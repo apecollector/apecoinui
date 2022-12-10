@@ -112,13 +112,13 @@ export default function Data() {
   const [bakcPoolTotalStaked, setBakcPoolTotalStaked] = useState(ethers.constants.Zero);
   const [apecoinPoolTotalStaked, setApecoinPoolTotalStaked] = useState(ethers.constants.Zero);
 
+  const apecoinToStake = parseInt(apecoinPoolToStake);
   const baycStakableCoins = parseInt(baycPoolStakable) * BAYC_MAX_STAKE;
   const maycStakableCoins = parseInt(maycPoolStakable) * MAYC_MAX_STAKE;
   const bakcStakableCoins = parseInt(bakcPoolStakable) * BAKC_MAX_STAKE;
 
   const totalPrimaryTokens = parseInt(baycPoolStakable) + parseInt(maycPoolStakable);
-  const totalStakable =
-    apecoinPoolToStake + baycStakableCoins + maycStakableCoins + bakcStakableCoins;
+  const totalStakable = apecoinToStake + baycStakableCoins + maycStakableCoins + bakcStakableCoins;
 
   useEffect(() => {
     setApecoinPoolToStake(isNaN(apeCoinBalance) ? 0 : apeCoinBalance);
@@ -216,7 +216,7 @@ export default function Data() {
                 {!initialLoad ? (
                   <>
                     <div role="status" className="max-w-sm animate-pulse">
-                      <div className="h-4 bg-gray-200 rounded-full dark:bg-gray-700 w-32"></div>
+                      <div className="h-4 bg-gray-200 rounded-full dark:bg-gray-700 w-16 sm:w-32"></div>
                       <span className="sr-only">Loading...</span>
                     </div>
                   </>
@@ -232,7 +232,7 @@ export default function Data() {
                 {!initialLoad ? (
                   <>
                     <div role="status" className="max-w-sm animate-pulse">
-                      <div className="h-4 bg-gray-200 rounded-full dark:bg-gray-700 w-32"></div>
+                      <div className="h-4 bg-gray-200 rounded-full dark:bg-gray-700 w-16 sm:w-32"></div>
                       <span className="sr-only">Loading...</span>
                     </div>
                   </>
@@ -248,7 +248,7 @@ export default function Data() {
                 {!initialLoad ? (
                   <>
                     <div role="status" className="max-w-sm animate-pulse">
-                      <div className="h-4 bg-gray-200 rounded-full dark:bg-gray-700 w-32"></div>
+                      <div className="h-4 bg-gray-200 rounded-full dark:bg-gray-700 w-16 sm:w-32"></div>
                       <span className="sr-only">Loading...</span>
                     </div>
                   </>
@@ -274,7 +274,7 @@ export default function Data() {
                 {!initialLoad ? (
                   <>
                     <div role="status" className="max-w-sm animate-pulse">
-                      <div className="h-4 bg-gray-200 rounded-full dark:bg-gray-700 w-32"></div>
+                      <div className="h-4 bg-gray-200 rounded-full dark:bg-gray-700 w-16 sm:w-32"></div>
                       <span className="sr-only">Loading...</span>
                     </div>
                   </>
@@ -290,7 +290,7 @@ export default function Data() {
                 {!initialLoad ? (
                   <>
                     <div role="status" className="max-w-sm animate-pulse">
-                      <div className="h-4 bg-gray-200 rounded-full dark:bg-gray-700 w-32"></div>
+                      <div className="h-4 bg-gray-200 rounded-full dark:bg-gray-700 w-16 sm:w-32"></div>
                       <span className="sr-only">Loading...</span>
                     </div>
                   </>
@@ -306,7 +306,7 @@ export default function Data() {
                 {!initialLoad ? (
                   <>
                     <div role="status" className="max-w-sm animate-pulse">
-                      <div className="h-4 bg-gray-200 rounded-full dark:bg-gray-700 w-32"></div>
+                      <div className="h-4 bg-gray-200 rounded-full dark:bg-gray-700 w-16 sm:w-32"></div>
                       <span className="sr-only">Loading...</span>
                     </div>
                   </>
@@ -332,7 +332,7 @@ export default function Data() {
                 {!initialLoad ? (
                   <>
                     <div role="status" className="max-w-sm animate-pulse">
-                      <div className="h-4 bg-gray-200 rounded-full dark:bg-gray-700 w-32"></div>
+                      <div className="h-4 bg-gray-200 rounded-full dark:bg-gray-700 w-16 sm:w-32"></div>
                       <span className="sr-only">Loading...</span>
                     </div>
                   </>
@@ -348,7 +348,7 @@ export default function Data() {
                 {!initialLoad ? (
                   <>
                     <div role="status" className="max-w-sm animate-pulse">
-                      <div className="h-4 bg-gray-200 rounded-full dark:bg-gray-700 w-32"></div>
+                      <div className="h-4 bg-gray-200 rounded-full dark:bg-gray-700 w-16 sm:w-32"></div>
                       <span className="sr-only">Loading...</span>
                     </div>
                   </>
@@ -364,7 +364,7 @@ export default function Data() {
                 {!initialLoad ? (
                   <>
                     <div role="status" className="max-w-sm animate-pulse">
-                      <div className="h-4 bg-gray-200 rounded-full dark:bg-gray-700 w-32"></div>
+                      <div className="h-4 bg-gray-200 rounded-full dark:bg-gray-700 w-16 sm:w-32"></div>
                       <span className="sr-only">Loading...</span>
                     </div>
                   </>
@@ -386,7 +386,7 @@ export default function Data() {
                 {!initialLoad ? (
                   <>
                     <div role="status" className="max-w-sm animate-pulse">
-                      <div className="h-4 bg-gray-200 rounded-full dark:bg-gray-700 w-32"></div>
+                      <div className="h-4 bg-gray-200 rounded-full dark:bg-gray-700 w-16 sm:w-32"></div>
                       <span className="sr-only">Loading...</span>
                     </div>
                   </>
@@ -402,7 +402,7 @@ export default function Data() {
                 {!initialLoad ? (
                   <>
                     <div role="status" className="max-w-sm animate-pulse">
-                      <div className="h-4 bg-gray-200 rounded-full dark:bg-gray-700 w-32"></div>
+                      <div className="h-4 bg-gray-200 rounded-full dark:bg-gray-700 w-16 sm:w-32"></div>
                       <span className="sr-only">Loading...</span>
                     </div>
                   </>
@@ -418,7 +418,7 @@ export default function Data() {
                 {!initialLoad ? (
                   <>
                     <div role="status" className="max-w-sm animate-pulse">
-                      <div className="h-4 bg-gray-200 rounded-full dark:bg-gray-700 w-32"></div>
+                      <div className="h-4 bg-gray-200 rounded-full dark:bg-gray-700 w-16 sm:w-32"></div>
                       <span className="sr-only">Loading...</span>
                     </div>
                   </>
@@ -444,8 +444,8 @@ export default function Data() {
         <h1 className="mt-10 text-4xl font-bold mb-4">Staking Calculator</h1>
         <div className="divide-y-[1px] border">
           <div className="grid grid-cols-4 p-4 gap-4">
-            <div className="flex items-center font-semibold col-span-2">Stake Count</div>
-            <div className="flex items-center font-semibold">Stake Limit</div>
+            <div className="flex items-center font-semibold col-span-2">Token Count</div>
+            <div className="flex items-center font-semibold">Stake Amount</div>
             <div className="flex items-center font-semibold">Daily ApeCoin Reward</div>
           </div>
 
@@ -464,12 +464,16 @@ export default function Data() {
               />
               ApeCoin
             </div>
-            <div>N/A</div>
+            <div className="flex items-center">
+              {new Intl.NumberFormat({
+                maximumFractionDigits: 4,
+              }).format(apecoinPoolToStake) || 0}
+            </div>
             <div>
               {!initialLoad ? (
                 <>
                   <div role="status" className="max-w-sm animate-pulse">
-                    <div className="h-4 bg-gray-200 rounded-full dark:bg-gray-700 w-32"></div>
+                    <div className="h-4 bg-gray-200 rounded-full dark:bg-gray-700 w-16 sm:w-32"></div>
                     <span className="sr-only">Loading...</span>
                   </div>
                 </>
@@ -518,7 +522,7 @@ export default function Data() {
               {!initialLoad ? (
                 <>
                   <div role="status" className="max-w-sm animate-pulse">
-                    <div className="h-4 bg-gray-200 rounded-full dark:bg-gray-700 w-32"></div>
+                    <div className="h-4 bg-gray-200 rounded-full dark:bg-gray-700 w-16 sm:w-32"></div>
                     <span className="sr-only">Loading...</span>
                   </div>
                 </>
@@ -569,7 +573,7 @@ export default function Data() {
               {!initialLoad ? (
                 <>
                   <div role="status" className="max-w-sm animate-pulse">
-                    <div className="h-4 bg-gray-200 rounded-full dark:bg-gray-700 w-32"></div>
+                    <div className="h-4 bg-gray-200 rounded-full dark:bg-gray-700 w-16 sm:w-32"></div>
                     <span className="sr-only">Loading...</span>
                   </div>
                 </>
@@ -620,7 +624,7 @@ export default function Data() {
               {!initialLoad ? (
                 <>
                   <div role="status" className="max-w-sm animate-pulse">
-                    <div className="h-4 bg-gray-200 rounded-full dark:bg-gray-700 w-32"></div>
+                    <div className="h-4 bg-gray-200 rounded-full dark:bg-gray-700 w-16 sm:w-32"></div>
                     <span className="sr-only">Loading...</span>
                   </div>
                 </>
@@ -658,7 +662,7 @@ export default function Data() {
               {!initialLoad ? (
                 <>
                   <div role="status" className="max-w-sm animate-pulse">
-                    <div className="h-4 bg-gray-200 rounded-full dark:bg-gray-700 w-32"></div>
+                    <div className="h-4 bg-gray-200 rounded-full dark:bg-gray-700 w-16 sm:w-32"></div>
                     <span className="sr-only">Loading...</span>
                   </div>
                 </>
@@ -690,18 +694,6 @@ export default function Data() {
             </div>
           </div>
         </div>
-
-        {/* <div className="mt-10">
-          <h2 className="text-xl mb-2">ApeCoin Pool Staking Rewards:</h2>
-          <div className="grid grid-cols-3 p-4 border">
-            <div className="col-span-2">ApeCoin Count</div>
-            <div>Daily ApeCoin Reward</div>
-          </div>
-
-          <div className="grid grid-cols-3 p-4 border">
-           
-          </div>
-        </div> */}
       </div>
     </div>
   );
