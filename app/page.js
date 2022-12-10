@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Events from "./events";
 
 export default async function Page() {
   return (
@@ -42,6 +43,10 @@ export default async function Page() {
             Answers to common questions around staking, apecoin and how to protect yourself.
           </p>
         </Link>
+      </div>
+
+      <div className="mt-10">
+        <Events />
       </div>
 
       {/* <div className="mt-10 p-4 bg-white md:p-8 dark:bg-gray-800">

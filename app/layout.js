@@ -44,7 +44,7 @@ export default function RootLayout({ children }) {
               <Header />
             </header>
             <main className="flex-grow">{children}</main>
-            <footer className="text-center mt-20">
+            <footer className="text-center my-20">
               <p>
                 Made by{" "}
                 <a className="text-[#1da1f2]" href="https://twitter.com/ApeCollector">
