@@ -5,11 +5,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAccount, useConnect, useBalance, useClient, useNetwork } from "wagmi";
 
-import MobileMenu from "./mobileMenu";
 import useStakingStore from "./store";
-
 import { humanize } from "../lib/utils/number";
-
 import { ConnectButton } from "./connectButton";
 
 const apecoinContractAddresses = {
@@ -19,11 +16,8 @@ const apecoinContractAddresses = {
 
 export default function Header() {
   const pathname = usePathname();
-
   const { address, isConnected } = useAccount();
-
   const { chain } = useNetwork();
-
   const balance = useBalance({
     enabled: isConnected,
     address: address,
@@ -95,10 +89,7 @@ export default function Header() {
       </div>
       <div className="flex items-center h-8">
         {isConnected && apeCoinBalance && !isNaN(apeCoinBalance) && (
-          <div className="mr-2">
-            {humanize(apeCoinBalance)} <span className="sm:hidden">$APE</span>{" "}
-            <span className="hidden sm:inline">ApeCoin</span>
-          </div>
+          <div className="mr-4">{humanize(apeCoinBalance)} $APE</div>
         )}
         {!autoConnecting && <ConnectButton />}
       </div>

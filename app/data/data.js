@@ -94,34 +94,53 @@ export default function Data() {
   const apeCoinBalance = useStakingStore((state) => state.apeCoinBalance);
 
   const [initialLoad, setInitialLoad] = useState(false);
+  const [apecoinPrice, setApecoinPrice] = useState(null);
 
+  const [apePoolStakable, setApePoolStakable] = useState(0);
   const [baycPoolStakable, setBaycPoolStakable] = useState(0);
   const [maycPoolStakable, setMaycPoolStakable] = useState(0);
   const [bakcPoolStakable, setBakcPoolStakable] = useState(0);
 
-  const [apecoinPrice, setApecoinPrice] = useState(null);
-
-  const [apecoinPoolToStake, setApecoinPoolToStake] = useState(0);
+  const [apePoolToStake, setApePoolToStake] = useState(0);
+  const [baycPoolToStake, setBaycPoolToStake] = useState(0);
+  const [maycPoolToStake, setMaycPoolToStake] = useState(0);
+  const [bakcPoolToStake, setBakcPoolToStake] = useState(0);
 
   const [baycPoolHourlyReward, setBaycPoolHourlyReward] = useState(ethers.constants.Zero);
   const [maycPoolHourlyReward, setMaycPoolHourlyReward] = useState(ethers.constants.Zero);
   const [bakcPoolHourlyReward, setBakcPoolHourlyReward] = useState(ethers.constants.Zero);
   const [apecoinPoolHourlyReward, setApecoinPoolHourlyReward] = useState(ethers.constants.Zero);
+
   const [baycPoolTotalStaked, setBaycPoolTotalStaked] = useState(ethers.constants.Zero);
   const [maycPoolTotalStaked, setMaycPoolTotalStaked] = useState(ethers.constants.Zero);
   const [bakcPoolTotalStaked, setBakcPoolTotalStaked] = useState(ethers.constants.Zero);
   const [apecoinPoolTotalStaked, setApecoinPoolTotalStaked] = useState(ethers.constants.Zero);
 
-  const apecoinToStake = parseInt(apecoinPoolToStake);
-  const baycStakableCoins = parseInt(baycPoolStakable) * BAYC_MAX_STAKE;
-  const maycStakableCoins = parseInt(maycPoolStakable) * MAYC_MAX_STAKE;
-  const bakcStakableCoins = parseInt(bakcPoolStakable) * BAKC_MAX_STAKE;
-
   const totalPrimaryTokens = parseInt(baycPoolStakable) + parseInt(maycPoolStakable);
-  const totalStakable = apecoinToStake + baycStakableCoins + maycStakableCoins + bakcStakableCoins;
+  const totalStakable =
+    parseInt(apePoolToStake) +
+    parseInt(baycPoolToStake) +
+    parseInt(maycPoolToStake) +
+    parseInt(bakcPoolToStake);
 
   useEffect(() => {
-    setApecoinPoolToStake(isNaN(apeCoinBalance) ? 0 : apeCoinBalance);
+    setApePoolToStake(apePoolStakable);
+  }, [apePoolStakable]);
+
+  useEffect(() => {
+    setBaycPoolToStake(baycPoolStakable * BAYC_MAX_STAKE);
+  }, [baycPoolStakable]);
+
+  useEffect(() => {
+    setMaycPoolToStake(maycPoolStakable * MAYC_MAX_STAKE);
+  }, [maycPoolStakable]);
+
+  useEffect(() => {
+    setBakcPoolToStake(bakcPoolStakable * BAKC_MAX_STAKE);
+  }, [bakcPoolStakable]);
+
+  useEffect(() => {
+    setApePoolStakable(isNaN(apeCoinBalance) ? 0 : apeCoinBalance);
   }, [apeCoinBalance]);
 
   useEffect(() => {
@@ -193,6 +212,17 @@ export default function Data() {
     },
   };
 
+  const toStakeTotal =
+    baycPoolToStake * stats.bayc.dailyRewardsPerApeCoin +
+    maycPoolToStake * stats.mayc.dailyRewardsPerApeCoin +
+    bakcPoolToStake * stats.bakc.dailyRewardsPerApeCoin +
+    apePoolToStake * stats.apecoin.dailyRewardsPerApeCoin;
+
+  const apeMaxStakable = apePoolStakable;
+  const baycMaxStakable = baycPoolStakable * BAYC_MAX_STAKE;
+  const maycMaxStakable = maycPoolStakable * MAYC_MAX_STAKE;
+  const bakcMaxStakable = bakcPoolStakable * BAKC_MAX_STAKE;
+
   return (
     <div className="mt-10">
       <h1 className="mt-10 text-4xl font-bold mb-4 flex items-center">Live Staking Data</h1>
@@ -202,16 +232,14 @@ export default function Data() {
           <thead>
             <tr className="grid grid-cols-4 gap-4 p-4">
               <td className="flex items-center font-semibold">Staking Pool</td>
-              <td className="flex items-center font-semibold">ApeCoin Staked</td>
-              <td className="flex items-center font-semibold">Daily ApeCoin Reward&nbsp;Pool</td>
-              <td className="flex items-center font-semibold">
-                Daily ApeCoin reward Per ApeCoin Staked
-              </td>
+              <td className="flex items-center font-semibold">$APE Staked</td>
+              <td className="flex items-center font-semibold">Daily $APE Reward&nbsp;Pool</td>
+              <td className="flex items-center font-semibold">Daily $APE reward Per $APE Staked</td>
             </tr>
           </thead>
           <tbody className="divide-y-[1px]">
             <tr className="grid grid-cols-4 gap-4 p-4">
-              <td className="flex items-center">ApeCoin</td>
+              <td className="flex items-center">$APE</td>
               <td className="flex items-center">
                 {!initialLoad ? (
                   <>
@@ -269,7 +297,7 @@ export default function Data() {
               </td>
             </tr>
             <tr className="grid grid-cols-4 gap-4 p-4">
-              <td>BAYC</td>
+              <td className="flex items-center">BAYC</td>
               <td className="flex items-center">
                 {!initialLoad ? (
                   <>
@@ -327,7 +355,7 @@ export default function Data() {
               </td>
             </tr>
             <tr className="grid grid-cols-4 gap-4 p-4">
-              <td>MAYC</td>
+              <td className="flex items-center">MAYC</td>
               <td className="flex items-center">
                 {!initialLoad ? (
                   <>
@@ -381,7 +409,7 @@ export default function Data() {
               </td>
             </tr>
             <tr className="grid grid-cols-4 gap-4 p-4">
-              <td>BAKC</td>
+              <td className="flex items-center">BAKC</td>
               <td className="flex items-center">
                 {!initialLoad ? (
                   <>
@@ -446,28 +474,43 @@ export default function Data() {
           <div className="grid grid-cols-4 p-4 gap-4">
             <div className="flex items-center font-semibold col-span-2">Token Count</div>
             <div className="flex items-center font-semibold">Stake Amount</div>
-            <div className="flex items-center font-semibold">Daily ApeCoin Reward</div>
+            <div className="flex items-center font-semibold">Daily $APE Reward</div>
           </div>
 
           <div className="grid grid-cols-4 p-4 gap-4">
-            <div className="flex items-center col-span-2">
+            <div className="flex items-center col-span-2 flex-wrap">
               <input
-                id="bayc-count"
                 className="mr-2 px-2 border w-28 dark:bg-slate-800 dark:border-slate-500"
-                value={apecoinPoolToStake}
+                value={apePoolStakable}
                 onChange={(e) => {
                   const value = +e.target.value;
                   if (Number.isInteger(value) && value < 1000000000) {
-                    setApecoinPoolToStake(value);
+                    setApePoolStakable(value);
                   }
                 }}
               />
-              ApeCoin
+              $APE
             </div>
-            <div className="flex items-center">
-              {new Intl.NumberFormat({
-                maximumFractionDigits: 4,
-              }).format(apecoinPoolToStake) || 0}
+            <div className="flex items-center flex-wrap">
+              <input
+                className="mr-2 px-2 border w-28 dark:bg-slate-800 dark:border-slate-500"
+                value={apePoolToStake}
+                onChange={(e) => {
+                  const value = +e.target.value;
+                  if (Number.isInteger(value) && value < apeMaxStakable) {
+                    setApePoolToStake(value);
+                  }
+                }}
+              />
+              {apePoolToStake != apePoolStakable && (
+                <button
+                  onClick={() => {
+                    setApePoolToStake(apePoolStakable);
+                  }}
+                >
+                  MAX
+                </button>
+              )}
             </div>
             <div>
               {!initialLoad ? (
@@ -481,14 +524,14 @@ export default function Data() {
                 <>
                   {new Intl.NumberFormat({
                     maximumFractionDigits: 4,
-                  }).format(apecoinPoolToStake * stats.apecoin.dailyRewardsPerApeCoin)}{" "}
+                  }).format(apePoolToStake * stats.apecoin.dailyRewardsPerApeCoin)}{" "}
                   ($
                   {new Intl.NumberFormat({
                     maximumFractionDigits: 4,
                     style: "currency",
                     currency: "USD",
                   }).format(
-                    apecoinPoolToStake *
+                    apePoolToStake *
                       stats.apecoin.dailyRewardsPerApeCoin *
                       +formatUnits(apecoinPrice, 8)
                   )}
@@ -499,7 +542,7 @@ export default function Data() {
           </div>
 
           <div className="grid grid-cols-4 p-4  gap-4">
-            <div className="flex items-center col-span-2">
+            <div className="flex items-center col-span-2 flex-wrap">
               <input
                 id="bayc-count"
                 className="mr-2 px-2 border w-16 dark:bg-slate-800 dark:border-slate-500"
@@ -511,14 +554,30 @@ export default function Data() {
                   }
                 }}
               />
-              BAYC Tokens
+              BAYC NFTs
             </div>
-            <div className="flex items-center">
-              {new Intl.NumberFormat({
-                maximumFractionDigits: 4,
-              }).format(baycPoolStakable * BAYC_MAX_STAKE) || 0}
-            </div>{" "}
-            <div className="flex items-center">
+            <div className="flex items-center flex-wrap">
+              <input
+                className="mr-2 px-2 border w-28 dark:bg-slate-800 dark:border-slate-500"
+                value={baycPoolToStake}
+                onChange={(e) => {
+                  const value = +e.target.value;
+                  if (Number.isInteger(value) && value < baycMaxStakable) {
+                    setBaycPoolToStake(value);
+                  }
+                }}
+              />
+              {baycPoolToStake != baycMaxStakable && (
+                <button
+                  onClick={() => {
+                    setBaycPoolToStake(baycMaxStakable);
+                  }}
+                >
+                  MAX
+                </button>
+              )}
+            </div>
+            <div className="flex items-center flex-wrap">
               {!initialLoad ? (
                 <>
                   <div role="status" className="max-w-sm animate-pulse">
@@ -530,17 +589,14 @@ export default function Data() {
                 <>
                   {new Intl.NumberFormat({
                     maximumFractionDigits: 4,
-                  }).format(
-                    baycPoolStakable * BAYC_MAX_STAKE * stats.bayc.dailyRewardsPerApeCoin
-                  )}{" "}
+                  }).format(baycPoolToStake * stats.bayc.dailyRewardsPerApeCoin)}{" "}
                   ($
                   {new Intl.NumberFormat({
                     maximumFractionDigits: 4,
                     style: "currency",
                     currency: "USD",
                   }).format(
-                    baycPoolStakable *
-                      BAYC_MAX_STAKE *
+                    baycPoolToStake *
                       stats.bayc.dailyRewardsPerApeCoin *
                       +formatUnits(apecoinPrice, 8)
                   )}
@@ -550,7 +606,7 @@ export default function Data() {
             </div>
           </div>
           <div className="grid grid-cols-4 p-4  gap-4">
-            <div className="flex items-center col-span-2">
+            <div className="flex items-center col-span-2 flex-wrap">
               <input
                 id="mayc-count"
                 className="mr-2 px-2 border w-16 dark:bg-slate-800 dark:border-slate-500"
@@ -562,14 +618,30 @@ export default function Data() {
                   }
                 }}
               />
-              MAYC Tokens
+              MAYC NFTs
             </div>
-            <div className="flex items-center">
-              {new Intl.NumberFormat({
-                maximumFractionDigits: 4,
-              }).format(maycPoolStakable * MAYC_MAX_STAKE) || 0}
+            <div className="flex items-center flex-wrap">
+              <input
+                className="mr-2 px-2 border w-28 dark:bg-slate-800 dark:border-slate-500"
+                value={maycPoolToStake}
+                onChange={(e) => {
+                  const value = +e.target.value;
+                  if (Number.isInteger(value) && value < maycMaxStakable) {
+                    setMaycPoolToStake(value);
+                  }
+                }}
+              />
+              {maycPoolToStake != maycMaxStakable && (
+                <button
+                  onClick={() => {
+                    setMaycPoolToStake(maycMaxStakable);
+                  }}
+                >
+                  MAX
+                </button>
+              )}
             </div>
-            <div className="flex items-center">
+            <div className="flex items-center flex-wrap">
               {!initialLoad ? (
                 <>
                   <div role="status" className="max-w-sm animate-pulse">
@@ -581,17 +653,14 @@ export default function Data() {
                 <>
                   {new Intl.NumberFormat({
                     maximumFractionDigits: 4,
-                  }).format(
-                    maycPoolStakable * MAYC_MAX_STAKE * stats.mayc.dailyRewardsPerApeCoin
-                  )}{" "}
+                  }).format(maycPoolToStake * stats.mayc.dailyRewardsPerApeCoin)}{" "}
                   ($
                   {new Intl.NumberFormat({
                     maximumFractionDigits: 4,
                     style: "currency",
                     currency: "USD",
                   }).format(
-                    maycPoolStakable *
-                      MAYC_MAX_STAKE *
+                    maycPoolToStake *
                       stats.mayc.dailyRewardsPerApeCoin *
                       +formatUnits(apecoinPrice, 8)
                   )}
@@ -601,7 +670,7 @@ export default function Data() {
             </div>
           </div>
           <div className="grid grid-cols-4 p-4  gap-4">
-            <div className="flex items-center col-span-2">
+            <div className="flex items-center col-span-2 flex-wrap">
               <input
                 id="bakc-count"
                 className="mr-2 px-2 border w-16 dark:bg-slate-800 dark:border-slate-500"
@@ -613,12 +682,28 @@ export default function Data() {
                   }
                 }}
               />
-              BAKC Tokens
+              BAKC NFTs
             </div>
-            <div className="flex items-center">
-              {new Intl.NumberFormat({
-                maximumFractionDigits: 4,
-              }).format(bakcPoolStakable * BAKC_MAX_STAKE) || 0}
+            <div className="flex items-center flex-wrap">
+              <input
+                className="mr-2 px-2 border w-28 dark:bg-slate-800 dark:border-slate-500"
+                value={bakcPoolToStake}
+                onChange={(e) => {
+                  const value = +e.target.value;
+                  if (Number.isInteger(value) && value < bakcMaxStakable) {
+                    setBakcPoolToStake(value);
+                  }
+                }}
+              />
+              {bakcPoolToStake != bakcMaxStakable && (
+                <button
+                  onClick={() => {
+                    setBakcPoolToStake(bakcMaxStakable);
+                  }}
+                >
+                  MAX
+                </button>
+              )}
             </div>
             <div className="flex items-center">
               {!initialLoad ? (
@@ -632,17 +717,14 @@ export default function Data() {
                 <>
                   {new Intl.NumberFormat({
                     maximumFractionDigits: 4,
-                  }).format(
-                    bakcPoolStakable * BAKC_MAX_STAKE * stats.bakc.dailyRewardsPerApeCoin
-                  )}{" "}
+                  }).format(bakcPoolToStake * stats.bakc.dailyRewardsPerApeCoin)}{" "}
                   ($
                   {new Intl.NumberFormat({
                     maximumFractionDigits: 4,
                     style: "currency",
                     currency: "USD",
                   }).format(
-                    bakcPoolStakable *
-                      BAKC_MAX_STAKE *
+                    bakcPoolToStake *
                       stats.bakc.dailyRewardsPerApeCoin *
                       +formatUnits(apecoinPrice, 8)
                   )}
@@ -670,24 +752,13 @@ export default function Data() {
                 <>
                   {new Intl.NumberFormat({
                     maximumFractionDigits: 4,
-                  }).format(
-                    baycPoolStakable * BAYC_MAX_STAKE * stats.bayc.dailyRewardsPerApeCoin +
-                      maycPoolStakable * MAYC_MAX_STAKE * stats.mayc.dailyRewardsPerApeCoin +
-                      bakcPoolStakable * BAKC_MAX_STAKE * stats.bakc.dailyRewardsPerApeCoin +
-                      apecoinPoolToStake * stats.apecoin.dailyRewardsPerApeCoin
-                  )}{" "}
+                  }).format(toStakeTotal)}{" "}
                   ($
                   {new Intl.NumberFormat({
                     maximumFractionDigits: 4,
                     style: "currency",
                     currency: "USD",
-                  }).format(
-                    (baycPoolStakable * BAYC_MAX_STAKE * stats.bayc.dailyRewardsPerApeCoin +
-                      maycPoolStakable * MAYC_MAX_STAKE * stats.mayc.dailyRewardsPerApeCoin +
-                      bakcPoolStakable * BAKC_MAX_STAKE * stats.bakc.dailyRewardsPerApeCoin +
-                      apecoinPoolToStake * stats.apecoin.dailyRewardsPerApeCoin) *
-                      +formatUnits(apecoinPrice, 8)
-                  )}
+                  }).format(toStakeTotal * +formatUnits(apecoinPrice, 8))}
                   )
                 </>
               )}

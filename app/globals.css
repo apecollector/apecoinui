@@ -7,7 +7,3 @@ body {
   font-family: monospace;
   font-size: 1.1em;
 }
-
-svg path {
-  stroke-width: 10;
-}
