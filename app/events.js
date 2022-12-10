@@ -32,15 +32,19 @@ export default function Events() {
     address: stakingContractAddresses[chain?.id || 1],
     abi: StakingABI,
     eventName: "Deposit",
-    listener(user, amount) {
-      console.log("Deposit", user, amount.toString());
+    listener(...args) {
       setDepositEvents((prevEvents) => {
         const newEvents = [...prevEvents];
 
         if (newEvents.length >= 10) {
           newEvents.pop();
         }
-        newEvents.unshift({ user, amount, poolId: 0 });
+        newEvents.unshift({
+          user: args[0],
+          amount: args[1],
+          poolId: 0,
+          event: args[args.length - 1],
+        });
         return newEvents;
       });
     },
@@ -52,15 +56,19 @@ export default function Events() {
     address: stakingContractAddresses[chain?.id || 1],
     abi: StakingABI,
     eventName: "DepositNft",
-    listener(user, poolId, amount) {
-      console.log("DepositNft", user, amount.toString(), poolId);
+    listener(...args) {
       setDepositEvents((prevEvents) => {
         const newEvents = [...prevEvents];
 
         if (newEvents.length >= 10) {
           newEvents.pop();
         }
-        newEvents.unshift({ user, amount, poolId });
+        newEvents.unshift({
+          user: args[0],
+          poolId: args[1],
+          amount: args[2],
+          event: args[args.length - 1],
+        });
         return newEvents;
       });
     },
@@ -72,15 +80,19 @@ export default function Events() {
     address: stakingContractAddresses[chain?.id || 1],
     abi: StakingABI,
     eventName: "DepositPairNft",
-    listener(user, amount) {
-      console.log("DepositPairNft", user, amount.toString());
+    listener(...args) {
       setDepositEvents((prevEvents) => {
         const newEvents = [...prevEvents];
 
         if (newEvents.length >= 10) {
           newEvents.pop();
         }
-        newEvents.unshift({ user, amount, poolId: 3 });
+        newEvents.unshift({
+          user: args[0],
+          amount: args[1],
+          poolId: 3,
+          event: args[args.length - 1],
+        });
         return newEvents;
       });
     },
@@ -91,7 +103,6 @@ export default function Events() {
     <>
       <div>
         <h3>Live staking activity:</h3>
-        {/* {JSON.stringify(depositEvents)} */}
 
         <ol className="mt-3 divide-y divider-gray-200 dark:divide-gray-700">
           {depositEvents.length === 0 && (
@@ -105,22 +116,25 @@ export default function Events() {
           )}
           {depositEvents.map((evt, i) => (
             <li key={i} className="block items-center py-3 sm:flex">
-              <div>
-                <div className="text-base font-normal text-gray-600 dark:text-gray-400">
-                  <span className="font-medium text-gray-900 dark:text-white">{evt.user}</span>{" "}
-                  staked{" "}
-                  <span className="font-medium text-gray-900 dark:text-white">
-                    {new Intl.NumberFormat({
-                      maximumFractionDigits: 4,
-                    }).format(+formatUnits(evt.amount))}{" "}
-                    ApeCoin
-                  </span>{" "}
-                  into the{" "}
-                  <span className="font-medium text-gray-900 dark:text-white">
-                    {poolIDs[evt.poolId]} pool
-                  </span>
-                </div>
-              </div>
+              <a
+                className="text-base font-normal text-gray-600 dark:text-gray-400"
+                target={"_blank"}
+                href={`https://${chain?.id === 5 ? "goerli.etherscan.io" : "etherscan.io"}/tx/${
+                  evt.event.transactionHash
+                }`}
+              >
+                <span className="font-medium text-gray-900 dark:text-white">{evt.user}</span> staked{" "}
+                <span className="font-medium text-gray-900 dark:text-white">
+                  {new Intl.NumberFormat({
+                    maximumFractionDigits: 4,
+                  }).format(+formatUnits(evt.amount))}{" "}
+                  ApeCoin
+                </span>{" "}
+                into the{" "}
+                <span className="font-medium text-gray-900 dark:text-white">
+                  {poolIDs[evt.poolId]} pool
+                </span>
+              </a>
             </li>
           ))}
         </ol>
