@@ -11,7 +11,7 @@ export const ConnectButton = ({ classNames }) => {
           <>
             <button
               onClick={show}
-              className={`px-2 border hover:border-gray-500 md:hidden ${classNames && classNames}`}
+              className={`px-2 h-8 flex items-center box-content border hover:border-gray-500 md:hidden ${classNames && classNames}`}
             >
               {isConnected
                 ? ensName
@@ -23,7 +23,7 @@ export const ConnectButton = ({ classNames }) => {
             </button>
             <button
               onClick={show}
-              className={`px-2 border hover:border-gray-500 hidden md:inline ${
+              className={`px-2 h-8 flex items-center box-content border hover:border-gray-500 hidden md:inline ${
                 classNames && classNames
               }`}
             >

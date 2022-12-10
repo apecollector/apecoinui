@@ -17,7 +17,7 @@ export default function FAQ() {
       question: "What are the official links?",
       answer: (
         <>
-          <p className="font-bold">
+          <p className="mt-2">
             Please be aware there are bound to be a lot of scams and fake websites / twitter
             accounts trying to steal your ApeCoin and/or NFTs. If you're unsure you should only use
             official links.

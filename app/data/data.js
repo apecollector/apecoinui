@@ -2,7 +2,9 @@
 
 import { formatUnits } from "ethers/lib/utils.js";
 import { useEffect, useState } from "react";
+import { ethers } from "ethers";
 import { useAccount, useContractRead, useContractReads, useNetwork } from "wagmi";
+
 import StakingABI from "../../lib/abis/staking";
 import PriceABI from "../../lib/abis/price";
 import BalanceABI from "../../lib/abis/balance";
@@ -49,10 +51,6 @@ export default function Data() {
   const bakcContract = {
     address: bakcContractAddresses[chain?.id],
     abi: BalanceABI,
-  };
-
-  const priceContract = {
-    abi: PriceABI,
   };
 
   const poolsContractRead = useContractRead({
@@ -105,21 +103,22 @@ export default function Data() {
 
   const [apecoinPoolToStake, setApecoinPoolToStake] = useState(0);
 
-  const [baycPoolHourlyReward, setBaycPoolHourlyReward] = useState(0);
-  const [maycPoolHourlyReward, setMaycPoolHourlyReward] = useState(0);
-  const [bakcPoolHourlyReward, setBakcPoolHourlyReward] = useState(0);
-  const [apecoinPoolHourlyReward, setApecoinPoolHourlyReward] = useState(0);
-  const [baycPoolTotalStaked, setBaycPoolTotalStaked] = useState(0);
-  const [maycPoolTotalStaked, setMaycPoolTotalStaked] = useState(0);
-  const [bakcPoolTotalStaked, setBakcPoolTotalStaked] = useState(0);
-  const [apecoinPoolTotalStaked, setApecoinPoolTotalStaked] = useState(0);
+  const [baycPoolHourlyReward, setBaycPoolHourlyReward] = useState(ethers.constants.Zero);
+  const [maycPoolHourlyReward, setMaycPoolHourlyReward] = useState(ethers.constants.Zero);
+  const [bakcPoolHourlyReward, setBakcPoolHourlyReward] = useState(ethers.constants.Zero);
+  const [apecoinPoolHourlyReward, setApecoinPoolHourlyReward] = useState(ethers.constants.Zero);
+  const [baycPoolTotalStaked, setBaycPoolTotalStaked] = useState(ethers.constants.Zero);
+  const [maycPoolTotalStaked, setMaycPoolTotalStaked] = useState(ethers.constants.Zero);
+  const [bakcPoolTotalStaked, setBakcPoolTotalStaked] = useState(ethers.constants.Zero);
+  const [apecoinPoolTotalStaked, setApecoinPoolTotalStaked] = useState(ethers.constants.Zero);
 
   const baycStakableCoins = parseInt(baycPoolStakable) * BAYC_MAX_STAKE;
   const maycStakableCoins = parseInt(maycPoolStakable) * MAYC_MAX_STAKE;
   const bakcStakableCoins = parseInt(bakcPoolStakable) * BAKC_MAX_STAKE;
 
   const totalPrimaryTokens = parseInt(baycPoolStakable) + parseInt(maycPoolStakable);
-  const totalStakable = baycStakableCoins + maycStakableCoins + bakcStakableCoins;
+  const totalStakable =
+    apecoinPoolToStake + baycStakableCoins + maycStakableCoins + bakcStakableCoins;
 
   useEffect(() => {
     setApecoinPoolToStake(isNaN(apeCoinBalance) ? 0 : apeCoinBalance);
@@ -196,31 +195,7 @@ export default function Data() {
 
   return (
     <div className="mt-10">
-      <h1 className="mt-10 text-4xl font-bold mb-4 flex items-center">
-        Live Staking Data
-        <span
-          onClick={() => {
-            poolsContractRead.refetch();
-          }}
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={3}
-            stroke="currentColor"
-            className={`w-6 h-6 ml-4 top-0.5 relative cursor-pointer ${
-              poolsContractRead.isFetching && "animate-spin"
-            }`}
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"
-            />
-          </svg>
-        </span>
-      </h1>
+      <h1 className="mt-10 text-4xl font-bold mb-4 flex items-center">Live Staking Data</h1>
 
       <div>
         <table className="table-fixed divide-y-[1px] border">
@@ -283,9 +258,11 @@ export default function Data() {
                       maximumFractionDigits: 4,
                     }).format(stats.apecoin.dailyRewardsPerApeCoin)}{" "}
                     ($
-                    {(stats.apecoin.dailyRewardsPerApeCoin * +formatUnits(apecoinPrice, 8)).toFixed(
-                      3
-                    )}
+                    {new Intl.NumberFormat({
+                      maximumFractionDigits: 4,
+                      style: "currency",
+                      currency: "USD",
+                    }).format(stats.apecoin.dailyRewardsPerApeCoin * +formatUnits(apecoinPrice, 8))}
                     )
                   </>
                 )}
@@ -339,7 +316,11 @@ export default function Data() {
                       maximumFractionDigits: 4,
                     }).format(stats.bayc.dailyRewardsPerApeCoin)}{" "}
                     ($
-                    {(stats.bayc.dailyRewardsPerApeCoin * +formatUnits(apecoinPrice, 8)).toFixed(3)}
+                    {new Intl.NumberFormat({
+                      maximumFractionDigits: 4,
+                      style: "currency",
+                      currency: "USD",
+                    }).format(stats.bayc.dailyRewardsPerApeCoin * +formatUnits(apecoinPrice, 8))}
                     )
                   </>
                 )}
@@ -447,7 +428,11 @@ export default function Data() {
                       maximumFractionDigits: 4,
                     }).format(stats.bakc.dailyRewardsPerApeCoin)}{" "}
                     ($
-                    {(stats.bakc.dailyRewardsPerApeCoin * +formatUnits(apecoinPrice, 8)).toFixed(3)}
+                    {new Intl.NumberFormat({
+                      maximumFractionDigits: 4,
+                      style: "currency",
+                      currency: "USD",
+                    }).format(stats.bakc.dailyRewardsPerApeCoin * +formatUnits(apecoinPrice, 8))}
                     )
                   </>
                 )}
@@ -468,7 +453,7 @@ export default function Data() {
             <div className="flex items-center col-span-2">
               <input
                 id="bayc-count"
-                className="mr-2 px-2 border w-28"
+                className="mr-2 px-2 border w-28 dark:bg-slate-800 dark:border-slate-500"
                 value={apecoinPoolToStake}
                 onChange={(e) => {
                   const value = +e.target.value;
@@ -494,11 +479,15 @@ export default function Data() {
                     maximumFractionDigits: 4,
                   }).format(apecoinPoolToStake * stats.apecoin.dailyRewardsPerApeCoin)}{" "}
                   ($
-                  {(
+                  {new Intl.NumberFormat({
+                    maximumFractionDigits: 4,
+                    style: "currency",
+                    currency: "USD",
+                  }).format(
                     apecoinPoolToStake *
-                    stats.apecoin.dailyRewardsPerApeCoin *
-                    +formatUnits(apecoinPrice, 8)
-                  ).toFixed(3)}
+                      stats.apecoin.dailyRewardsPerApeCoin *
+                      +formatUnits(apecoinPrice, 8)
+                  )}
                   )
                 </>
               )}
@@ -509,7 +498,7 @@ export default function Data() {
             <div className="flex items-center col-span-2">
               <input
                 id="bayc-count"
-                className="mr-2 px-2 border w-16"
+                className="mr-2 px-2 border w-16 dark:bg-slate-800 dark:border-slate-500"
                 value={baycPoolStakable}
                 onChange={(e) => {
                   const value = +e.target.value;
@@ -541,12 +530,16 @@ export default function Data() {
                     baycPoolStakable * BAYC_MAX_STAKE * stats.bayc.dailyRewardsPerApeCoin
                   )}{" "}
                   ($
-                  {(
+                  {new Intl.NumberFormat({
+                    maximumFractionDigits: 4,
+                    style: "currency",
+                    currency: "USD",
+                  }).format(
                     baycPoolStakable *
-                    BAYC_MAX_STAKE *
-                    stats.bayc.dailyRewardsPerApeCoin *
-                    +formatUnits(apecoinPrice, 8)
-                  ).toFixed(3)}
+                      BAYC_MAX_STAKE *
+                      stats.bayc.dailyRewardsPerApeCoin *
+                      +formatUnits(apecoinPrice, 8)
+                  )}
                   )
                 </>
               )}
@@ -556,7 +549,7 @@ export default function Data() {
             <div className="flex items-center col-span-2">
               <input
                 id="mayc-count"
-                className="mr-2 px-2 border w-16"
+                className="mr-2 px-2 border w-16 dark:bg-slate-800 dark:border-slate-500"
                 value={maycPoolStakable}
                 onChange={(e) => {
                   const value = +e.target.value;
@@ -588,12 +581,16 @@ export default function Data() {
                     maycPoolStakable * MAYC_MAX_STAKE * stats.mayc.dailyRewardsPerApeCoin
                   )}{" "}
                   ($
-                  {(
+                  {new Intl.NumberFormat({
+                    maximumFractionDigits: 4,
+                    style: "currency",
+                    currency: "USD",
+                  }).format(
                     maycPoolStakable *
-                    MAYC_MAX_STAKE *
-                    stats.mayc.dailyRewardsPerApeCoin *
-                    +formatUnits(apecoinPrice, 8)
-                  ).toFixed(3)}
+                      MAYC_MAX_STAKE *
+                      stats.mayc.dailyRewardsPerApeCoin *
+                      +formatUnits(apecoinPrice, 8)
+                  )}
                   )
                 </>
               )}
@@ -603,7 +600,7 @@ export default function Data() {
             <div className="flex items-center col-span-2">
               <input
                 id="bakc-count"
-                className="mr-2 px-2 border w-16"
+                className="mr-2 px-2 border w-16 dark:bg-slate-800 dark:border-slate-500"
                 value={bakcPoolStakable}
                 onChange={(e) => {
                   const value = +e.target.value;
@@ -635,12 +632,16 @@ export default function Data() {
                     bakcPoolStakable * BAKC_MAX_STAKE * stats.bakc.dailyRewardsPerApeCoin
                   )}{" "}
                   ($
-                  {(
+                  {new Intl.NumberFormat({
+                    maximumFractionDigits: 4,
+                    style: "currency",
+                    currency: "USD",
+                  }).format(
                     bakcPoolStakable *
-                    BAKC_MAX_STAKE *
-                    stats.bakc.dailyRewardsPerApeCoin *
-                    +formatUnits(apecoinPrice, 8)
-                  ).toFixed(3)}
+                      BAKC_MAX_STAKE *
+                      stats.bakc.dailyRewardsPerApeCoin *
+                      +formatUnits(apecoinPrice, 8)
+                  )}
                   )
                 </>
               )}
@@ -672,13 +673,17 @@ export default function Data() {
                       apecoinPoolToStake * stats.apecoin.dailyRewardsPerApeCoin
                   )}{" "}
                   ($
-                  {(
+                  {new Intl.NumberFormat({
+                    maximumFractionDigits: 4,
+                    style: "currency",
+                    currency: "USD",
+                  }).format(
                     (baycPoolStakable * BAYC_MAX_STAKE * stats.bayc.dailyRewardsPerApeCoin +
                       maycPoolStakable * MAYC_MAX_STAKE * stats.mayc.dailyRewardsPerApeCoin +
                       bakcPoolStakable * BAKC_MAX_STAKE * stats.bakc.dailyRewardsPerApeCoin +
                       apecoinPoolToStake * stats.apecoin.dailyRewardsPerApeCoin) *
-                    +formatUnits(apecoinPrice, 8)
-                  ).toFixed(3)}
+                      +formatUnits(apecoinPrice, 8)
+                  )}
                   )
                 </>
               )}

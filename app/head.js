@@ -1,8 +1,18 @@
+import Script from "next/script";
+
 export default function Head() {
   return (
     <>
-      <title>Ape Staking</title>
-      <meta name="description" content="ApeCoin staking calculator and alternative UI for the smart contract." />
+      <title>ApeCoin UI</title>
+      <meta name="description" content="ApeCoin UI is an alternative UI for ApeCoin." />
+      <meta
+        property="og:title"
+        content="ApeCoin UI - An alternative interface for ApeCoin, staking and more.."
+      />
+      <meta property="og:site_name" content="ApeCoin UI" />
+      <meta property="og:url" content="https://apecoinui.com" />
+      <meta property="og:type" content="website" />
+      <meta property="og:image" content="https://apecoinui.com/og-image.png" />
       <link rel="icon" href="./teeth.png" />
     </>
   );

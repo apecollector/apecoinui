@@ -76,11 +76,8 @@ export default function Header() {
 
   return (
     <>
-      <div className="flex justify-between items-center gap-x-4">
-        <Link className="opacity-90 hover:opacity-100 cursor-pointer" href="/">
-          <img src="./teeth.png" alt="ApeCoin Logo" width={32} height={32} />
-        </Link>
-        <div className="hidden sm:flex gap-x-4">
+      <div className="h-8 flex justify-between items-center gap-x-4">
+        <div className="flex gap-x-4">
           {pages.map((page) => (
             <Link
               key={page.name}
@@ -95,13 +92,13 @@ export default function Header() {
             </Link>
           ))}
         </div>
-        <div className="sm:hidden">
-          <MobileMenu pages={pages} />
-        </div>
       </div>
-      <div className="flex items-center">
-        {isConnected && apeCoinBalance && (
-          <div className="mr-2">{humanize(apeCoinBalance)} ApeCoin</div>
+      <div className="flex items-center h-8">
+        {isConnected && apeCoinBalance && !isNaN(apeCoinBalance) && (
+          <div className="mr-2">
+            {humanize(apeCoinBalance)} <span className="sm:hidden">$APE</span>{" "}
+            <span className="hidden sm:inline">ApeCoin</span>
+          </div>
         )}
         {!autoConnecting && <ConnectButton />}
       </div>
