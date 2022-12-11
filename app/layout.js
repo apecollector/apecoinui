@@ -6,6 +6,7 @@ import { mainnet, goerli } from "wagmi/chains";
 import { ConnectKitProvider, getDefaultClient } from "connectkit";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
+import { publicProvider } from "wagmi/providers/public";
 
 import Header from "./header";
 
@@ -14,11 +15,16 @@ import "./globals.css";
 const { provider, chains } = configureChains(
   [mainnet, goerli],
   [
-    alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY }),
+    publicProvider({ priority: 1 }),
+    alchemyProvider({ priority: 2, apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY }),
     jsonRpcProvider({
+      priority: 2,
       rpc: (chain) => {
-        if (chain.id !== mainnet.id) return null;
-        return { http: "https://eth.apecoinui.com" };
+        return {
+          http: `https://eth.apecoinui.com${
+            chain.id === mainnet.id ? "/v1/mainnet" : "/v1/goerli"
+          }`,
+        };
       },
     }),
   ]
