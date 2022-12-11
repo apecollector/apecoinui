@@ -225,9 +225,8 @@ export default function Data() {
 
   return (
     <div className="mt-10">
-      <h1 className="mt-10 text-4xl font-bold mb-4 flex items-center">Live Staking Data</h1>
-
       <div>
+        <h1 className="mt-10 text-4xl font-bold mb-4 flex items-center">Live Staking Data</h1>
         <table className="table-fixed divide-y-[1px] border">
           <thead>
             <tr className="grid grid-cols-4 gap-4 p-4">
@@ -291,7 +290,7 @@ export default function Data() {
                       style: "currency",
                       currency: "USD",
                     }).format(stats.apecoin.dailyRewardsPerApeCoin * +formatUnits(apecoinPrice, 8))}
-                    )
+                    ) {(stats.apecoin.dailyRewardsPerApeCoin * 365 * 100).toFixed(0)}%&nbsp;APR
                   </>
                 )}
               </td>
@@ -349,7 +348,7 @@ export default function Data() {
                       style: "currency",
                       currency: "USD",
                     }).format(stats.bayc.dailyRewardsPerApeCoin * +formatUnits(apecoinPrice, 8))}
-                    )
+                    ) {(stats.bayc.dailyRewardsPerApeCoin * 365 * 100).toFixed(0)}%&nbsp;APR
                   </>
                 )}
               </td>
@@ -403,7 +402,7 @@ export default function Data() {
                     }).format(stats.mayc.dailyRewardsPerApeCoin)}{" "}
                     ($
                     {(stats.mayc.dailyRewardsPerApeCoin * +formatUnits(apecoinPrice, 8)).toFixed(3)}
-                    )
+                    ) {(stats.mayc.dailyRewardsPerApeCoin * 365 * 100).toFixed(0)}%&nbsp;APR
                   </>
                 )}
               </td>
@@ -461,14 +460,16 @@ export default function Data() {
                       style: "currency",
                       currency: "USD",
                     }).format(stats.bakc.dailyRewardsPerApeCoin * +formatUnits(apecoinPrice, 8))}
-                    )
+                    ) {(stats.bakc.dailyRewardsPerApeCoin * 365 * 100).toFixed(0)}%&nbsp;APR
                   </>
                 )}
               </td>
             </tr>
           </tbody>
         </table>
+      </div>
 
+      <div className="mt-10">
         <h1 className="mt-10 text-4xl font-bold mb-4">Staking Calculator</h1>
         <div className="divide-y-[1px] border">
           <div className="grid grid-cols-4 p-4 gap-4">
@@ -509,6 +510,15 @@ export default function Data() {
                   }}
                 >
                   MAX
+                </button>
+              )}
+              {apePoolToStake == apePoolStakable && (
+                <button
+                  onClick={() => {
+                    setApePoolToStake(0);
+                  }}
+                >
+                  CLEAR
                 </button>
               )}
             </div>
@@ -576,6 +586,15 @@ export default function Data() {
                   MAX
                 </button>
               )}
+              {baycPoolToStake == baycMaxStakable && (
+                <button
+                  onClick={() => {
+                    setBaycPoolToStake(0);
+                  }}
+                >
+                  CLEAR
+                </button>
+              )}
             </div>
             <div className="flex items-center flex-wrap">
               {!initialLoad ? (
@@ -640,6 +659,15 @@ export default function Data() {
                   MAX
                 </button>
               )}
+              {maycPoolToStake == maycMaxStakable && (
+                <button
+                  onClick={() => {
+                    setMaycPoolToStake(0);
+                  }}
+                >
+                  CLEAR
+                </button>
+              )}
             </div>
             <div className="flex items-center flex-wrap">
               {!initialLoad ? (
@@ -702,6 +730,15 @@ export default function Data() {
                   }}
                 >
                   MAX
+                </button>
+              )}
+              {bakcPoolToStake == bakcMaxStakable && (
+                <button
+                  onClick={() => {
+                    setBakcPoolToStake(0);
+                  }}
+                >
+                  CLEAR
                 </button>
               )}
             </div>
