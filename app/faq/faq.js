@@ -2,11 +2,11 @@
 
 function Question({ question, answer }) {
   return (
-    <div className="mt-10 mb-2 w-full">
-      <div className="flex justify-between items-center mb-2">
-        <h3 className="text-2xl">{question}</h3>
-      </div>
-      <div>{answer}</div>
+    <div class="mb-10">
+      <h3 class="flex items-center mb-4 text-lg font-medium text-gray-900 dark:text-white">
+        {question}
+      </h3>
+      <div class="text-gray-500 dark:text-gray-400">{answer}</div>
     </div>
   );
 }
@@ -111,7 +111,7 @@ export default function FAQ() {
         <h1 className="text-4xl font-bold mb-4">Common Questions</h1>
         {/* <p className="mb-8">A place to find clarity in a world of uncertainty</p> */}
       </div>
-      <div className="flex flex-col">
+      <div className="mt-4">
         {faqs.map((faq, i) => (
           <Question key={i} question={faq.question} answer={faq.answer} />
         ))}

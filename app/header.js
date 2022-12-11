@@ -74,6 +74,7 @@ export default function Header() {
         <div className="flex gap-x-4">
           {pages.map((page) => (
             <Link
+              shallow={true}
               key={page.name}
               className={
                 page.pathname === pathname
@@ -87,11 +88,15 @@ export default function Header() {
           ))}
         </div>
       </div>
-      <div className="flex items-center h-8">
-        {isConnected && apeCoinBalance && !isNaN(apeCoinBalance) && (
-          <div className="mr-4">{humanize(apeCoinBalance)} $APE</div>
+      <div className="flex items-center h-8 gap-x-4">
+        {!autoConnecting && (
+          <>
+            {apeCoinBalance && !isNaN(apeCoinBalance) && (
+              <div>{humanize(apeCoinBalance)} ApeCoin</div>
+            )}
+            <ConnectButton />
+          </>
         )}
-        {!autoConnecting && <ConnectButton />}
       </div>
     </>
   );
