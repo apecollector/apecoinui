@@ -6,9 +6,11 @@ import { ethers } from "ethers";
 import { useAccount, useContractRead, useContractReads, useNetwork } from "wagmi";
 
 import StakingABI from "../../lib/abis/staking";
-import PriceABI from "../../lib/abis/price";
 import BalanceABI from "../../lib/abis/balance";
 import useStakingStore from "../store";
+import usePrice from "../../lib/hooks/usePrice";
+import Events from "../events";
+import Countdown from "../countdown";
 
 const BAYC_MAX_STAKE = 10094;
 const MAYC_MAX_STAKE = 2042;
@@ -61,14 +63,6 @@ export default function Data() {
     chainId: chain?.id || 1,
   });
 
-  const priceContractRead = useContractRead({
-    address: "0xD10aBbC76679a20055E167BB80A24ac851b37056",
-    abi: PriceABI,
-    functionName: "latestRoundData",
-    watch: true,
-    chainId: 1,
-  });
-
   const { data, isSuccess } = useContractReads({
     enabled: isConnected,
     watch: true,
@@ -94,7 +88,8 @@ export default function Data() {
   const apeCoinBalance = useStakingStore((state) => state.apeCoinBalance);
 
   const [initialLoad, setInitialLoad] = useState(false);
-  const [apecoinPrice, setApecoinPrice] = useState(null);
+
+  const apecoinPrice = usePrice();
 
   const [apePoolStakable, setApePoolStakable] = useState(0);
   const [baycPoolStakable, setBaycPoolStakable] = useState(0);
@@ -175,12 +170,6 @@ export default function Data() {
     }
   }, [poolsContractRead.isSuccess, poolsContractRead.isRefetching, poolsContractRead.data]);
 
-  useEffect(() => {
-    if (priceContractRead.isSuccess) {
-      setApecoinPrice(priceContractRead.data.answer);
-    }
-  }, [priceContractRead.isSuccess, priceContractRead.isRefetching, priceContractRead.data]);
-
   const stats = {
     apecoin: {
       totalStaked: Math.round(formatUnits(apecoinPoolTotalStaked)),
@@ -226,19 +215,40 @@ export default function Data() {
   return (
     <div className="mt-10">
       <div>
+        <h1 className="mt-10 text-4xl font-bold mb-4 flex items-center">Staking Rewards Countdown</h1>
+        <Countdown targetDate={1670864400000} />
+      </div>
+
+      <div>
         <h1 className="mt-10 text-4xl font-bold mb-4 flex items-center">Live Staking Data</h1>
-        <table className="table-fixed divide-y-[1px] border">
+        <table className="table-fixed divide-y-[1px] border dark:divide-slate-500  dark:border-slate-500 ">
           <thead>
-            <tr className="grid grid-cols-4 gap-4 p-4">
+            <tr className="grid grid-cols-4 gap-4 gap-x-8 p-4">
               <td className="flex items-center font-semibold">Staking Pool</td>
-              <td className="flex items-center font-semibold">$APE Staked</td>
-              <td className="flex items-center font-semibold">Daily $APE Reward&nbsp;Pool</td>
-              <td className="flex items-center font-semibold">Daily $APE reward Per $APE Staked</td>
+              <td className="flex items-center font-semibold">ApeCoin Staked</td>
+              <td className="flex items-center font-semibold">Daily ApeCoin Reward Pool</td>
+              <td className="flex items-center font-semibold">
+                Daily ApeCoin reward Per ApeCoin Staked
+              </td>
             </tr>
           </thead>
-          <tbody className="divide-y-[1px]">
-            <tr className="grid grid-cols-4 gap-4 p-4">
-              <td className="flex items-center">$APE</td>
+          <tbody className="divide-y-[1px] dark:divide-slate-500">
+            <tr className="grid grid-cols-4 gap-4 gap-x-8 p-4">
+              <td className="flex flex-wrap items-center gap-x-4 ">
+                APE&nbsp;{" "}
+                {!initialLoad ? (
+                  <>
+                    <div role="status" className="max-w-sm animate-pulse">
+                      <div className="h-4 bg-gray-200 rounded-full dark:bg-gray-700 w-20"></div>
+                      <span className="sr-only">Loading...</span>
+                    </div>
+                  </>
+                ) : (
+                  <span className="bg-green-100 text-green-800 text-sm font-semibold px-2.5 py-0.5 rounded dark:bg-green-200 dark:text-green-900">
+                    {(stats.apecoin.dailyRewardsPerApeCoin * 365 * 100).toFixed(0)}%&nbsp;APR
+                  </span>
+                )}
+              </td>
               <td className="flex items-center">
                 {!initialLoad ? (
                   <>
@@ -290,13 +300,27 @@ export default function Data() {
                       style: "currency",
                       currency: "USD",
                     }).format(stats.apecoin.dailyRewardsPerApeCoin * +formatUnits(apecoinPrice, 8))}
-                    ) {(stats.apecoin.dailyRewardsPerApeCoin * 365 * 100).toFixed(0)}%&nbsp;APR
+                    )
                   </>
                 )}
               </td>
             </tr>
-            <tr className="grid grid-cols-4 gap-4 p-4">
-              <td className="flex items-center">BAYC</td>
+            <tr className="grid grid-cols-4 gap-4 gap-x-8 p-4">
+              <td className="flex flex-wrap items-center gap-x-4 ">
+                BAYC{" "}
+                {!initialLoad ? (
+                  <>
+                    <div role="status" className="max-w-sm animate-pulse">
+                      <div className="h-4 bg-gray-200 rounded-full dark:bg-gray-700 w-20"></div>
+                      <span className="sr-only">Loading...</span>
+                    </div>
+                  </>
+                ) : (
+                  <span className="bg-green-100 text-green-800 text-sm font-semibold px-2.5 py-0.5 rounded dark:bg-green-200 dark:text-green-900">
+                    {(stats.bayc.dailyRewardsPerApeCoin * 365 * 100).toFixed(0)}%&nbsp;APR
+                  </span>
+                )}
+              </td>
               <td className="flex items-center">
                 {!initialLoad ? (
                   <>
@@ -348,13 +372,27 @@ export default function Data() {
                       style: "currency",
                       currency: "USD",
                     }).format(stats.bayc.dailyRewardsPerApeCoin * +formatUnits(apecoinPrice, 8))}
-                    ) {(stats.bayc.dailyRewardsPerApeCoin * 365 * 100).toFixed(0)}%&nbsp;APR
+                    )
                   </>
                 )}
               </td>
             </tr>
-            <tr className="grid grid-cols-4 gap-4 p-4">
-              <td className="flex items-center">MAYC</td>
+            <tr className="grid grid-cols-4 gap-4 gap-x-8 p-4">
+              <td className="flex flex-wrap items-center gap-x-4 ">
+                MAYC{" "}
+                {!initialLoad ? (
+                  <>
+                    <div role="status" className="max-w-sm animate-pulse">
+                      <div className="h-4 bg-gray-200 rounded-full dark:bg-gray-700 w-20"></div>
+                      <span className="sr-only">Loading...</span>
+                    </div>
+                  </>
+                ) : (
+                  <span className="bg-green-100 text-green-800 text-sm font-semibold px-2.5 py-0.5 rounded dark:bg-green-200 dark:text-green-900">
+                    {(stats.mayc.dailyRewardsPerApeCoin * 365 * 100).toFixed(0)}%&nbsp;APR
+                  </span>
+                )}
+              </td>
               <td className="flex items-center">
                 {!initialLoad ? (
                   <>
@@ -402,13 +440,27 @@ export default function Data() {
                     }).format(stats.mayc.dailyRewardsPerApeCoin)}{" "}
                     ($
                     {(stats.mayc.dailyRewardsPerApeCoin * +formatUnits(apecoinPrice, 8)).toFixed(3)}
-                    ) {(stats.mayc.dailyRewardsPerApeCoin * 365 * 100).toFixed(0)}%&nbsp;APR
+                    )
                   </>
                 )}
               </td>
             </tr>
-            <tr className="grid grid-cols-4 gap-4 p-4">
-              <td className="flex items-center">BAKC</td>
+            <tr className="grid grid-cols-4 gap-4 gap-x-8 p-4">
+              <td className="flex flex-wrap items-center gap-x-4 ">
+                BAKC{" "}
+                {!initialLoad ? (
+                  <>
+                    <div role="status" className="max-w-sm animate-pulse">
+                      <div className="h-4 bg-gray-200 rounded-full dark:bg-gray-700 w-20"></div>
+                      <span className="sr-only">Loading...</span>
+                    </div>
+                  </>
+                ) : (
+                  <span className="bg-green-100 text-green-800 text-sm font-semibold px-2.5 py-0.5 rounded dark:bg-green-200 dark:text-green-900">
+                    {(stats.bakc.dailyRewardsPerApeCoin * 365 * 100).toFixed(0)}%&nbsp;APR
+                  </span>
+                )}
+              </td>
               <td className="flex items-center">
                 {!initialLoad ? (
                   <>
@@ -460,7 +512,7 @@ export default function Data() {
                       style: "currency",
                       currency: "USD",
                     }).format(stats.bakc.dailyRewardsPerApeCoin * +formatUnits(apecoinPrice, 8))}
-                    ) {(stats.bakc.dailyRewardsPerApeCoin * 365 * 100).toFixed(0)}%&nbsp;APR
+                    )
                   </>
                 )}
               </td>
@@ -471,14 +523,14 @@ export default function Data() {
 
       <div className="mt-10">
         <h1 className="mt-10 text-4xl font-bold mb-4">Staking Calculator</h1>
-        <div className="divide-y-[1px] border">
-          <div className="grid grid-cols-4 p-4 gap-4">
+        <div className="divide-y-[1px] dark:divide-slate-500 border dark:border-slate-500">
+          <div className="grid grid-cols-4 p-4 gap-4 gap-x-8">
             <div className="flex items-center font-semibold col-span-2">Token Count</div>
             <div className="flex items-center font-semibold">Stake Amount</div>
-            <div className="flex items-center font-semibold">Daily $APE Reward</div>
+            <div className="flex items-center font-semibold">Daily ApeCoin Reward</div>
           </div>
 
-          <div className="grid grid-cols-4 p-4 gap-4">
+          <div className="grid grid-cols-4 p-4 gap-4 gap-x-8">
             <div className="flex items-center col-span-2 flex-wrap">
               <input
                 className="mr-2 px-2 border w-28 dark:bg-slate-800 dark:border-slate-500"
@@ -490,7 +542,7 @@ export default function Data() {
                   }
                 }}
               />
-              $APE
+              ApeCoin
             </div>
             <div className="flex items-center flex-wrap">
               <input
@@ -512,7 +564,7 @@ export default function Data() {
                   MAX
                 </button>
               )}
-              {apePoolToStake == apePoolStakable && (
+              {apePoolToStake == apePoolStakable && apePoolStakable != 0 && (
                 <button
                   onClick={() => {
                     setApePoolToStake(0);
@@ -522,7 +574,7 @@ export default function Data() {
                 </button>
               )}
             </div>
-            <div>
+            <div className="flex items-center flex-wrap">
               {!initialLoad ? (
                 <>
                   <div role="status" className="max-w-sm animate-pulse">
@@ -551,7 +603,7 @@ export default function Data() {
             </div>
           </div>
 
-          <div className="grid grid-cols-4 p-4  gap-4">
+          <div className="grid grid-cols-4 p-4 gap-4 gap-x-8">
             <div className="flex items-center col-span-2 flex-wrap">
               <input
                 id="bayc-count"
@@ -586,7 +638,7 @@ export default function Data() {
                   MAX
                 </button>
               )}
-              {baycPoolToStake == baycMaxStakable && (
+              {baycPoolToStake == baycMaxStakable && baycPoolStakable != 0 && (
                 <button
                   onClick={() => {
                     setBaycPoolToStake(0);
@@ -624,7 +676,7 @@ export default function Data() {
               )}
             </div>
           </div>
-          <div className="grid grid-cols-4 p-4  gap-4">
+          <div className="grid grid-cols-4 p-4 gap-4 gap-x-8">
             <div className="flex items-center col-span-2 flex-wrap">
               <input
                 id="mayc-count"
@@ -659,7 +711,7 @@ export default function Data() {
                   MAX
                 </button>
               )}
-              {maycPoolToStake == maycMaxStakable && (
+              {maycPoolToStake == maycMaxStakable && maycPoolStakable != 0 && (
                 <button
                   onClick={() => {
                     setMaycPoolToStake(0);
@@ -697,7 +749,7 @@ export default function Data() {
               )}
             </div>
           </div>
-          <div className="grid grid-cols-4 p-4  gap-4">
+          <div className="grid grid-cols-4 p-4 gap-4 gap-x-8">
             <div className="flex items-center col-span-2 flex-wrap">
               <input
                 id="bakc-count"
@@ -732,7 +784,7 @@ export default function Data() {
                   MAX
                 </button>
               )}
-              {bakcPoolToStake == bakcMaxStakable && (
+              {bakcPoolToStake == bakcMaxStakable && bakcPoolStakable != 0 && (
                 <button
                   onClick={() => {
                     setBakcPoolToStake(0);
@@ -742,7 +794,7 @@ export default function Data() {
                 </button>
               )}
             </div>
-            <div className="flex items-center">
+            <div className="flex items-center flex-wrap">
               {!initialLoad ? (
                 <>
                   <div role="status" className="max-w-sm animate-pulse">
@@ -770,7 +822,7 @@ export default function Data() {
               )}
             </div>
           </div>
-          <div className="grid grid-cols-4 p-4  gap-4">
+          <div className="grid grid-cols-4 p-4 gap-4 gap-x-8">
             <div className="flex items-center col-span-2">Totals</div>
             <div className="flex items-center">
               {new Intl.NumberFormat({
@@ -802,6 +854,10 @@ export default function Data() {
             </div>
           </div>
         </div>
+      </div>
+      <div className="mt-10">
+        <h1 className="mt-10 text-4xl font-bold mb-4">Staking Activity</h1>
+        <Events />
       </div>
     </div>
   );

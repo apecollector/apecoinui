@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Countdown from "./countdown";
 import Events from "./events";
 
 export default async function Page() {
@@ -9,6 +10,7 @@ export default async function Page() {
 
       <div className="mt-10 grid sm:grid-cols-3 gap-4">
         <Link
+          shallow={true}
           href="/data"
           className={`block sm:max-w-sm p-6 bg-white border border-gray-200 
           hover:bg-gray-100 dark:bg-gray-900 dark:border-gray-700 dark:hover:bg-gray-800`}
@@ -19,6 +21,7 @@ export default async function Page() {
           </p>
         </Link>
         <Link
+          shallow={true}
           href="/stake"
           className={`block sm:max-w-sm p-6 bg-white border border-gray-200 
           hover:bg-gray-100 dark:bg-gray-900 dark:border-gray-700 dark:hover:bg-gray-800`}
@@ -34,6 +37,7 @@ export default async function Page() {
           </p>
         </Link>
         <Link
+          shallow={true}
           href="/faq"
           className={`block sm:max-w-sm p-6 bg-white border border-gray-200 
           hover:bg-gray-100 dark:bg-gray-900 dark:border-gray-700 dark:hover:bg-gray-800`}
@@ -46,6 +50,14 @@ export default async function Page() {
       </div>
 
       <div className="mt-10">
+        <h3 className="text-3xl font-bold">Staking Rewards Countdown:</h3>
+        <div className="mt-5">
+          <Countdown targetDate={1670864400000} />
+        </div>
+      </div>
+
+      <div className="mt-10">
+        <h3 className="text-3xl font-bold">Live staking activity:</h3>
         <Events />
       </div>
 
