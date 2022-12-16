@@ -32,17 +32,17 @@ export default function UserStaking() {
     <>
       <div className="mt-4 grid gap-4 sm:grid-cols-3">
         <div
-          className={`block border border-gray-200 bg-white p-4 
-          dark:border-gray-700 dark:bg-gray-900 sm:max-w-sm`}
+          className={`block border border-zinc-200 bg-white p-4
+          dark:border-zinc-700 dark:bg-zinc-900 sm:max-w-sm`}
         >
           <h5 className="mb-2 text-xl font-bold tracking-tight">
             Address or ENS name:
           </h5>
           <input
             spellCheck="false"
-            className="w-full border px-1 text-xs dark:border-slate-500 dark:bg-slate-800"
+            className="w-full border px-1 text-xs dark:border-zinc-500 dark:bg-zinc-800"
             value={statsAddress}
-            placeholder={"ennter address or ens name"}
+            placeholder={"enter address or ens name"}
             onChange={(e) => {
               setStatsAddress(e.target.value);
             }}
@@ -53,23 +53,23 @@ export default function UserStaking() {
             "Invalid address or ENS name"}
         </div>
         <div
-          className={`block border border-gray-200 bg-white p-4 
-          dark:border-gray-700 dark:bg-gray-900 sm:max-w-sm`}
+          className={`block border border-zinc-200 bg-white p-4
+          dark:border-zinc-700 dark:bg-zinc-900 sm:max-w-sm`}
         >
           <h5 className="mb-2 text-xl font-bold tracking-tight">
             Total Staked
           </h5>
-          <p className="text-gray-700 dark:text-gray-400">
+          <p className="text-zinc-700 dark:text-zinc-400">
             {totalStaked && (
               <>
-                {Intl.NumberFormat(undefined, {
+                {Intl.NumberFormat("en-US", {
                   maximumFractionDigits: 4,
                 }).format(totalStaked)}
                 {totalStaked && apecoinPriceNumber && (
                   <>
                     {" "}
                     (
-                    {Intl.NumberFormat(undefined, {
+                    {Intl.NumberFormat("en-US", {
                       style: "currency",
                       currency: "USD",
                       maximumFractionDigits: 2,
@@ -82,23 +82,23 @@ export default function UserStaking() {
           </p>
         </div>
         <div
-          className={`block border border-gray-200 bg-white p-4 
-          dark:border-gray-700 dark:bg-gray-900 sm:max-w-sm`}
+          className={`block border border-zinc-200 bg-white p-4
+          dark:border-zinc-700 dark:bg-zinc-900 sm:max-w-sm`}
         >
           <h5 className="mb-2 text-xl font-bold tracking-tight">
             Unclaimed Rewards
           </h5>
-          <p className="text-gray-700 dark:text-gray-400">
+          <p className="text-zinc-700 dark:text-zinc-400">
             {totalUnclaimed && (
               <>
-                {Intl.NumberFormat(undefined, {
+                {Intl.NumberFormat("en-US", {
                   maximumFractionDigits: 4,
                 }).format(totalUnclaimed)}
                 {totalUnclaimed && apecoinPriceNumber && (
                   <>
                     {" "}
                     (
-                    {Intl.NumberFormat(undefined, {
+                    {Intl.NumberFormat("en-US", {
                       style: "currency",
                       currency: "USD",
                       maximumFractionDigits: 2,

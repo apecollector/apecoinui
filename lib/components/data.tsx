@@ -38,9 +38,9 @@ export default function Data() {
       <div className="ld:items-center flex flex-col justify-between gap-x-4 lg:flex-row">
         <TimeframeSelector /> <AmountSelector />
       </div>
-      <div className="overflow-auto border dark:border-gray-600">
+      <div className="overflow-auto border dark:border-zinc-700">
         <table className="w-full">
-          <thead className="border-b-2 border-gray-200 dark:border-gray-600">
+          <thead className="border-b border-zinc-200 dark:border-zinc-700">
             <tr className="flex">
               <th className="flex w-1/4 items-center p-4 text-left font-semibold tracking-wide">
                 Staking Pool
@@ -56,7 +56,7 @@ export default function Data() {
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-200 dark:divide-gray-600">
+          <tbody className="divide-y divide-zinc-200 dark:divide-zinc-700">
             {(Object.keys(poolData.poolData) as unknown as PoolType[]).map(
               (pool) => (
                 <tr key={pool} className="flex">
@@ -71,7 +71,7 @@ export default function Data() {
                       </span>
                     ) : (
                       <div role="status" className="max-w-sm animate-pulse">
-                        <div className="h-4 w-20 rounded-full bg-gray-200 dark:bg-gray-700"></div>
+                        <div className="h-4 w-20 rounded-full bg-zinc-200 dark:bg-zinc-700"></div>
                         <span className="sr-only">Loading...</span>
                       </div>
                     )}
@@ -85,7 +85,7 @@ export default function Data() {
                       </>
                     ) : (
                       <div role="status" className="max-w-sm animate-pulse">
-                        <div className="h-4 w-16 rounded-full bg-gray-200 dark:bg-gray-700 md:w-36"></div>
+                        <div className="h-4 w-16 rounded-full bg-zinc-200 dark:bg-zinc-700 md:w-36"></div>
                         <span className="sr-only">Loading...</span>
                       </div>
                     )}
@@ -104,7 +104,7 @@ export default function Data() {
                       </>
                     ) : (
                       <div role="status" className="max-w-sm animate-pulse">
-                        <div className="h-4 w-16 rounded-full bg-gray-200 dark:bg-gray-700 md:w-36"></div>
+                        <div className="h-4 w-16 rounded-full bg-zinc-200 dark:bg-zinc-700 md:w-36"></div>
                         <span className="sr-only">Loading...</span>
                       </div>
                     )}
@@ -147,7 +147,7 @@ export default function Data() {
                       </>
                     ) : (
                       <div role="status" className="max-w-sm animate-pulse">
-                        <div className="h-4 w-16 rounded-full bg-gray-200 dark:bg-gray-700 md:w-36"></div>
+                        <div className="h-4 w-16 rounded-full bg-zinc-200 dark:bg-zinc-700 md:w-36"></div>
                         <span className="sr-only">Loading...</span>
                       </div>
                     )}

@@ -21,24 +21,24 @@ const DisplayStakeEvent: React.FC<{ event: EventData }> = ({ event }) => {
   const { chain } = useNetwork();
   return (
     <a
-      className="text-gray-600 dark:text-gray-400"
+      className="text-zinc-600 dark:text-zinc-400"
       target={"_blank"}
       href={`https://${
         chain?.id === 5 ? "goerli.etherscan.io" : "etherscan.io"
       }/tx/${event.hash}`}
     >
-      <span className="font-medium text-gray-900 dark:text-white">
+      <span className="font-medium text-zinc-900 dark:text-white">
         {event.user}
       </span>{" "}
       staked{" "}
-      <span className="font-medium text-gray-900 dark:text-white">
-        {new Intl.NumberFormat(undefined, {
+      <span className="font-medium text-zinc-900 dark:text-white">
+        {new Intl.NumberFormat("en-US", {
           maximumFractionDigits: 4,
         }).format(+formatUnits(event.amount))}{" "}
         ApeCoin
       </span>{" "}
       into the{" "}
-      <span className="font-medium text-gray-900 dark:text-white">
+      <span className="font-medium text-zinc-900 dark:text-white">
         {poolIDs[event.poolId]} pool
       </span>
     </a>
@@ -49,24 +49,24 @@ const DisplayWithdrawEvent: React.FC<{ event: EventData }> = ({ event }) => {
   const { chain } = useNetwork();
   return (
     <a
-      className="text-gray-600 dark:text-gray-400"
+      className="text-zinc-600 dark:text-zinc-400"
       target={"_blank"}
       href={`https://${
         chain?.id === 5 ? "goerli.etherscan.io" : "etherscan.io"
       }/tx/${event.hash}`}
     >
-      <span className="font-medium text-gray-900 dark:text-white">
+      <span className="font-medium text-zinc-900 dark:text-white">
         {event.user}
       </span>{" "}
       withdrew{" "}
-      <span className="font-medium text-gray-900 dark:text-white">
-        {new Intl.NumberFormat(undefined, {
+      <span className="font-medium text-zinc-900 dark:text-white">
+        {new Intl.NumberFormat("en-US", {
           maximumFractionDigits: 4,
         }).format(+formatUnits(event.amount))}{" "}
         ApeCoin
       </span>{" "}
       from the{" "}
-      <span className="font-medium text-gray-900 dark:text-white">
+      <span className="font-medium text-zinc-900 dark:text-white">
         {poolIDs[event.poolId]} pool
       </span>
     </a>
@@ -77,24 +77,24 @@ const DisplayClaimEvent: React.FC<{ event: EventData }> = ({ event }) => {
   const { chain } = useNetwork();
   return (
     <a
-      className="text-gray-600 dark:text-gray-400"
+      className="text-zinc-600 dark:text-zinc-400"
       target={"_blank"}
       href={`https://${
         chain?.id === 5 ? "goerli.etherscan.io" : "etherscan.io"
       }/tx/${event.hash}`}
     >
-      <span className="font-medium text-gray-900 dark:text-white">
+      <span className="font-medium text-zinc-900 dark:text-white">
         {event.user}
       </span>{" "}
       claimed{" "}
-      <span className="font-medium text-gray-900 dark:text-white">
-        {new Intl.NumberFormat(undefined, {
+      <span className="font-medium text-zinc-900 dark:text-white">
+        {new Intl.NumberFormat("en-US", {
           maximumFractionDigits: 4,
         }).format(+formatUnits(event.amount))}{" "}
         ApeCoin
       </span>{" "}
       from the{" "}
-      <span className="font-medium text-gray-900 dark:text-white">
+      <span className="font-medium text-zinc-900 dark:text-white">
         {poolIDs[event.poolId]} pool
       </span>
     </a>
@@ -112,24 +112,24 @@ const DisplayEvent: React.FC<{ event: EventData }> = ({ event }) => {
   }
   return (
     <a
-      className="text-gray-600 dark:text-gray-400"
+      className="text-zinc-600 dark:text-zinc-400"
       target={"_blank"}
       href={`https://${
         chain?.id === 5 ? "goerli.etherscan.io" : "etherscan.io"
       }/tx/${event.hash}`}
     >
-      <span className="font-medium text-gray-900 dark:text-white">
+      <span className="font-medium text-zinc-900 dark:text-white">
         {event.user}
       </span>{" "}
       staked{" "}
-      <span className="font-medium text-gray-900 dark:text-white">
-        {new Intl.NumberFormat(undefined, {
+      <span className="font-medium text-zinc-900 dark:text-white">
+        {new Intl.NumberFormat("en-US", {
           maximumFractionDigits: 4,
         }).format(+formatUnits(event.amount))}{" "}
         ApeCoin
       </span>{" "}
       into the{" "}
-      <span className="font-medium text-gray-900 dark:text-white">
+      <span className="font-medium text-zinc-900 dark:text-white">
         {poolIDs[event.poolId]} pool
       </span>
     </a>
@@ -141,11 +141,11 @@ export default function Events() {
   return (
     <>
       <div>
-        <ol className="divider-gray-200 mt-3 divide-y dark:divide-gray-700">
+        <ol className="divider-zinc-200 mt-3 divide-y dark:divide-zinc-700">
           {!events || events?.length === 0 ? (
             <li className="block items-center py-3 sm:flex">
               <div>
-                <div className="text-gray-600 dark:text-gray-400">
+                <div className="text-zinc-600 dark:text-zinc-400">
                   Waiting for staking contract events...
                 </div>
               </div>

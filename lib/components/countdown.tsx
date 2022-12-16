@@ -11,7 +11,7 @@ export default function Countdown() {
 
   if (!mounted)
     return (
-      <div className="mt-4 text-gray-600 dark:text-gray-400">
+      <div className="mt-4 text-zinc-600 dark:text-zinc-400">
         Getting reward timestamp from contract...
       </div>
     );
@@ -19,7 +19,7 @@ export default function Countdown() {
   return (
     <div className="mt-4">
       Next reward in{" "}
-      <span className="font-medium text-gray-900 dark:text-white">
+      <span className="font-medium text-zinc-900 dark:text-white">
         {padTo2Digits(minutes)} minutes {padTo2Digits(seconds)} seconds
       </span>{" "}
       from now

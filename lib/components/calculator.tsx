@@ -160,9 +160,9 @@ export default function Calculator() {
   return (
     <div className="mt-4">
       <TimeframeSelector />
-      <div className="overflow-auto border dark:border-gray-600">
+      <div className="overflow-auto border dark:border-zinc-700">
         <table className="w-full">
-          <thead className="border-b-2 border-gray-200 dark:border-gray-600">
+          <thead className="border-b border-zinc-200 dark:border-zinc-700">
             <tr className="flex">
               <th className="flex w-1/3 items-center p-4 text-left font-semibold tracking-wide">
                 Owned Token Count
@@ -175,7 +175,7 @@ export default function Calculator() {
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-200 dark:divide-gray-600">
+          <tbody className="divide-y divide-zinc-200 dark:divide-zinc-700">
             {(Object.keys(poolData.poolData) as unknown as PoolType[]).map(
               (pool) => (
                 <tr key={pool} className="flex">
@@ -183,7 +183,7 @@ export default function Calculator() {
                     <input
                       className={`${
                         pool != PoolType.APE ? "w-16" : "w-28"
-                      } border px-2 dark:border-slate-500 dark:bg-slate-800`}
+                      } border px-2 dark:border-zinc-500 dark:bg-zinc-800`}
                       value={PoolDataObject[pool].ownedCount}
                       onChange={(e) => {
                         const newValue = +e.target.value;
@@ -199,7 +199,7 @@ export default function Calculator() {
                   </td>
                   <td className="flex w-1/3 flex-wrap items-center gap-2 p-4">
                     <input
-                      className="w-28 border px-2 dark:border-slate-500 dark:bg-slate-800"
+                      className="w-28 border px-2 dark:border-zinc-500 dark:bg-zinc-800"
                       value={PoolDataObject[pool].toStake}
                       onChange={(e) => {
                         const newValue = +e.target.value;
@@ -245,7 +245,7 @@ export default function Calculator() {
                     poolData.poolData[pool].rewardPerDay &&
                     apecoinPriceNumber ? (
                       <>
-                        {Intl.NumberFormat(undefined, {
+                        {Intl.NumberFormat( "en-US", {
                           maximumFractionDigits: 4,
                         }).format(
                           poolData.poolData[pool].rewardPerHour! *
@@ -253,7 +253,7 @@ export default function Calculator() {
                             PoolDataObject[pool].toStake
                         )}{" "}
                         (
-                        {Intl.NumberFormat(undefined, {
+                        {Intl.NumberFormat( "en-US", {
                           maximumFractionDigits: 4,
                           style: "currency",
                           currency: "USD",
@@ -267,7 +267,7 @@ export default function Calculator() {
                       </>
                     ) : (
                       <div role="status" className="max-w-sm animate-pulse">
-                        <div className="h-4 w-16 rounded-full bg-gray-200 dark:bg-gray-700 md:w-36"></div>
+                        <div className="h-4 w-16 rounded-full bg-zinc-200 dark:bg-zinc-700 md:w-36"></div>
                         <span className="sr-only">Loading...</span>
                       </div>
                     )}
@@ -290,18 +290,18 @@ export default function Calculator() {
                 )}
               </td>
               <td className="flex w-1/3 flex-wrap items-center gap-2 p-4">
-                {Intl.NumberFormat(undefined, {
+                {Intl.NumberFormat( "en-US", {
                   maximumFractionDigits: 4,
                 }).format(totalStakable) || 0}
               </td>
               <td className="flex w-1/3 flex-wrap items-center gap-2 p-4">
                 {apecoinPriceNumber ? (
                   <>
-                    {Intl.NumberFormat(undefined, {
+                    {Intl.NumberFormat( "en-US", {
                       maximumFractionDigits: 4,
                     }).format(rewardsTotal)}{" "}
                     (
-                    {Intl.NumberFormat(undefined, {
+                    {Intl.NumberFormat( "en-US", {
                       maximumFractionDigits: 4,
                       style: "currency",
                       currency: "USD",
@@ -314,7 +314,7 @@ export default function Calculator() {
                   </>
                 ) : (
                   <div role="status" className="max-w-sm animate-pulse">
-                    <div className="h-4 w-16 rounded-full bg-gray-200 dark:bg-gray-700 md:w-36"></div>
+                    <div className="h-4 w-16 rounded-full bg-zinc-200 dark:bg-zinc-700 md:w-36"></div>
                     <span className="sr-only">Loading...</span>
                   </div>
                 )}

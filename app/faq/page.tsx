@@ -1,10 +1,10 @@
 function Question({ question, answer }: { question: string; answer: any }) {
   return (
     <div className="mb-10">
-      <h3 className="mb-4 flex items-center text-lg font-medium text-gray-900 dark:text-white">
+      <h3 className="mb-4 flex items-center text-lg font-medium text-zinc-900 dark:text-white">
         {question}
       </h3>
-      <div className="text-gray-500 dark:text-gray-400">{answer}</div>
+      <div className="text-zinc-700 dark:text-zinc-400">{answer}</div>
     </div>
   );
 }

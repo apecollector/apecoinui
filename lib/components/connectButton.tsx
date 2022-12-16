@@ -63,7 +63,7 @@ const ConnectButton: React.FC<{ classNames?: string }> = ({ classNames }) => {
             <>
               <button
                 onClick={show}
-                className={`box-content flex h-6 items-center border px-2 hover:border-gray-500 dark:border-slate-500 dark:bg-slate-800 dark:hover:border-slate-300 sm:h-8 md:hidden ${
+                className={`box-content flex h-6 items-center border px-2 hover:border-zinc-500 dark:border-zinc-500 dark:bg-zinc-800 dark:hover:border-zinc-300 sm:h-8 md:hidden ${
                   classNames && classNames
                 }`}
               >
@@ -77,7 +77,7 @@ const ConnectButton: React.FC<{ classNames?: string }> = ({ classNames }) => {
               </button>
               <button
                 onClick={show}
-                className={`box-content hidden h-8 items-center border px-2 hover:border-gray-500 dark:border-slate-500 dark:bg-slate-800 dark:hover:border-slate-300 md:flex ${
+                className={`box-content hidden h-8 items-center border px-2 hover:border-zinc-500 dark:border-zinc-500 dark:bg-zinc-800 dark:hover:border-zinc-300 md:flex ${
                   classNames && classNames
                 }`}
               >

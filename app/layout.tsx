@@ -10,7 +10,7 @@ export default async function RootLayout({
 }) {
   return (
     <html lang="en" className="font-monospace">
-      <body className="container mx-auto flex h-full min-h-screen max-w-6xl flex-col p-4 dark:bg-gray-900 dark:text-slate-300 md:p-8">
+      <body className="container mx-auto flex h-full min-h-screen max-w-6xl flex-col p-4 dark:bg-zinc-900 dark:text-zinc-300 md:p-8">
         <Provider>
           <Header />
           <main className="flex-grow">{children}</main>

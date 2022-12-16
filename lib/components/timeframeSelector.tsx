@@ -25,7 +25,7 @@ const TimeframeSelector: React.FC<{ classNames?: string }> = () => {
           name={hourlyRadioName}
           checked={selectedTimeframe === TimeFrame.Hourly}
           onChange={() => setSelectedTimeframe(TimeFrame.Hourly)}
-          className="h-4 w-4 border-gray-300 bg-gray-100 text-blue-600"
+          className="h-4 w-4 border-zinc-300 bg-zinc-100 text-blue-600"
         />
         <label htmlFor={hourlyRadioID} className="ml-2">
           Hourly
@@ -38,7 +38,7 @@ const TimeframeSelector: React.FC<{ classNames?: string }> = () => {
           name={dailyRadioName}
           checked={selectedTimeframe === TimeFrame.Daily}
           onChange={() => setSelectedTimeframe(TimeFrame.Daily)}
-          className="h-4 w-4 border-gray-300 bg-gray-100 text-blue-600"
+          className="h-4 w-4 border-zinc-300 bg-zinc-100 text-blue-600"
         />
         <label htmlFor={dailyRadioID} className="ml-2">
           Daily
@@ -51,7 +51,7 @@ const TimeframeSelector: React.FC<{ classNames?: string }> = () => {
           name={weeklyRadioName}
           checked={selectedTimeframe === TimeFrame.Weekly}
           onChange={() => setSelectedTimeframe(TimeFrame.Weekly)}
-          className="h-4 w-4 border-gray-300 bg-gray-100 text-blue-600"
+          className="h-4 w-4 border-zinc-300 bg-zinc-100 text-blue-600"
         />
         <label htmlFor={weeklyRadioID} className="ml-2">
           Weekly

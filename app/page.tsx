@@ -14,11 +14,11 @@ export default async function Page() {
         <Link
           shallow={true}
           href="/data"
-          className={`block border border-gray-200 bg-white p-6 hover:bg-gray-100 
-          dark:border-gray-700 dark:bg-gray-900 dark:hover:bg-gray-800 sm:max-w-sm`}
+          className={`block border border-zinc-200 bg-white p-6 hover:bg-zinc-100
+          dark:border-zinc-700 dark:bg-zinc-900 dark:hover:bg-zinc-800 sm:max-w-sm`}
         >
           <h5 className="mb-2 text-2xl font-bold tracking-tight">Data</h5>
-          <p className="text-gray-700 dark:text-gray-400">
+          <p className="text-zinc-700 dark:text-zinc-400">
             Live staking data next to how many ApeCoin you can stake and daily
             rewards.
           </p>
@@ -26,8 +26,8 @@ export default async function Page() {
         <Link
           shallow={true}
           href="/stake"
-          className={`block border border-gray-200 bg-white p-6 hover:bg-gray-100 
-          dark:border-gray-700 dark:bg-gray-900 dark:hover:bg-gray-800 sm:max-w-sm`}
+          className={`block border border-zinc-200 bg-white p-6 hover:bg-zinc-100
+          dark:border-zinc-700 dark:bg-zinc-900 dark:hover:bg-zinc-800 sm:max-w-sm`}
         >
           <h5 className="mb-2 text-2xl font-bold tracking-tight">
             Stake{" "}
@@ -35,7 +35,7 @@ export default async function Page() {
               BETA
             </span>
           </h5>
-          <p className="text-gray-700 dark:text-gray-400">
+          <p className="text-zinc-700 dark:text-zinc-400">
             Manage your staking positions and staking contract apecoin
             allowance.
           </p>
@@ -43,11 +43,11 @@ export default async function Page() {
         <Link
           shallow={true}
           href="/faq"
-          className={`block border border-gray-200 bg-white p-6 hover:bg-gray-100 
-          dark:border-gray-700 dark:bg-gray-900 dark:hover:bg-gray-800 sm:max-w-sm`}
+          className={`block border border-zinc-200 bg-white p-6 hover:bg-zinc-100
+          dark:border-zinc-700 dark:bg-zinc-900 dark:hover:bg-zinc-800 sm:max-w-sm`}
         >
           <h5 className="mb-2 text-2xl font-bold tracking-tight">FAQ</h5>
-          <p className="text-gray-700 dark:text-gray-400">
+          <p className="text-zinc-700 dark:text-zinc-400">
             Answers to common questions around staking, apecoin and how to
             protect yourself.
           </p>
