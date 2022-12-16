@@ -22,7 +22,8 @@ const DisplayStakeEvent: React.FC<{ event: EventData }> = ({ event }) => {
   return (
     <a
       className="text-zinc-600 dark:text-zinc-400"
-      target={"_blank"}
+      target="_blank"
+      rel="noreferrer"
       href={`https://${
         chain?.id === 5 ? "goerli.etherscan.io" : "etherscan.io"
       }/tx/${event.hash}`}
@@ -50,7 +51,8 @@ const DisplayWithdrawEvent: React.FC<{ event: EventData }> = ({ event }) => {
   return (
     <a
       className="text-zinc-600 dark:text-zinc-400"
-      target={"_blank"}
+      target="_blank"
+      rel="noreferrer"
       href={`https://${
         chain?.id === 5 ? "goerli.etherscan.io" : "etherscan.io"
       }/tx/${event.hash}`}
@@ -78,7 +80,8 @@ const DisplayClaimEvent: React.FC<{ event: EventData }> = ({ event }) => {
   return (
     <a
       className="text-zinc-600 dark:text-zinc-400"
-      target={"_blank"}
+      target="_blank"
+      rel="noreferrer"
       href={`https://${
         chain?.id === 5 ? "goerli.etherscan.io" : "etherscan.io"
       }/tx/${event.hash}`}
@@ -113,7 +116,8 @@ const DisplayEvent: React.FC<{ event: EventData }> = ({ event }) => {
   return (
     <a
       className="text-zinc-600 dark:text-zinc-400"
-      target={"_blank"}
+      target="_blank"
+      rel="noreferrer"
       href={`https://${
         chain?.id === 5 ? "goerli.etherscan.io" : "etherscan.io"
       }/tx/${event.hash}`}
