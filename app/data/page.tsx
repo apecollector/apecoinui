@@ -10,10 +10,7 @@ export default async function Page() {
       <div className="mt-10">
         <UserStaking />
       </div>
-      <div className="mt-10">
-        <h3 className="text-3xl font-bold">Reward countdown:</h3>
-        <Countdown />
-      </div>
+
       <div className="mt-10">
         <h3 className="text-3xl font-bold">Live staking data:</h3>
         <Data />

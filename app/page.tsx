@@ -55,13 +55,6 @@ export default async function Page() {
       </div>
 
       <div className="mt-10">
-        <h3 className="text-3xl font-bold">Staking Rewards Countdown:</h3>
-        <div className="mt-5">
-          <Countdown />
-        </div>
-      </div>
-
-      <div className="mt-10">
         <h3 className="text-3xl font-bold">Live Staking Activity:</h3>
         <Events />
       </div>

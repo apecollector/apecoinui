@@ -13,15 +13,6 @@ const ConnectButton: React.FC<{ classNames?: string }> = ({ classNames }) => {
   const { connectAsync, connectors } = useConnect();
   const { apeCoinBalance } = useApeCoinBalance();
   const { autoConnecting, setAutoConnecting } = useAutoConnecting();
-  const apecoinPrice = usePrice();
-
-  const apecoinPriceNumber =
-    apecoinPrice &&
-    Intl.NumberFormat(undefined, {
-      style: "currency",
-      currency: "USD",
-      maximumFractionDigits: 2,
-    }).format(+formatUnits(apecoinPrice, 8));
 
   useEffect(() => {
     setAutoConnecting(true);
@@ -48,12 +39,11 @@ const ConnectButton: React.FC<{ classNames?: string }> = ({ classNames }) => {
     autoConnect();
   }, []);
 
-  if (autoConnecting || !apecoinPriceNumber) return <></>;
+  if (autoConnecting) return <></>;
 
   return (
     <>
-      {apeCoinBalance && <>{Intl.NumberFormat().format(apeCoinBalance)}</>} APE
-      ({apecoinPriceNumber})
+      {apeCoinBalance && <>{Intl.NumberFormat().format(apeCoinBalance)} APE</>}
       <ConnectKitButton.Custom>
         {({ isConnected, isConnecting, show, address, ensName }) => {
           if (isConnecting) {

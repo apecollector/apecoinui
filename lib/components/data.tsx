@@ -17,7 +17,7 @@ export default function Data() {
   const { amount: selectedAmount } = useAmount();
 
   const poolData = usePoolData();
-  const apecoinPrice = usePrice();
+  const {apecoinPrice} = usePrice();
 
   const apecoinPriceHumanNumber = apecoinPrice && +formatUnits(apecoinPrice, 8);
   const rewardHeader =

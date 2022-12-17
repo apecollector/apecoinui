@@ -16,7 +16,7 @@ import useApeCoinBalance from "@/hooks/useApeCoinBalance";
 
 export default function Calculator() {
   const poolData = usePoolData();
-  const apecoinPrice = usePrice();
+  const { apecoinPrice } = usePrice();
   const { timeframe } = useTimeframe();
   const { baycPoolStakable, maycPoolStakable, bakcPoolStakable } =
     useBalances();
@@ -245,7 +245,7 @@ export default function Calculator() {
                     poolData.poolData[pool].rewardPerDay &&
                     apecoinPriceNumber ? (
                       <>
-                        {Intl.NumberFormat( "en-US", {
+                        {Intl.NumberFormat("en-US", {
                           maximumFractionDigits: 4,
                         }).format(
                           poolData.poolData[pool].rewardPerHour! *
@@ -253,7 +253,7 @@ export default function Calculator() {
                             PoolDataObject[pool].toStake
                         )}{" "}
                         (
-                        {Intl.NumberFormat( "en-US", {
+                        {Intl.NumberFormat("en-US", {
                           maximumFractionDigits: 4,
                           style: "currency",
                           currency: "USD",
@@ -290,18 +290,18 @@ export default function Calculator() {
                 )}
               </td>
               <td className="flex w-1/3 flex-wrap items-center gap-2 p-4">
-                {Intl.NumberFormat( "en-US", {
+                {Intl.NumberFormat("en-US", {
                   maximumFractionDigits: 4,
                 }).format(totalStakable) || 0}
               </td>
               <td className="flex w-1/3 flex-wrap items-center gap-2 p-4">
                 {apecoinPriceNumber ? (
                   <>
-                    {Intl.NumberFormat( "en-US", {
+                    {Intl.NumberFormat("en-US", {
                       maximumFractionDigits: 4,
                     }).format(rewardsTotal)}{" "}
                     (
-                    {Intl.NumberFormat( "en-US", {
+                    {Intl.NumberFormat("en-US", {
                       maximumFractionDigits: 4,
                       style: "currency",
                       currency: "USD",

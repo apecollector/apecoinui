@@ -1,12 +1,12 @@
 export default function Footer() {
   return (
-    <footer className="my-20 text-center">
+    <footer className="mt-20 mb-24 text-center">
       <p>
         Made by{" "}
         <a className="text-[#1da1f2]" href="https://twitter.com/ApeCollector">
-          @ApeCollector
+          @ApeCollector #ApeFollowApe
         </a>
-        .
+        
       </p>
       <p>
         View the{" "}

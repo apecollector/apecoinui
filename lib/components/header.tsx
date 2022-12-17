@@ -1,5 +1,6 @@
 import Link from "next/link";
 import ConnectButton from "@/components/connectButton";
+import FixedData from "./fixedData";
 
 export default function Header() {
   const pages = [
@@ -11,6 +12,7 @@ export default function Header() {
 
   return (
     <>
+      <FixedData />
       <div className="flex h-8 items-center justify-between gap-x-4">
         <div className="flex gap-x-4">
           {pages.map((page) => (

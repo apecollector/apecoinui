@@ -9,7 +9,7 @@ import usePrice from "@/hooks/usePrice";
 
 export default function UserStaking() {
   const { address } = useAccount();
-  const apecoinPrice = usePrice();
+  const { apecoinPrice } = usePrice();
   const [statsAddress, setStatsAddress] = useState<string>();
   useEffect(() => {
     if (address) {

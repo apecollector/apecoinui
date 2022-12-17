@@ -8,10 +8,10 @@ export default function useCountdown() {
   useEffect(() => {
     const intervalId = setInterval(() => {
       const d = new Date();
-      const m = 60 - d.getMinutes();
-      const s = 60 - d.getSeconds();
-      setSeconds(s == 60 ? 0 : s);
-      setMinutes(s === 0 ? m : m - 1);
+      const m = 59 - d.getMinutes();
+      const s = 59 - d.getSeconds();
+      setSeconds(s);
+      setMinutes(m);
       setMounted(true);
     }, 1000);
     return () => clearInterval(intervalId);
