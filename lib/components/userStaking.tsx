@@ -70,9 +70,11 @@ export default function UserStaking() {
                     {" "}
                     (
                     {Intl.NumberFormat("en-US", {
+                      maximumFractionDigits: 2,
                       style: "currency",
                       currency: "USD",
-                      maximumFractionDigits: 2,
+                      notation: "compact",
+                      compactDisplay: "short",
                     }).format(totalStaked * apecoinPriceNumber)}
                     )
                   </>
@@ -101,7 +103,8 @@ export default function UserStaking() {
                     {Intl.NumberFormat("en-US", {
                       style: "currency",
                       currency: "USD",
-                      maximumFractionDigits: 2,
+                      notation: "compact",
+                      compactDisplay: "short",
                     }).format(totalUnclaimed * apecoinPriceNumber)}
                     )
                   </>
