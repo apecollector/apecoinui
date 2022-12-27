@@ -11,13 +11,13 @@ import { publicProvider } from "wagmi/providers/public";
 const { provider, chains } = configureChains(
   [mainnet, goerli],
   [
-    publicProvider({ priority: 1 }),
+    publicProvider({ priority: 2 }),
     alchemyProvider({
-      priority: 2,
+      priority: 1,
       apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY!,
     }),
     jsonRpcProvider({
-      priority: 2,
+      priority: 1,
       rpc: (chain) => {
         return {
           http: `https://eth.apecoinui.com${

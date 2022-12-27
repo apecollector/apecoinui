@@ -6,7 +6,7 @@ interface Map {
 }
 const apecoinContractAddresses: Map = {
   1: "0x4d224452801ACEd8B2F0aebE155379bb5D594381",
-  5: "0x6729F254aaB029a9B076CdDF97D5CbEe3859340d",
+  5: "0x328507DC29C95c170B56a1b3A758eB7a9E73455c",
 } as const;
 
 import useStore from "@/stores/store";
@@ -26,7 +26,7 @@ const useApeCoinBalance = () => {
 
   useEffect(() => {
     if (balance.data) {
-      setApeCoinBalance(+balance.data.formatted);
+      setApeCoinBalance(balance.data.value);
     }
   }, [balance.isSuccess, balance.isRefetching, balance.data]);
 

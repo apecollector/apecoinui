@@ -17,7 +17,7 @@ export default function Data() {
   const { amount: selectedAmount } = useAmount();
 
   const poolData = usePoolData();
-  const {apecoinPrice} = usePrice();
+  const { apecoinPrice } = usePrice();
 
   const apecoinPriceHumanNumber = apecoinPrice && +formatUnits(apecoinPrice, 8);
   const rewardHeader =
@@ -33,9 +33,25 @@ export default function Data() {
     return NaN;
   };
 
+  let timeFrameHourMultiplier: number;
+  switch (selectedTimeframe) {
+    case TimeFrame.Hourly:
+      timeFrameHourMultiplier = 1;
+      break;
+    case TimeFrame.Daily:
+      timeFrameHourMultiplier = 24;
+      break;
+    case TimeFrame.Weekly:
+      timeFrameHourMultiplier = 24 * 7;
+      break;
+    case TimeFrame.Monthly:
+      timeFrameHourMultiplier = 24 * 30;
+      break;
+  }
+
   return (
     <div className="mt-4">
-      <div className="ld:items-center flex flex-col justify-between gap-x-4 lg:flex-row">
+      <div className="ld:items-center flex flex-col justify-between gap-x-4 md:flex-row">
         <TimeframeSelector /> <AmountSelector />
       </div>
       <div className="overflow-auto border dark:border-zinc-700">
@@ -121,11 +137,9 @@ export default function Data() {
                             {Intl.NumberFormat(undefined, {
                               maximumFractionDigits: 4,
                             }).format(
-                              selectedTimeframe === TimeFrame.Hourly
-                                ? poolData.poolData[pool].rewardPerHour! *
-                                    rewardMultiplier(pool)
-                                : poolData.poolData[pool].rewardPerDay! *
-                                    rewardMultiplier(pool)
+                              timeFrameHourMultiplier *
+                                poolData.poolData[pool].rewardPerHour! *
+                                rewardMultiplier(pool)
                             )}{" "}
                             (
                             {Intl.NumberFormat(undefined, {
@@ -133,13 +147,9 @@ export default function Data() {
                               style: "currency",
                               currency: "USD",
                             }).format(
-                              selectedTimeframe === TimeFrame.Hourly
-                                ? poolData.poolData[pool].rewardPerHour! *
-                                    apecoinPriceHumanNumber *
-                                    rewardMultiplier(pool)
-                                : poolData.poolData[pool].rewardPerDay! *
-                                    apecoinPriceHumanNumber *
-                                    rewardMultiplier(pool)
+                              timeFrameHourMultiplier *
+                                poolData.poolData[pool].rewardPerHour! *
+                                rewardMultiplier(pool)
                             )}
                             )
                           </>

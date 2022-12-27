@@ -4,8 +4,8 @@ import Countdown from "@/components/countdown";
 
 export default async function Page() {
   return (
-    <div className="mt-20">
-      <h1 className="mt-10 text-4xl font-bold">ApeCoinUI</h1>
+    <>
+      <h1 className="text-4xl font-bold">ApeCoinUI</h1>
       <p className="mt-4">
         An open-source alternative user interface for all things apecoin.
       </p>
@@ -58,6 +58,6 @@ export default async function Page() {
         <h3 className="text-3xl font-bold">Live Staking Activity:</h3>
         <Events />
       </div>
-    </div>
+    </>
   );
 }

@@ -124,7 +124,7 @@ export default async function Page() {
 
   return (
     <>
-      <div className="mt-10 flex flex-col justify-center">
+      <div className="flex flex-col justify-center">
         <h1 className="mb-4 text-4xl font-bold">Common Questions</h1>
         {/* <p className="mb-8">A place to find clarity in a world of uncertainty</p> */}
       </div>

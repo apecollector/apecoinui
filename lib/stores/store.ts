@@ -1,4 +1,4 @@
-import { constants } from "ethers";
+import { BigNumber, constants } from "ethers";
 import produce from "immer";
 import create from "zustand";
 import { devtools } from "zustand/middleware";
@@ -21,8 +21,8 @@ interface AppState {
   amount: Amount;
   setAmount: (amount: Amount) => void;
 
-  apeCoinBalance: number | undefined;
-  setApeCoinBalance: (balance: number | undefined) => void;
+  apeCoinBalance: BigNumber | undefined;
+  setApeCoinBalance: (balance: BigNumber | undefined) => void;
 }
 
 const useStore = create<AppState>()(

@@ -13,7 +13,7 @@ export default async function RootLayout({
       <body className="container mx-auto flex h-full min-h-screen max-w-6xl flex-col px-4 py-8 dark:bg-zinc-900 dark:text-zinc-300 md:px-8">
         <Provider>
           <Header />
-          <main className="flex-grow">{children}</main>
+          <main className="mt-10 flex-grow">{children}</main>
           <Footer />
         </Provider>
       </body>

@@ -37,12 +37,12 @@ export default function FixedData() {
         <div className="flex items-center gap-x-4">
           {mounted && (
             <>
-              Next Staking Reward{" "}
+              Staking Reward in{" "}
               {minutes === 0 && seconds === 0 ? (
-                <>now</>
+                <>60M 00S</>
               ) : (
                 <>
-                  in {minutes}M {seconds}S
+                  {minutes}M {seconds}S
                 </>
               )}
             </>

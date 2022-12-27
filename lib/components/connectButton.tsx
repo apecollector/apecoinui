@@ -4,6 +4,7 @@ import { ConnectKitButton } from "connectkit";
 import { useAccount, useClient, useConnect } from "wagmi";
 import useAutoConnecting from "@/hooks/useAutoConnecting";
 import useApeCoinBalance from "@/hooks/useApeCoinBalance";
+import { formatUnits } from "ethers/lib/utils.js";
 
 const ConnectButton: React.FC<{ classNames?: string }> = ({ classNames }) => {
   const client = useClient();
@@ -42,7 +43,12 @@ const ConnectButton: React.FC<{ classNames?: string }> = ({ classNames }) => {
   return (
     <>
       {apeCoinBalance !== undefined && (
-        <>{Intl.NumberFormat().format(apeCoinBalance)} APE</>
+        <>
+          {Intl.NumberFormat("en-us", {
+            maximumFractionDigits: 2,
+          }).format(+formatUnits(apeCoinBalance))}{" "}
+          APE
+        </>
       )}
       <ConnectKitButton.Custom>
         {({ isConnected, isConnecting, show, address, ensName }) => {

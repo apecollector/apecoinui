@@ -15,8 +15,11 @@ const TimeframeSelector: React.FC<{ classNames?: string }> = () => {
   const weeklyRadioID = useId();
   const weeklyRadioName = useId();
 
+  const monthlyRadioID = useId();
+  const monthlyRadioName = useId();
+
   return (
-    <div className="mb-4 flex gap-4">
+    <div className="mb-4 flex flex-wrap gap-4 text-sm">
       <div>Reward Timeframe:</div>
       <div className="flex items-center">
         <input
@@ -25,7 +28,7 @@ const TimeframeSelector: React.FC<{ classNames?: string }> = () => {
           name={hourlyRadioName}
           checked={selectedTimeframe === TimeFrame.Hourly}
           onChange={() => setSelectedTimeframe(TimeFrame.Hourly)}
-          className="h-4 w-4 border-zinc-300 bg-zinc-100 text-blue-600"
+          className="h-3 w-3 border-zinc-300 bg-zinc-100 text-blue-600"
         />
         <label htmlFor={hourlyRadioID} className="ml-2">
           Hourly
@@ -38,7 +41,7 @@ const TimeframeSelector: React.FC<{ classNames?: string }> = () => {
           name={dailyRadioName}
           checked={selectedTimeframe === TimeFrame.Daily}
           onChange={() => setSelectedTimeframe(TimeFrame.Daily)}
-          className="h-4 w-4 border-zinc-300 bg-zinc-100 text-blue-600"
+          className="h-3 w-3 border-zinc-300 bg-zinc-100 text-blue-600"
         />
         <label htmlFor={dailyRadioID} className="ml-2">
           Daily
@@ -51,10 +54,23 @@ const TimeframeSelector: React.FC<{ classNames?: string }> = () => {
           name={weeklyRadioName}
           checked={selectedTimeframe === TimeFrame.Weekly}
           onChange={() => setSelectedTimeframe(TimeFrame.Weekly)}
-          className="h-4 w-4 border-zinc-300 bg-zinc-100 text-blue-600"
+          className="h-3 w-3 border-zinc-300 bg-zinc-100 text-blue-600"
         />
         <label htmlFor={weeklyRadioID} className="ml-2">
           Weekly
+        </label>
+      </div>
+      <div className="flex items-center">
+        <input
+          type="radio"
+          id={monthlyRadioID}
+          name={monthlyRadioName}
+          checked={selectedTimeframe === TimeFrame.Monthly}
+          onChange={() => setSelectedTimeframe(TimeFrame.Monthly)}
+          className="h-3 w-3 border-zinc-300 bg-zinc-100 text-blue-600"
+        />
+        <label htmlFor={monthlyRadioID} className="ml-2">
+          Monthly
         </label>
       </div>
     </div>

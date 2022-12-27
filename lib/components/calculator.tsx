@@ -1,6 +1,6 @@
 "use client";
 
-import { formatUnits } from "ethers/lib/utils";
+import { formatUnits, parseUnits } from "ethers/lib/utils";
 
 import usePoolData from "@/hooks/usePoolData";
 import usePrice from "@/hooks/usePrice";
@@ -13,6 +13,9 @@ import TimeframeSelector from "@/components/timeframeSelector";
 import { Dispatch, useEffect, useState } from "react";
 import useBalances from "@/hooks/useBalances";
 import useApeCoinBalance from "@/hooks/useApeCoinBalance";
+import { useAccount } from "wagmi";
+import useAllStakes from "@/hooks/useAllStakes";
+import { BigNumber } from "ethers";
 
 export default function Calculator() {
   const poolData = usePoolData();
@@ -21,6 +24,10 @@ export default function Calculator() {
   const { baycPoolStakable, maycPoolStakable, bakcPoolStakable } =
     useBalances();
   const { apeCoinBalance } = useApeCoinBalance();
+
+  const { address } = useAccount();
+
+  const { poolsContractRead: allStakes } = useAllStakes(address!);
 
   // apecoinPrice comes back as a big number and apecoin token has 8 decimal
   // places, so we need to turn it into a formatted string via ethers then
@@ -86,6 +93,20 @@ export default function Calculator() {
     return map;
   }, {} as { [key in PoolType]: PoolDataInterface });
 
+  const totalUnclaimed =
+    allStakes.data?.reduce((sum, stake) => {
+      return sum.add(stake.unclaimed);
+    }, BigNumber.from(0)) || BigNumber.from(0);
+
+  let unstakedApeCoin = apeCoinBalance || BigNumber.from(0);
+  if (allStakes.data && allStakes.data[0].deposited) {
+    unstakedApeCoin = unstakedApeCoin.add(allStakes.data[0].deposited);
+  }
+
+  if (allStakes.data) {
+    unstakedApeCoin = unstakedApeCoin.add(totalUnclaimed);
+  }
+
   useEffect(() => {
     setApeCoinToStakeCount(apeCoinOwnedCount);
   }, [apeCoinOwnedCount]);
@@ -109,8 +130,8 @@ export default function Calculator() {
   }, [bakcTokenOwnedCount]);
 
   useEffect(() => {
-    if (!apeCoinBalance) return;
-    setApeCoinOwnedCount(Math.round(apeCoinBalance));
+    if (unstakedApeCoin.isZero()) return;
+    setApeCoinOwnedCount(Math.round(+formatUnits(unstakedApeCoin)));
   }, [apeCoinBalance]);
 
   useEffect(() => {
@@ -139,6 +160,7 @@ export default function Calculator() {
 
   const dailyRewardsTotal = hourlyRewardsTotal * 24;
   const weeklyRewardsTotal = dailyRewardsTotal * 7;
+  const monthlyRewardsTotal = dailyRewardsTotal * 30;
 
   let rewardsTotal;
   let timeFrameHourMultiplier: number;
@@ -154,6 +176,10 @@ export default function Calculator() {
     case TimeFrame.Weekly:
       rewardsTotal = weeklyRewardsTotal;
       timeFrameHourMultiplier = 24 * 7;
+      break;
+    case TimeFrame.Monthly:
+      rewardsTotal = monthlyRewardsTotal;
+      timeFrameHourMultiplier = 24 * 30;
       break;
   }
 

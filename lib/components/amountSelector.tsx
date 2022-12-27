@@ -5,36 +5,37 @@ import { Amount } from "@/types/data";
 const AmountSelector: React.FC<{ classNames?: string }> = () => {
   const { amount, setAmount } = useAmount();
 
-  const dailyRadioID = useId();
-  const hourlyRadioID = useId();
-  const hourlyRadioName = useId();
+  const perRadioID = useId();
+  const maxRadioID = useId();
+  const perRadioName = useId();
+  const maxRadioName = useId();
 
   return (
-    <div className="mb-4 flex gap-4">
+    <div className="mb-4 flex flex-wrap gap-4 text-sm">
       <div>Reward Amount:</div>
       <div className="flex items-center">
         <input
           type="radio"
-          id={dailyRadioID}
-          name={hourlyRadioName}
+          id={perRadioID}
+          name={perRadioName}
           checked={amount === Amount.PerApe}
           onChange={() => setAmount(Amount.PerApe)}
-          className="h-4 w-4 border-zinc-300 bg-zinc-100 text-blue-600"
+          className="h-3 w-3 border-zinc-300 bg-zinc-100 text-blue-600"
         />
-        <label htmlFor={dailyRadioID} className="ml-2">
-          Per ApeCoin Staked
+        <label htmlFor={perRadioID} className="ml-2">
+          Per ApeCoin
         </label>
       </div>
       <div className="flex items-center">
         <input
           type="radio"
-          id={hourlyRadioID}
-          name={hourlyRadioName}
+          id={maxRadioID}
+          name={maxRadioName}
           checked={amount === Amount.Max}
           onChange={() => setAmount(Amount.Max)}
-          className="h-4 w-4 border-zinc-300 bg-zinc-100 text-blue-600"
+          className="h-3 w-3 border-zinc-300 bg-zinc-100 text-blue-600"
         />
-        <label htmlFor={hourlyRadioID} className="ml-2">
+        <label htmlFor={maxRadioID} className="ml-2">
           Max Stake
         </label>
       </div>

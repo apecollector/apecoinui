@@ -70,9 +70,9 @@ function useBalances(): {
 
   useEffect(() => {
     if (isSuccess && data) {
-      setBaycPoolStakable(data?.[0].toNumber() || 0);
-      setMaycPoolStakable(data?.[1].toNumber() || 0);
-      setBakcPoolStakable(data?.[2].toNumber() || 0);
+      setBaycPoolStakable(data?.[0]?.toNumber() || 0);
+      setMaycPoolStakable(data?.[1]?.toNumber() || 0);
+      setBakcPoolStakable(data?.[2]?.toNumber() || 0);
     }
   }, [address, isSuccess, data, isRefetching]);
 

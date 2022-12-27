@@ -1,5 +1,5 @@
 export interface Map {
-  [key: number]: string;
+  [key: number]: `0x${string}`;
 }
 
 export interface NumberMap {
