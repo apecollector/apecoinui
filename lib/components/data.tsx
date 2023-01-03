@@ -149,7 +149,7 @@ export default function Data() {
                             }).format(
                               timeFrameHourMultiplier *
                                 poolData.poolData[pool].rewardPerHour! *
-                                rewardMultiplier(pool)
+                                rewardMultiplier(pool) * apecoinPriceHumanNumber
                             )}
                             )
                           </>
