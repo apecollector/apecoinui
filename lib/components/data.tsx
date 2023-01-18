@@ -23,7 +23,7 @@ export default function Data() {
   const rewardHeader =
     selectedAmount === Amount.PerApe
       ? "ApeCoin Reward Per ApeCoin Staked"
-      : "ApeCoin Reward When Max Staked";
+      : "ApeCoin Reward With 1 Max Staked NFT";
 
   const rewardMultiplier = (pool: number): number => {
     if (selectedAmount === Amount.PerApe) return 1;
@@ -149,7 +149,8 @@ export default function Data() {
                             }).format(
                               timeFrameHourMultiplier *
                                 poolData.poolData[pool].rewardPerHour! *
-                                rewardMultiplier(pool) * apecoinPriceHumanNumber
+                                rewardMultiplier(pool) *
+                                apecoinPriceHumanNumber
                             )}
                             )
                           </>
