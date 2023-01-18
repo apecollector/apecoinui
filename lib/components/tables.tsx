@@ -32,24 +32,18 @@ export function ApeCoinTable({
     poolID: number,
     asString: boolean
   ) =>
-    | (string | ethers.BigNumber)[]
+    | string
+    | BigNumber
     | (
         | (string | number)[]
-        | { tokenId: ethers.BigNumber; amount: ethers.BigNumber }[]
+        | { tokenId: BigNumber; amount: BigNumber }[]
         | undefined
       )[]
     | undefined;
   claimArgs: (
     poolID: number,
     asString: boolean
-  ) =>
-    | (string | ethers.BigNumber)[]
-    | (
-        | (string | number)[]
-        | { tokenId: ethers.BigNumber; amount: ethers.BigNumber }[]
-        | undefined
-      )[]
-    | undefined;
+  ) => string | ethers.BigNumber | (number | undefined)[] | undefined;
 }) {
   const { apeCoinBalance } = useApeCoinBalance();
 
@@ -215,8 +209,8 @@ export function ApeCoinTable({
                       depositSelfApeCoin
                     </a>
                     <textarea
-                      value={`["${depositApeCoinAmount?.toString()}"]`}
-                      className="border px-2 dark:border-zinc-500 dark:bg-zinc-800"
+                      value={`"${depositApeCoinAmount?.toString()}"`}
+                      className="w-full border px-2 text-[10px] dark:border-zinc-500 dark:bg-zinc-800"
                     />
                   </>
                 )}
@@ -231,7 +225,7 @@ export function ApeCoinTable({
                       withdrawSelfApeCoin
                     </a>
                     <textarea
-                      className="border px-2 dark:border-zinc-500 dark:bg-zinc-800"
+                      className="w-full border px-2 text-[10px] dark:border-zinc-500 dark:bg-zinc-800"
                       readOnly
                       value={JSON.stringify(withdrawArgs(0, true))}
                     />
@@ -248,7 +242,7 @@ export function ApeCoinTable({
                       claimSelfApeCoin
                     </a>
                     <textarea
-                      className="border px-2 dark:border-zinc-500 dark:bg-zinc-800"
+                      className="w-full border px-2 text-[10px] dark:border-zinc-500 dark:bg-zinc-800"
                       readOnly
                       value={JSON.stringify(claimArgs(0, true))}
                     />
@@ -285,24 +279,18 @@ export function NftTable({
     poolID: number,
     asString: boolean
   ) =>
-    | (string | ethers.BigNumber)[]
+    | string
+    | BigNumber
     | (
         | (string | number)[]
-        | { tokenId: ethers.BigNumber; amount: ethers.BigNumber }[]
+        | { tokenId: BigNumber; amount: BigNumber }[]
         | undefined
       )[]
     | undefined;
   claimArgs: (
     poolID: number,
     asString: boolean
-  ) =>
-    | (string | ethers.BigNumber)[]
-    | (
-        | (string | number)[]
-        | { tokenId: ethers.BigNumber; amount: ethers.BigNumber }[]
-        | undefined
-      )[]
-    | undefined;
+  ) => string | ethers.BigNumber | (number | undefined)[] | undefined;
 }) {
   const [depositAmounts, setDepositAmounts] = useState<{
     [key: number]: BigNumber;
@@ -593,7 +581,7 @@ export function NftTable({
                       deposit{tokenSymbol}
                     </a>
                     <textarea
-                      className="border px-2 dark:border-zinc-500 dark:bg-zinc-800"
+                      className="w-full border px-2 text-[10px] dark:border-zinc-500 dark:bg-zinc-800"
                       readOnly
                       value={JSON.stringify(depositArgs())}
                     />
@@ -610,7 +598,7 @@ export function NftTable({
                       withdrawSelf{tokenSymbol}
                     </a>
                     <textarea
-                      className="border px-2 dark:border-zinc-500 dark:bg-zinc-800"
+                      className="w-full border px-2 text-[10px] dark:border-zinc-500  dark:bg-zinc-800"
                       readOnly
                       value={JSON.stringify(withdrawArgs(poolId, true))}
                     />
@@ -627,7 +615,7 @@ export function NftTable({
                       claimSelf{tokenSymbol}
                     </a>
                     <textarea
-                      className="border px-2 dark:border-zinc-500 dark:bg-zinc-800"
+                      className="w-full border px-2 text-[10px] dark:border-zinc-500  dark:bg-zinc-800"
                       readOnly
                       value={JSON.stringify(claimArgs(poolId, true))}
                     />
@@ -873,13 +861,13 @@ export function BakcTable({
                 </a>
                 <p className="mt-4 text-sm">_baycPairs</p>
                 <textarea
-                  className="border px-2 dark:border-zinc-500 dark:bg-zinc-800"
+                  className="w-full border px-2 text-[10px] dark:border-zinc-500 dark:bg-zinc-800"
                   readOnly
                   value={JSON.stringify(withdrawArgs(1, true))}
                 />
                 <p className="text-sm">_maycPairs</p>
                 <textarea
-                  className="border px-2 dark:border-zinc-500 dark:bg-zinc-800"
+                  className="w-full border px-2 text-[10px] dark:border-zinc-500 dark:bg-zinc-800"
                   readOnly
                   value={JSON.stringify(withdrawArgs(2, true))}
                 />
@@ -893,13 +881,13 @@ export function BakcTable({
                 </a>
                 <p className="mt-4 text-sm">_baycPairs</p>
                 <textarea
-                  className="border px-2 dark:border-zinc-500 dark:bg-zinc-800"
+                  className="w-full border px-2 text-[10px] dark:border-zinc-500  dark:bg-zinc-800"
                   readOnly
                   value={JSON.stringify(withdrawArgs(1, true))}
                 />
                 <p className="text-sm">_maycPairs</p>
                 <textarea
-                  className="border px-2 dark:border-zinc-500 dark:bg-zinc-800"
+                  className="w-full border px-2 text-[10px] dark:border-zinc-500 dark:bg-zinc-800"
                   readOnly
                   value={JSON.stringify(withdrawArgs(2, true))}
                 />
@@ -913,13 +901,13 @@ export function BakcTable({
                 </a>
                 <p className="mt-4 text-sm">_baycPairs</p>
                 <textarea
-                  className="border px-2 dark:border-zinc-500 dark:bg-zinc-800"
+                  className="w-full border px-2 text-[10px] dark:border-zinc-500 dark:bg-zinc-800"
                   readOnly
                   value={JSON.stringify(claimArgs(1, true))}
                 />
                 <p className="text-sm">_maycPairs</p>
                 <textarea
-                  className="border px-2 dark:border-zinc-500 dark:bg-zinc-800"
+                  className="w-full border px-2 text-[10px] dark:border-zinc-500 dark:bg-zinc-800"
                   readOnly
                   value={JSON.stringify(claimArgs(2, true))}
                 />
