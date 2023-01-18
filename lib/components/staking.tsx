@@ -6,7 +6,9 @@ import useAllStakes from "@/hooks/useAllStakes";
 import { ethers, BigNumber } from "ethers";
 import usePrice from "@/hooks/usePrice";
 import useAutoConnecting from "@/hooks/useAutoConnecting";
-import { ApeCoinTable, NftTable, BakcTable } from "@/components/tables";
+import { BakcTable } from "@/components/tables";
+import { ApeCoinTable } from "./Tables/ApeCoinTable";
+import { NftTable } from "./Tables/NFTTable";
 import useAllowance from "@/hooks/useAllowance";
 import Allowance from "./allowance";
 import { formatUnits } from "ethers/lib/utils.js";
@@ -230,7 +232,7 @@ export default function Staking() {
       </div>
 
       <div className="mt-10 overflow-scroll">
-        {/* {allowance?.data?.eq(0) ? (
+        {allowance?.data?.eq(0) ? (
           <>
             <div>ApeCoin Staking Contract Allowance Approval not set:</div>
             <Allowance />
@@ -243,7 +245,7 @@ export default function Staking() {
               : formatUnits(allowance.data?.toString()!)}
             <Allowance />
           </div>
-        )} */}
+        )}
 
         <h2 className="text-4xl font-extrabold">ApeCoin Staking Pool</h2>
         <ApeCoinTable
@@ -261,8 +263,6 @@ export default function Staking() {
           poolId={1}
           tokenSymbol="BAYC"
           poolStakes={baycStakes}
-          withdrawArgs={withdrawArgs}
-          claimArgs={claimArgs}
           apecoinPrice={apecoinPrice}
           withdrawFunctionID="24"
           claimFunctionID="8"
@@ -277,8 +277,6 @@ export default function Staking() {
           poolId={2}
           tokenSymbol={"MAYC"}
           poolStakes={maycStakes}
-          withdrawArgs={withdrawArgs}
-          claimArgs={claimArgs}
           apecoinPrice={apecoinPrice}
           withdrawFunctionID="25"
           claimFunctionID="9"
