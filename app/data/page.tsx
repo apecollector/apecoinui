@@ -20,10 +20,10 @@ export default async function Page() {
         <Calculator />
       </div>
 
-      <div className="mt-10">
+      {/* <div className="mt-10">
         <h3 className="text-3xl font-bold">Live staking activity:</h3>
         <Events />
-      </div>
+      </div> */}
     </>
   );
 }
