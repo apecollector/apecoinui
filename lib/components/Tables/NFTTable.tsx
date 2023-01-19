@@ -274,32 +274,6 @@ export const NftTable = (props: NftTableProps) => {
                 )}
               </td>
             </tr>
-            <tr className="flex">
-              <td className="flex w-1/4 flex-wrap items-center gap-2 p-4">
-                Batch Transaction:
-              </td>
-              <td className="flex w-1/4 flex-wrap items-center gap-2 p-4">
-                {totalToDeposit.gt(0) && (
-                  <button className="border px-2 hover:border-zinc-500 dark:border-zinc-500 dark:bg-zinc-800 dark:hover:border-zinc-300">
-                    Deposit All
-                  </button>
-                )}
-              </td>
-              <td className="flex w-1/4 flex-wrap items-center gap-2 p-4">
-                {depositedTotal.gt(0) && (
-                  <button className="border px-2 hover:border-zinc-500 dark:border-zinc-500 dark:bg-zinc-800 dark:hover:border-zinc-300">
-                    Withdraw All
-                  </button>
-                )}
-              </td>
-              <td className="flex w-1/4 flex-wrap items-center gap-2 p-4">
-                {unclaimedTotal.gt(0) && (
-                  <button className="border px-2 hover:border-zinc-500 dark:border-zinc-500 dark:bg-zinc-800 dark:hover:border-zinc-300">
-                    Claim All
-                  </button>
-                )}
-              </td>
-            </tr>
 
             <tr className="flex">
               <td className="flex w-1/4 flex-wrap items-center gap-2 p-4">
