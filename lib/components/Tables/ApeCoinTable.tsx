@@ -6,14 +6,17 @@ import useApeCoinBalance from "@/hooks/useApeCoinBalance";
 import { useDeposits } from "@/hooks/useDeposits";
 import { poolStakesData } from "@/hooks/useAllStakes";
 import { TableHead } from "./common/TableHead";
+import { IClaimArgs, IWithdrawArgs } from "./common/types";
 
 interface ApeCoinTableProps {
   apeCoinStakes: poolStakesData[];
   apecoinPrice: BigNumber | undefined;
+  withdrawArgs: IWithdrawArgs;
+  claimArgs: IClaimArgs;
 }
 
 export const ApeCoinTable = (props: ApeCoinTableProps) => {
-  const { apeCoinStakes, apecoinPrice } = props;
+  const { apeCoinStakes, apecoinPrice, withdrawArgs, claimArgs } = props;
   const { apeCoinBalance } = useApeCoinBalance();
 
   const [depositApeCoinAmount, setDepositApeCoinAmount] = useState<BigNumber>(
@@ -150,6 +153,61 @@ export const ApeCoinTable = (props: ApeCoinTableProps) => {
                   <button className="border px-2 hover:border-zinc-500 dark:border-zinc-500 dark:bg-zinc-800 dark:hover:border-zinc-300">
                     Claim
                   </button>
+                )}
+              </td>
+            </tr>
+            <tr className="flex">
+              <td className="flex w-1/4 flex-wrap items-center gap-2 p-4">
+                Etherscan Contract:
+              </td>
+              <td className="flex w-1/4 flex-wrap items-center gap-2 p-4">
+                {depositApeCoinAmount.gt(0) && (
+                  <>
+                    <a
+                      className="text-sm text-[#1da1f2] sm:text-base"
+                      href={`https://etherscan.io/address/0x5954aB967Bc958940b7EB73ee84797Dc8a2AFbb9#writeContract#F14`}
+                    >
+                      depositSelfApeCoin
+                    </a>
+                    <textarea
+                      value={`["${depositApeCoinAmount?.toString()}"]`}
+                      className="border px-2 dark:border-zinc-500 dark:bg-zinc-800"
+                    />
+                  </>
+                )}
+              </td>
+              <td className="flex w-1/4 flex-wrap items-center gap-2 p-4">
+                {depositedTotal.gt(0) && (
+                  <>
+                    <a
+                      className="text-sm text-[#1da1f2] sm:text-base"
+                      href={`https://etherscan.io/address/0x5954aB967Bc958940b7EB73ee84797Dc8a2AFbb9#writeContract#F23`}
+                    >
+                      withdrawSelfApeCoin
+                    </a>
+                    <textarea
+                      className="border px-2 dark:border-zinc-500 dark:bg-zinc-800"
+                      readOnly
+                      value={JSON.stringify(withdrawArgs(0, true))}
+                    />
+                  </>
+                )}
+              </td>
+              <td className="flex w-1/4 flex-wrap items-center gap-2 p-4">
+                {unclaimedTotal.gt(0) && (
+                  <>
+                    <a
+                      className="text-sm text-[#1da1f2] sm:text-base"
+                      href={`https://etherscan.io/address/0x5954aB967Bc958940b7EB73ee84797Dc8a2AFbb9#writeContract#F14`}
+                    >
+                      claimSelfApeCoin
+                    </a>
+                    <textarea
+                      className="border px-2 dark:border-zinc-500 dark:bg-zinc-800"
+                      readOnly
+                      value={JSON.stringify(claimArgs(0, true))}
+                    />
+                  </>
                 )}
               </td>
             </tr>

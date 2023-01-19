@@ -6,6 +6,7 @@ import { poolStakesData } from "@/hooks/useAllStakes";
 import { MAX_STAKES } from "@/types/constants";
 import { TableHead } from "./common/TableHead";
 import { formatToUSD } from "../../utils/format";
+import { IClaimArgs, IWithdrawArgs } from "./common/types";
 
 interface NftTableProps {
   tokenSymbol: string;
@@ -15,6 +16,8 @@ interface NftTableProps {
   poolStakes: poolStakesData[];
   apecoinPrice: BigNumber | undefined;
   poolId: 1 | 2 | 3;
+  withdrawArgs: IWithdrawArgs;
+  claimArgs: IClaimArgs;
 }
 export const NftTable = (props: NftTableProps) => {
   const {
@@ -24,6 +27,8 @@ export const NftTable = (props: NftTableProps) => {
     depositFunctionID,
     claimFunctionID,
     withdrawFunctionID,
+    withdrawArgs,
+    claimArgs,
     poolId,
   } = props;
 
@@ -35,6 +40,19 @@ export const NftTable = (props: NftTableProps) => {
       {}
     )
   );
+
+  const depositArgs = () => {
+    const args = Object.entries(depositAmounts)
+      .map((token) => {
+        if (token[1].gt(0)) {
+          return [token[0], token[1].toString()];
+        }
+      })
+      .filter((token) => {
+        return token !== undefined;
+      });
+    return args.length === 0 ? [] : args;
+  };
 
   const depositedTotal = poolStakes.reduce((total, token) => {
     return total.add(token.deposited);
@@ -253,6 +271,89 @@ export const NftTable = (props: NftTableProps) => {
                   <button className="border px-2 hover:border-zinc-500 dark:border-zinc-500 dark:bg-zinc-800 dark:hover:border-zinc-300">
                     Claim All
                   </button>
+                )}
+              </td>
+            </tr>
+            <tr className="flex">
+              <td className="flex w-1/4 flex-wrap items-center gap-2 p-4">
+                Batch Transaction:
+              </td>
+              <td className="flex w-1/4 flex-wrap items-center gap-2 p-4">
+                {totalToDeposit.gt(0) && (
+                  <button className="border px-2 hover:border-zinc-500 dark:border-zinc-500 dark:bg-zinc-800 dark:hover:border-zinc-300">
+                    Deposit All
+                  </button>
+                )}
+              </td>
+              <td className="flex w-1/4 flex-wrap items-center gap-2 p-4">
+                {depositedTotal.gt(0) && (
+                  <button className="border px-2 hover:border-zinc-500 dark:border-zinc-500 dark:bg-zinc-800 dark:hover:border-zinc-300">
+                    Withdraw All
+                  </button>
+                )}
+              </td>
+              <td className="flex w-1/4 flex-wrap items-center gap-2 p-4">
+                {unclaimedTotal.gt(0) && (
+                  <button className="border px-2 hover:border-zinc-500 dark:border-zinc-500 dark:bg-zinc-800 dark:hover:border-zinc-300">
+                    Claim All
+                  </button>
+                )}
+              </td>
+            </tr>
+
+            <tr className="flex">
+              <td className="flex w-1/4 flex-wrap items-center gap-2 p-4">
+                Etherscan Contract:
+              </td>
+              <td className="flex w-1/4 flex-wrap items-center gap-2 p-4">
+                {totalToDeposit.gt(0) && (
+                  <>
+                    <a
+                      className="text-sm text-[#1da1f2] sm:text-base"
+                      href={`https://etherscan.io/address/0x5954aB967Bc958940b7EB73ee84797Dc8a2AFbb9#writeContract#F${depositFunctionID}`}
+                    >
+                      deposit{tokenSymbol}
+                    </a>
+                    <textarea
+                      className="border px-2 dark:border-zinc-500 dark:bg-zinc-800"
+                      readOnly
+                      value={JSON.stringify(depositArgs())}
+                    />
+                  </>
+                )}
+              </td>
+              <td className="flex w-1/4 flex-wrap items-center gap-2 p-4">
+                {depositedTotal.gt(0) && (
+                  <>
+                    <a
+                      className="text-sm text-[#1da1f2] sm:text-base"
+                      href={`https://etherscan.io/address/0x5954aB967Bc958940b7EB73ee84797Dc8a2AFbb9#writeContract#F${withdrawFunctionID}`}
+                    >
+                      withdrawSelf{tokenSymbol}
+                    </a>
+                    <textarea
+                      className="border px-2 dark:border-zinc-500 dark:bg-zinc-800"
+                      readOnly
+                      value={JSON.stringify(withdrawArgs(poolId, true))}
+                    />
+                  </>
+                )}
+              </td>
+              <td className="flex w-1/4 flex-wrap items-center gap-2 p-4">
+                {unclaimedTotal.gt(0) && (
+                  <>
+                    <a
+                      className="text-sm text-[#1da1f2] sm:text-base"
+                      href={`https://etherscan.io/address/0x5954aB967Bc958940b7EB73ee84797Dc8a2AFbb9#writeContract#F${claimFunctionID}`}
+                    >
+                      claimSelf{tokenSymbol}
+                    </a>
+                    <textarea
+                      className="border px-2 dark:border-zinc-500 dark:bg-zinc-800"
+                      readOnly
+                      value={JSON.stringify(claimArgs(poolId, true))}
+                    />
+                  </>
                 )}
               </td>
             </tr>

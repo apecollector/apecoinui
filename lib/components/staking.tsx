@@ -267,6 +267,8 @@ export default function Staking() {
           withdrawFunctionID="24"
           claimFunctionID="8"
           depositFunctionID="12"
+          withdrawArgs={withdrawArgs}
+          claimArgs={claimArgs}
         />
 
         <h2 className="mt-10 text-4xl font-extrabold">
@@ -281,6 +283,8 @@ export default function Staking() {
           withdrawFunctionID="25"
           claimFunctionID="9"
           depositFunctionID="13"
+          withdrawArgs={withdrawArgs}
+          claimArgs={claimArgs}
         />
 
         <h2 className="mt-10 text-4xl font-extrabold">
