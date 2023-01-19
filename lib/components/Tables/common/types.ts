@@ -1,16 +1,15 @@
 import { ethers } from "ethers";
 
 export type IWithdrawArgs = (
-  mainTypePoolId: number,
+  poolID: number,
   asString: boolean
 ) =>
+  | (string | ethers.BigNumber)[]
   | (
       | (string | number)[]
       | {
-          mainTokenId: ethers.BigNumber;
-          bakcTokenId: ethers.BigNumber;
+          tokenId: ethers.BigNumber;
           amount: ethers.BigNumber;
-          isUncommit: boolean;
         }[]
       | undefined
     )[]

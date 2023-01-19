@@ -22,7 +22,7 @@ export const ApeCoinTable = (props: ApeCoinTableProps) => {
   const [depositApeCoinAmount, setDepositApeCoinAmount] = useState<BigNumber>(
     ethers.constants.Zero
   );
-  const { write } = useDeposits({ amount: depositApeCoinAmount });
+  const { depositApecoin } = useDeposits({ amount: depositApeCoinAmount });
 
   const depositedTotal =
     apeCoinStakes?.reduce((total, token) => {
@@ -133,9 +133,9 @@ export const ApeCoinTable = (props: ApeCoinTableProps) => {
               <td className="flex w-1/4 flex-wrap items-center gap-2 p-4">
                 {depositApeCoinAmount.gt(0) && (
                   <button
-                    disabled={!write}
+                    disabled={!depositApecoin}
                     className="border px-2 hover:border-zinc-500 dark:border-zinc-500 dark:bg-zinc-800 dark:hover:border-zinc-300"
-                    onClick={() => write?.()}
+                    onClick={() => depositApecoin?.()}
                   >
                     Deposit
                   </button>
