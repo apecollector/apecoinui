@@ -25,24 +25,6 @@ const ABI = [
     stateMutability: "nonpayable",
     type: "constructor",
   },
-  { inputs: [], name: "BAKCAlreadyPaired", type: "error" },
-  { inputs: [], name: "BAKCNotOwnedOrPaired", type: "error" },
-  { inputs: [], name: "CallerNotOwner", type: "error" },
-  { inputs: [], name: "DepositMoreThanOneAPE", type: "error" },
-  { inputs: [], name: "EndNotWholeHour", type: "error" },
-  { inputs: [], name: "ExceededCapAmount", type: "error" },
-  { inputs: [], name: "ExceededStakedAmount", type: "error" },
-  { inputs: [], name: "InvalidPoolId", type: "error" },
-  { inputs: [], name: "MainTokenNotOwnedOrPaired", type: "error" },
-  { inputs: [], name: "NeitherTokenInPairOwnedByCaller", type: "error" },
-  { inputs: [], name: "NotOwnerOfBAKC", type: "error" },
-  { inputs: [], name: "NotOwnerOfMain", type: "error" },
-  { inputs: [], name: "ProvidedTokensNotPaired", type: "error" },
-  { inputs: [], name: "SplitPairCantPartiallyWithdraw", type: "error" },
-  { inputs: [], name: "StartMustBeGreaterThanEnd", type: "error" },
-  { inputs: [], name: "StartMustEqualLastEnd", type: "error" },
-  { inputs: [], name: "StartNotWholeHour", type: "error" },
-  { inputs: [], name: "UncommitWrongParameters", type: "error" },
   {
     anonymous: false,
     inputs: [
@@ -370,7 +352,7 @@ const ABI = [
     ],
     name: "bakcToMain",
     outputs: [
-      { internalType: "uint248", name: "tokenId", type: "uint248" },
+      { internalType: "uint256", name: "tokenId", type: "uint256" },
       { internalType: "bool", name: "isPaired", type: "bool" },
     ],
     stateMutability: "view",
@@ -387,8 +369,8 @@ const ABI = [
     inputs: [
       {
         components: [
-          { internalType: "uint128", name: "mainTokenId", type: "uint128" },
-          { internalType: "uint128", name: "bakcTokenId", type: "uint128" },
+          { internalType: "uint256", name: "mainTokenId", type: "uint256" },
+          { internalType: "uint256", name: "bakcTokenId", type: "uint256" },
         ],
         internalType: "struct ApeCoinStaking.PairNft[]",
         name: "_baycPairs",
@@ -396,8 +378,8 @@ const ABI = [
       },
       {
         components: [
-          { internalType: "uint128", name: "mainTokenId", type: "uint128" },
-          { internalType: "uint128", name: "bakcTokenId", type: "uint128" },
+          { internalType: "uint256", name: "mainTokenId", type: "uint256" },
+          { internalType: "uint256", name: "bakcTokenId", type: "uint256" },
         ],
         internalType: "struct ApeCoinStaking.PairNft[]",
         name: "_maycPairs",
@@ -441,8 +423,8 @@ const ABI = [
     inputs: [
       {
         components: [
-          { internalType: "uint128", name: "mainTokenId", type: "uint128" },
-          { internalType: "uint128", name: "bakcTokenId", type: "uint128" },
+          { internalType: "uint256", name: "mainTokenId", type: "uint256" },
+          { internalType: "uint256", name: "bakcTokenId", type: "uint256" },
         ],
         internalType: "struct ApeCoinStaking.PairNft[]",
         name: "_baycPairs",
@@ -450,8 +432,8 @@ const ABI = [
       },
       {
         components: [
-          { internalType: "uint128", name: "mainTokenId", type: "uint128" },
-          { internalType: "uint128", name: "bakcTokenId", type: "uint128" },
+          { internalType: "uint256", name: "mainTokenId", type: "uint256" },
+          { internalType: "uint256", name: "bakcTokenId", type: "uint256" },
         ],
         internalType: "struct ApeCoinStaking.PairNft[]",
         name: "_maycPairs",
@@ -491,21 +473,21 @@ const ABI = [
     inputs: [
       {
         components: [
-          { internalType: "uint32", name: "mainTokenId", type: "uint32" },
-          { internalType: "uint32", name: "bakcTokenId", type: "uint32" },
-          { internalType: "uint184", name: "amount", type: "uint184" },
+          { internalType: "uint256", name: "mainTokenId", type: "uint256" },
+          { internalType: "uint256", name: "bakcTokenId", type: "uint256" },
+          { internalType: "uint256", name: "amount", type: "uint256" },
         ],
-        internalType: "struct ApeCoinStaking.PairNftDepositWithAmount[]",
+        internalType: "struct ApeCoinStaking.PairNftWithAmount[]",
         name: "_baycPairs",
         type: "tuple[]",
       },
       {
         components: [
-          { internalType: "uint32", name: "mainTokenId", type: "uint32" },
-          { internalType: "uint32", name: "bakcTokenId", type: "uint32" },
-          { internalType: "uint184", name: "amount", type: "uint184" },
+          { internalType: "uint256", name: "mainTokenId", type: "uint256" },
+          { internalType: "uint256", name: "bakcTokenId", type: "uint256" },
+          { internalType: "uint256", name: "amount", type: "uint256" },
         ],
-        internalType: "struct ApeCoinStaking.PairNftDepositWithAmount[]",
+        internalType: "struct ApeCoinStaking.PairNftWithAmount[]",
         name: "_maycPairs",
         type: "tuple[]",
       },
@@ -519,8 +501,8 @@ const ABI = [
     inputs: [
       {
         components: [
-          { internalType: "uint32", name: "tokenId", type: "uint32" },
-          { internalType: "uint224", name: "amount", type: "uint224" },
+          { internalType: "uint256", name: "tokenId", type: "uint256" },
+          { internalType: "uint256", name: "amount", type: "uint256" },
         ],
         internalType: "struct ApeCoinStaking.SingleNft[]",
         name: "_nfts",
@@ -536,8 +518,8 @@ const ABI = [
     inputs: [
       {
         components: [
-          { internalType: "uint32", name: "tokenId", type: "uint32" },
-          { internalType: "uint224", name: "amount", type: "uint224" },
+          { internalType: "uint256", name: "tokenId", type: "uint256" },
+          { internalType: "uint256", name: "amount", type: "uint256" },
         ],
         internalType: "struct ApeCoinStaking.SingleNft[]",
         name: "_nfts",
@@ -732,24 +714,24 @@ const ABI = [
           {
             components: [
               {
-                internalType: "uint48",
+                internalType: "uint256",
                 name: "startTimestampHour",
-                type: "uint48",
+                type: "uint256",
               },
               {
-                internalType: "uint48",
+                internalType: "uint256",
                 name: "endTimestampHour",
-                type: "uint48",
+                type: "uint256",
               },
               {
-                internalType: "uint96",
+                internalType: "uint256",
                 name: "rewardsPerHour",
-                type: "uint96",
+                type: "uint256",
               },
               {
-                internalType: "uint96",
+                internalType: "uint256",
                 name: "capPerPosition",
-                type: "uint96",
+                type: "uint256",
               },
             ],
             internalType: "struct ApeCoinStaking.TimeRange",
@@ -768,24 +750,24 @@ const ABI = [
           {
             components: [
               {
-                internalType: "uint48",
+                internalType: "uint256",
                 name: "startTimestampHour",
-                type: "uint48",
+                type: "uint256",
               },
               {
-                internalType: "uint48",
+                internalType: "uint256",
                 name: "endTimestampHour",
-                type: "uint48",
+                type: "uint256",
               },
               {
-                internalType: "uint96",
+                internalType: "uint256",
                 name: "rewardsPerHour",
-                type: "uint96",
+                type: "uint256",
               },
               {
-                internalType: "uint96",
+                internalType: "uint256",
                 name: "capPerPosition",
-                type: "uint96",
+                type: "uint256",
               },
             ],
             internalType: "struct ApeCoinStaking.TimeRange",
@@ -804,24 +786,24 @@ const ABI = [
           {
             components: [
               {
-                internalType: "uint48",
+                internalType: "uint256",
                 name: "startTimestampHour",
-                type: "uint48",
+                type: "uint256",
               },
               {
-                internalType: "uint48",
+                internalType: "uint256",
                 name: "endTimestampHour",
-                type: "uint48",
+                type: "uint256",
               },
               {
-                internalType: "uint96",
+                internalType: "uint256",
                 name: "rewardsPerHour",
-                type: "uint96",
+                type: "uint256",
               },
               {
-                internalType: "uint96",
+                internalType: "uint256",
                 name: "capPerPosition",
-                type: "uint96",
+                type: "uint256",
               },
             ],
             internalType: "struct ApeCoinStaking.TimeRange",
@@ -840,24 +822,24 @@ const ABI = [
           {
             components: [
               {
-                internalType: "uint48",
+                internalType: "uint256",
                 name: "startTimestampHour",
-                type: "uint48",
+                type: "uint256",
               },
               {
-                internalType: "uint48",
+                internalType: "uint256",
                 name: "endTimestampHour",
-                type: "uint48",
+                type: "uint256",
               },
               {
-                internalType: "uint96",
+                internalType: "uint256",
                 name: "rewardsPerHour",
-                type: "uint96",
+                type: "uint256",
               },
               {
-                internalType: "uint96",
+                internalType: "uint256",
                 name: "capPerPosition",
-                type: "uint96",
+                type: "uint256",
               },
             ],
             internalType: "struct ApeCoinStaking.TimeRange",
@@ -916,13 +898,17 @@ const ABI = [
       {
         components: [
           {
-            internalType: "uint48",
+            internalType: "uint256",
             name: "startTimestampHour",
-            type: "uint48",
+            type: "uint256",
           },
-          { internalType: "uint48", name: "endTimestampHour", type: "uint48" },
-          { internalType: "uint96", name: "rewardsPerHour", type: "uint96" },
-          { internalType: "uint96", name: "capPerPosition", type: "uint96" },
+          {
+            internalType: "uint256",
+            name: "endTimestampHour",
+            type: "uint256",
+          },
+          { internalType: "uint256", name: "rewardsPerHour", type: "uint256" },
+          { internalType: "uint256", name: "capPerPosition", type: "uint256" },
         ],
         internalType: "struct ApeCoinStaking.TimeRange",
         name: "",
@@ -939,7 +925,7 @@ const ABI = [
     ],
     name: "mainToBakc",
     outputs: [
-      { internalType: "uint248", name: "tokenId", type: "uint248" },
+      { internalType: "uint256", name: "tokenId", type: "uint256" },
       { internalType: "bool", name: "isPaired", type: "bool" },
     ],
     stateMutability: "view",
@@ -990,16 +976,20 @@ const ABI = [
     name: "pools",
     outputs: [
       {
-        internalType: "uint48",
+        internalType: "uint256",
         name: "lastRewardedTimestampHour",
-        type: "uint48",
+        type: "uint256",
       },
-      { internalType: "uint16", name: "lastRewardsRangeIndex", type: "uint16" },
-      { internalType: "uint96", name: "stakedAmount", type: "uint96" },
       {
-        internalType: "uint96",
+        internalType: "uint256",
+        name: "lastRewardsRangeIndex",
+        type: "uint256",
+      },
+      { internalType: "uint256", name: "stakedAmount", type: "uint256" },
+      {
+        internalType: "uint256",
         name: "accumulatedRewardsPerShare",
-        type: "uint96",
+        type: "uint256",
       },
     ],
     stateMutability: "view",
@@ -1034,7 +1024,7 @@ const ABI = [
     type: "function",
   },
   {
-    inputs: [{ internalType: "address", name: "_address", type: "address" }],
+    inputs: [{ internalType: "address", name: "_addr", type: "address" }],
     name: "stakedTotal",
     outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
     stateMutability: "view",
@@ -1068,23 +1058,21 @@ const ABI = [
     inputs: [
       {
         components: [
-          { internalType: "uint32", name: "mainTokenId", type: "uint32" },
-          { internalType: "uint32", name: "bakcTokenId", type: "uint32" },
-          { internalType: "uint184", name: "amount", type: "uint184" },
-          { internalType: "bool", name: "isUncommit", type: "bool" },
+          { internalType: "uint256", name: "mainTokenId", type: "uint256" },
+          { internalType: "uint256", name: "bakcTokenId", type: "uint256" },
+          { internalType: "uint256", name: "amount", type: "uint256" },
         ],
-        internalType: "struct ApeCoinStaking.PairNftWithdrawWithAmount[]",
+        internalType: "struct ApeCoinStaking.PairNftWithAmount[]",
         name: "_baycPairs",
         type: "tuple[]",
       },
       {
         components: [
-          { internalType: "uint32", name: "mainTokenId", type: "uint32" },
-          { internalType: "uint32", name: "bakcTokenId", type: "uint32" },
-          { internalType: "uint184", name: "amount", type: "uint184" },
-          { internalType: "bool", name: "isUncommit", type: "bool" },
+          { internalType: "uint256", name: "mainTokenId", type: "uint256" },
+          { internalType: "uint256", name: "bakcTokenId", type: "uint256" },
+          { internalType: "uint256", name: "amount", type: "uint256" },
         ],
-        internalType: "struct ApeCoinStaking.PairNftWithdrawWithAmount[]",
+        internalType: "struct ApeCoinStaking.PairNftWithAmount[]",
         name: "_maycPairs",
         type: "tuple[]",
       },
@@ -1098,8 +1086,8 @@ const ABI = [
     inputs: [
       {
         components: [
-          { internalType: "uint32", name: "tokenId", type: "uint32" },
-          { internalType: "uint224", name: "amount", type: "uint224" },
+          { internalType: "uint256", name: "tokenId", type: "uint256" },
+          { internalType: "uint256", name: "amount", type: "uint256" },
         ],
         internalType: "struct ApeCoinStaking.SingleNft[]",
         name: "_nfts",
@@ -1116,8 +1104,8 @@ const ABI = [
     inputs: [
       {
         components: [
-          { internalType: "uint32", name: "tokenId", type: "uint32" },
-          { internalType: "uint224", name: "amount", type: "uint224" },
+          { internalType: "uint256", name: "tokenId", type: "uint256" },
+          { internalType: "uint256", name: "amount", type: "uint256" },
         ],
         internalType: "struct ApeCoinStaking.SingleNft[]",
         name: "_nfts",
@@ -1141,8 +1129,8 @@ const ABI = [
     inputs: [
       {
         components: [
-          { internalType: "uint32", name: "tokenId", type: "uint32" },
-          { internalType: "uint224", name: "amount", type: "uint224" },
+          { internalType: "uint256", name: "tokenId", type: "uint256" },
+          { internalType: "uint256", name: "amount", type: "uint256" },
         ],
         internalType: "struct ApeCoinStaking.SingleNft[]",
         name: "_nfts",
@@ -1158,8 +1146,8 @@ const ABI = [
     inputs: [
       {
         components: [
-          { internalType: "uint32", name: "tokenId", type: "uint32" },
-          { internalType: "uint224", name: "amount", type: "uint224" },
+          { internalType: "uint256", name: "tokenId", type: "uint256" },
+          { internalType: "uint256", name: "amount", type: "uint256" },
         ],
         internalType: "struct ApeCoinStaking.SingleNft[]",
         name: "_nfts",
