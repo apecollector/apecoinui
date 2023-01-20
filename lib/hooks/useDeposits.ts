@@ -1,10 +1,9 @@
 import { usePrepareContractWrite, useNetwork, useContractWrite } from "wagmi";
 import StakingABI from "@/abis/staking";
-import { BigNumber, ethers } from "ethers";
+import { BigNumber } from "ethers";
 import { stakingContractAddresses } from "@/types/constants";
 
 interface UseDepositsProps {
-  addressOrEns?: string;
   amount: BigNumber;
 }
 
@@ -26,8 +25,8 @@ export const useDeposits = (props: UseDepositsProps) => {
 
   return { depositApecoin: write };
 };
-interface SingleNft {
-  tokenId: number;
+export interface SingleNft {
+  tokenId: BigNumber;
   amount: BigNumber;
 }
 
@@ -39,13 +38,14 @@ interface UseNftDepositsProps {
 export const useNftDeposits = (props: UseNftDepositsProps) => {
   const { poolId, nfts } = props;
   const { chain } = useNetwork();
+
   const { config } = usePrepareContractWrite({
     address: stakingContractAddresses[chain?.id || 1],
     abi: StakingABI,
     functionName: poolId === 1 ? "depositBAYC" : "depositMAYC",
     chainId: chain?.id || 1,
     args: [nfts],
-    enabled: nfts.length > 0,
+    enabled: Boolean(nfts.find((n) => n.amount.gt(0))),
   });
 
   const { data, isLoading, isSuccess, write, ...rest } = useContractWrite({
@@ -56,9 +56,9 @@ export const useNftDeposits = (props: UseNftDepositsProps) => {
 };
 
 interface PairNftDepositWithAmount {
-  mainTokenId: number;
-  bakcTokenId: number;
-  amount: ethers.BigNumber;
+  mainTokenId: BigNumber;
+  bakcTokenId: BigNumber;
+  amount: BigNumber;
 }
 
 interface UseBakcDepositsProps {
