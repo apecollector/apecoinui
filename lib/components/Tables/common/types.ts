@@ -14,6 +14,22 @@ export type IWithdrawArgs = (
       | undefined
     )[]
   | undefined;
+
+export type IWithdrawArgsBakc = (
+  mainTypePoolId: number,
+  asString: boolean
+) =>
+  | (
+      | (string | number)[]
+      | {
+          mainTokenId: ethers.BigNumber;
+          bakcTokenId: ethers.BigNumber;
+          amount: ethers.BigNumber;
+          isUncommit: boolean;
+        }[]
+      | undefined
+    )[]
+  | undefined;
 export type IClaimArgs = (
   poolID: number,
   asString: boolean

@@ -7,13 +7,13 @@ import { poolStakesData } from "@/hooks/useAllStakes";
 import { MAX_STAKES } from "@/types/constants";
 import { TableHead } from "./common/TableHead";
 import { formatToUSD } from "../../utils/format";
-import { IClaimArgs, IWithdrawArgs } from "./common/types";
+import { IClaimArgs, IWithdrawArgsBakc } from "./common/types";
 
 interface BakcTableProps {
   poolStakes: poolStakesData[];
   apecoinPrice: BigNumber | undefined;
   pairOptions: { label: string }[];
-  withdrawArgs: IWithdrawArgs;
+  withdrawArgs: IWithdrawArgsBakc;
   claimArgs: IClaimArgs;
 }
 
