@@ -6,7 +6,7 @@ import useAllStakes from "@/hooks/useAllStakes";
 import { ethers, BigNumber } from "ethers";
 import usePrice from "@/hooks/usePrice";
 import useAutoConnecting from "@/hooks/useAutoConnecting";
-import { BakcTable } from "@/components/tables";
+import { BakcTable } from "./Tables/BakcTable";
 import { ApeCoinTable } from "./Tables/ApeCoinTable";
 import { NftTable } from "./Tables/NFTTable";
 import useAllowance from "@/hooks/useAllowance";
