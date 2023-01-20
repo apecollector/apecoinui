@@ -7,6 +7,8 @@ import { MAX_STAKES } from "@/types/constants";
 import { TableHead } from "./common/TableHead";
 import { formatToUSD } from "../../utils/format";
 import { IClaimArgs, IWithdrawArgs } from "./common/types";
+import { SingleNft, useNftDeposits } from "@/hooks/useDeposits";
+import { ChainDoesNotSupportMulticallError } from "wagmi";
 
 interface NftTableProps {
   tokenSymbol: string;
@@ -15,7 +17,7 @@ interface NftTableProps {
   depositFunctionID: string;
   poolStakes: poolStakesData[];
   apecoinPrice: BigNumber | undefined;
-  poolId: 1 | 2 | 3;
+  poolId: 1 | 2;
   withdrawArgs: IWithdrawArgs;
   claimArgs: IClaimArgs;
 }
@@ -40,6 +42,17 @@ export const NftTable = (props: NftTableProps) => {
       {}
     )
   );
+
+  const { depositNft } = useNftDeposits({
+    poolId,
+    nfts: Object.entries(depositAmounts).reduce(
+      (acc: SingleNft[], [key, value]) => [
+        ...acc,
+        { tokenId: BigNumber.from(key), amount: value },
+      ],
+      []
+    ),
+  });
 
   const depositArgs = () => {
     const args = Object.entries(depositAmounts)
@@ -254,7 +267,11 @@ export const NftTable = (props: NftTableProps) => {
               </td>
               <td className="flex w-1/4 flex-wrap items-center gap-2 p-4">
                 {totalToDeposit.gt(0) && (
-                  <button className="border px-2 hover:border-zinc-500 dark:border-zinc-500 dark:bg-zinc-800 dark:hover:border-zinc-300">
+                  <button
+                    disabled={!depositNft}
+                    className="border px-2 hover:border-zinc-500 dark:border-zinc-500 dark:bg-zinc-800 dark:hover:border-zinc-300"
+                    onClick={() => depositNft?.()}
+                  >
                     Deposit All
                   </button>
                 )}
