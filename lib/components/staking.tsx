@@ -46,35 +46,19 @@ export default function Staking() {
   }
 
   const apeCoinStakes: poolStakesData[] | undefined = allStakes.data?.filter(
-    (stake) => {
-      if (stake.poolId.toNumber() === 0) {
-        return true;
-      }
-    }
+    (stake) => stake.poolId.toNumber() === 0
   );
 
   const baycStakes: poolStakesData[] | undefined = allStakes.data.filter(
-    (stake) => {
-      if (stake.poolId.toNumber() === 1) {
-        return true;
-      }
-    }
+    (stake) => stake.poolId.toNumber() === 1
   );
 
   const maycStakes: poolStakesData[] | undefined = allStakes.data.filter(
-    (stake) => {
-      if (stake.poolId.toNumber() === 2) {
-        return true;
-      }
-    }
+    (stake) => stake.poolId.toNumber() === 2
   );
 
   const bakcStakes: poolStakesData[] | undefined = allStakes.data.filter(
-    (stake) => {
-      if (stake.poolId.toNumber() === 3) {
-        return true;
-      }
-    }
+    (stake) => stake.poolId.toNumber() === 3
   );
 
   const withdrawArgs = (poolID: number, asString: boolean) => {
