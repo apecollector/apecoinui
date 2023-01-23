@@ -55,15 +55,15 @@ export const useNftDeposits = (props: UseNftDepositsProps) => {
   return { depositNft: write };
 };
 
-interface PairNftDepositWithAmount {
+export interface PairNftWithAmount {
   mainTokenId: BigNumber;
   bakcTokenId: BigNumber;
   amount: BigNumber;
 }
 
 interface UseBakcDepositsProps {
-  baycPairs: PairNftDepositWithAmount[];
-  maycPairs: PairNftDepositWithAmount[];
+  baycPairs: PairNftWithAmount[];
+  maycPairs: PairNftWithAmount[];
 }
 
 export const useBakcDeposits = (props: UseBakcDepositsProps) => {
