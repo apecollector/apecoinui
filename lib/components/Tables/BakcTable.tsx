@@ -8,11 +8,19 @@ import { MAX_STAKES } from "@/types/constants";
 import { TableHead } from "./common/TableHead";
 import { formatToUSD } from "../../utils/format";
 import { IClaimArgs, IWithdrawArgsBakc } from "./common/types";
+import { useState } from "react";
+import { PairNftWithAmount } from "@/hooks/useDeposits";
+import { PoolType } from "../../types/data";
+
+export interface IPairOption {
+  tokenId: number;
+  poolId: PoolType.BAYC | PoolType.MAYC;
+}
 
 interface BakcTableProps {
   poolStakes: poolStakesData[];
   apecoinPrice: BigNumber | undefined;
-  pairOptions: { label: string }[];
+  pairOptions: IPairOption[];
   withdrawArgs: IWithdrawArgsBakc;
   claimArgs: IClaimArgs;
 }
@@ -20,10 +28,51 @@ interface BakcTableProps {
 export const BakcTable = (props: BakcTableProps) => {
   const { poolStakes, apecoinPrice, withdrawArgs, claimArgs, pairOptions } =
     props;
+
+  const availableMainTokenIds = pairOptions.filter(
+    (po) =>
+      !poolStakes.find(
+        (ps) =>
+          ps.pair.mainTokenId.toNumber() === po.tokenId &&
+          ps.pair.mainTypePoolId.toNumber() === po.poolId
+      )
+  );
+
   const depositedTotal =
     poolStakes?.reduce((total, token) => {
       return total.add(token.deposited);
     }, ethers.constants.Zero) || 0;
+
+  const [depositAmounts, setDepositAmounts] = useState<{
+    [key: number]: PairNftWithAmount & {
+      poolId: PoolType;
+      unclaimed: ethers.BigNumber;
+    };
+  }>(
+    poolStakes.reduce((acc, s) => {
+      return {
+        ...acc,
+        [s.tokenId.toNumber()]: {
+          bakcTokenId: s.tokenId,
+          amount: s.deposited,
+          mainTokenId: s.pair.mainTokenId,
+          poolId: s.pair.mainTypePoolId.toNumber(),
+          unclaimed: s.unclaimed,
+        },
+      };
+    }, {})
+  );
+
+  const handleSelectInputChangeForBakc = (bakcTokenId: number) => (e) => {
+    setDepositAmounts((prev) => ({
+      ...prev,
+      [bakcTokenId]: {
+        ...prev[bakcTokenId],
+        mainTokenId: ethers.BigNumber.from(e.target.value.split("_")[1]),
+        poolId: Number(e.target.value.split("_")[0]),
+      },
+    }));
+  };
 
   const unclaimedTotal =
     poolStakes?.reduce((total, token) => {
@@ -38,50 +87,67 @@ export const BakcTable = (props: BakcTableProps) => {
     <table className="mt-4 w-full border dark:border-zinc-700">
       <TableHead />
       <tbody className="divide-y divide-zinc-200 dark:divide-zinc-700">
-        {poolStakes.map((stake, i) => (
-          <tr className="flex" key={i}>
+        {Object.values(depositAmounts).map((da) => (
+          <tr className="flex" key={da.bakcTokenId.toNumber()}>
             <td className="flex w-1/4 flex-wrap items-center gap-2 p-4">
-              BAKC {stake.tokenId.toNumber()}
-              <select className="h-7 w-1/2 appearance-none border px-2 py-0 dark:border-zinc-500 dark:bg-zinc-800">
-                <option>PAIR WITH</option>
-                {pairOptions.map((option) => (
-                  <option key={option.label}>{option.label}</option>
-                ))}
-              </select>
+              BAKC {da.bakcTokenId.toNumber()}
+              {da.mainTokenId.isZero() ||
+              availableMainTokenIds.find(
+                (amt) =>
+                  amt.poolId === da.poolId &&
+                  amt.tokenId === da.mainTokenId.toNumber()
+              ) ? (
+                <select
+                  className="h-7 w-1/2 appearance-none border px-2 py-0 dark:border-zinc-500 dark:bg-zinc-800"
+                  name="mainTokenId"
+                  onChange={handleSelectInputChangeForBakc(
+                    da.bakcTokenId.toNumber()
+                  )}
+                >
+                  <option selected disabled>
+                    PAIR WITH
+                  </option>
+                  {availableMainTokenIds.map((o) => (
+                    <option
+                      key={`${o.poolId}_${o.tokenId}`}
+                      value={`${o.poolId}_${o.tokenId}`}
+                    >
+                      {o.poolId === PoolType.BAYC ? "BAYC" : "MAYC"} {o.tokenId}
+                    </option>
+                  ))}
+                </select>
+              ) : (
+                <span>
+                  + {da.poolId === 1 ? "BAYC" : "MAYC"}{" "}
+                  {da.mainTokenId.toNumber()}
+                </span>
+              )}
             </td>
             <td className="flex w-1/4 flex-wrap items-center gap-2 p-4">
               <input className="w-2/5 border px-2 dark:border-zinc-500 dark:bg-zinc-800" />
               <button>MAX</button>
             </td>
             <td className="flex w-1/4 flex-wrap items-center gap-2 p-4">
-              {Intl.NumberFormat("en-us").format(+formatUnits(stake.deposited))}
+              {Intl.NumberFormat("en-us").format(+formatUnits(da.amount))}
               {apecoinPrice && (
                 <>
                   {" "}
                   (
-                  {Intl.NumberFormat(undefined, {
-                    maximumFractionDigits: 2,
-                    style: "currency",
-                    currency: "USD",
-                    notation: "compact",
-                    compactDisplay: "short",
-                  }).format(
-                    +formatUnits(stake.deposited) *
-                      +formatUnits(apecoinPrice, 8)
+                  {formatToUSD(
+                    +formatUnits(da.amount) * +formatUnits(apecoinPrice, 8)
                   )}
                   )
                 </>
               )}
             </td>
             <td className="flex w-1/4 flex-wrap items-center gap-2 p-4">
-              {Intl.NumberFormat("en-us").format(+formatUnits(stake.unclaimed))}
+              {Intl.NumberFormat("en-us").format(+formatUnits(da.unclaimed))}
               {apecoinPrice && (
                 <>
                   {" "}
                   (
                   {formatToUSD(
-                    +formatUnits(stake.unclaimed) *
-                      +formatUnits(apecoinPrice, 8)
+                    +formatUnits(da.unclaimed) * +formatUnits(apecoinPrice, 8)
                   )}
                   )
                 </>
@@ -97,7 +163,7 @@ export const BakcTable = (props: BakcTableProps) => {
                 Totals:
               </td>
               <td className="flex w-1/4 flex-wrap items-center gap-2 p-4">
-                1,712
+                {Intl.NumberFormat("en-us").format(+formatUnits(0))}
                 {apecoinPrice && (
                   <> ({formatToUSD(1712 * +formatUnits(apecoinPrice, 8))})</>
                 )}
