@@ -6,13 +6,14 @@ import useAllStakes from "@/hooks/useAllStakes";
 import { ethers, BigNumber } from "ethers";
 import usePrice from "@/hooks/usePrice";
 import useAutoConnecting from "@/hooks/useAutoConnecting";
-import { BakcTable } from "./Tables/BakcTable";
+import { BakcTable, IPairOption } from "./Tables/BakcTable";
 import { ApeCoinTable } from "./Tables/ApeCoinTable";
 import { NftTable } from "./Tables/NFTTable";
 import useAllowance from "@/hooks/useAllowance";
 import Allowance from "./allowance";
 import { formatUnits } from "ethers/lib/utils.js";
 import UserStaking from "./userStaking";
+import { PoolType } from "../types/data";
 
 interface poolStakesData {
   poolId: BigNumber;
@@ -71,11 +72,7 @@ export default function Staking() {
       }
     }
     return allStakes.data
-      ?.filter((stake) => {
-        if (stake.poolId.toNumber() === poolID) {
-          return true;
-        }
-      })
+      ?.filter((stake) => stake.poolId.toNumber() === poolID)
       .map((token) => {
         if (token.deposited?.gt(0)) {
           if (asString) {
@@ -90,21 +87,16 @@ export default function Staking() {
           }
         }
       })
-      .filter((token) => {
-        return token !== undefined;
-      });
+      .filter((token) => token !== undefined);
   };
 
   const withdrawBakcArgs = (mainTypePoolId: number, asString: boolean) => {
     return allStakes.data
-      ?.filter((stake) => {
-        if (
+      ?.filter(
+        (stake) =>
           stake.poolId.toNumber() === 3 &&
           stake.pair.mainTypePoolId.toNumber() === mainTypePoolId
-        ) {
-          return true;
-        }
-      })
+      )
       .map((token) => {
         if (token.deposited?.gt(0)) {
           if (asString) {
@@ -126,9 +118,7 @@ export default function Staking() {
           }
         }
       })
-      .filter((token) => {
-        return token !== undefined;
-      });
+      .filter((token) => token !== undefined);
   };
 
   const claimArgs = (poolID: number, asString: boolean) => {
@@ -194,18 +184,18 @@ export default function Staking() {
           }
         }
       })
-      .filter((token) => {
-        return token !== undefined;
-      });
+      .filter((token) => token !== undefined);
   };
 
-  const baycOptions = baycStakes.map((data) => {
-    return { label: `BAYC ${data.tokenId}` };
-  });
+  const baycOptions: IPairOption[] = baycStakes.map((data) => ({
+    tokenId: data.tokenId.toNumber(),
+    poolId: PoolType.BAYC,
+  }));
 
-  const maycOptions = maycStakes.map((data) => {
-    return { label: `MAYC ${data.tokenId}` };
-  });
+  const maycOptions: IPairOption[] = maycStakes.map((data) => ({
+    tokenId: data.tokenId.toNumber(),
+    poolId: PoolType.MAYC,
+  }));
 
   const options = baycOptions.concat(maycOptions);
 
