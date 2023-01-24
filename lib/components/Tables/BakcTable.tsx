@@ -1,6 +1,6 @@
 "use client";
 
-import { formatUnits } from "ethers/lib/utils.js";
+import { formatUnits, parseUnits } from "ethers/lib/utils.js";
 import { ethers, BigNumber } from "ethers";
 
 import { poolStakesData } from "@/hooks/useAllStakes";
@@ -46,7 +46,6 @@ export const BakcTable = (props: BakcTableProps) => {
   const [depositAmounts, setDepositAmounts] = useState<{
     [key: number]: PairNftWithAmount & {
       poolId: PoolType;
-      unclaimed: ethers.BigNumber;
     };
   }>(
     poolStakes.reduce((acc, s) => {
@@ -54,10 +53,9 @@ export const BakcTable = (props: BakcTableProps) => {
         ...acc,
         [s.tokenId.toNumber()]: {
           bakcTokenId: s.tokenId,
-          amount: s.deposited,
+          amount: ethers.constants.Zero,
           mainTokenId: s.pair.mainTokenId,
           poolId: s.pair.mainTypePoolId.toNumber(),
-          unclaimed: s.unclaimed,
         },
       };
     }, {})
@@ -74,6 +72,38 @@ export const BakcTable = (props: BakcTableProps) => {
     }));
   };
 
+  const handleAmountChange = (bakcTokenId: number) => (e) => {
+    setDepositAmounts((prev) => ({
+      ...prev,
+      [bakcTokenId]: {
+        ...prev[bakcTokenId],
+        amount: e.target.value,
+      },
+    }));
+  };
+
+  const depositArgs = (() => {
+    return Object.values(depositAmounts)
+      .filter((da) => da.amount.gt(0) && !da.mainTokenId.isZero())
+      .reduce(
+        (acc, da) => {
+          const key = da.poolId === PoolType.BAYC ? "bayc" : "mayc";
+          return {
+            ...acc,
+            [key]: [
+              ...acc[key],
+              [
+                da.mainTokenId.toNumber(),
+                da.bakcTokenId.toNumber(),
+                da.amount.toString(),
+              ],
+            ],
+          };
+        },
+        { bayc: [], mayc: [] }
+      );
+  })();
+
   const unclaimedTotal =
     poolStakes?.reduce((total, token) => {
       return total.add(token.unclaimed);
@@ -87,74 +117,118 @@ export const BakcTable = (props: BakcTableProps) => {
     <table className="mt-4 w-full border dark:border-zinc-700">
       <TableHead />
       <tbody className="divide-y divide-zinc-200 dark:divide-zinc-700">
-        {Object.values(depositAmounts).map((da) => (
-          <tr className="flex" key={da.bakcTokenId.toNumber()}>
-            <td className="flex w-1/4 flex-wrap items-center gap-2 p-4">
-              BAKC {da.bakcTokenId.toNumber()}
-              {da.mainTokenId.isZero() ||
-              availableMainTokenIds.find(
-                (amt) =>
-                  amt.poolId === da.poolId &&
-                  amt.tokenId === da.mainTokenId.toNumber()
-              ) ? (
-                <select
-                  className="h-7 w-1/2 appearance-none border px-2 py-0 dark:border-zinc-500 dark:bg-zinc-800"
-                  name="mainTokenId"
-                  onChange={handleSelectInputChangeForBakc(
-                    da.bakcTokenId.toNumber()
-                  )}
-                >
-                  <option selected disabled>
-                    PAIR WITH
-                  </option>
-                  {availableMainTokenIds.map((o) => (
-                    <option
-                      key={`${o.poolId}_${o.tokenId}`}
-                      value={`${o.poolId}_${o.tokenId}`}
-                    >
-                      {o.poolId === PoolType.BAYC ? "BAYC" : "MAYC"} {o.tokenId}
+        {poolStakes.map((da) => {
+          const depositedAmount = Number(
+            da.deposited.isZero() ? 0 : formatUnits(da.deposited)
+          );
+
+          return (
+            <tr className="flex" key={da.tokenId.toNumber()}>
+              <td className="flex w-1/4 flex-wrap items-center gap-2 p-4">
+                BAKC {da.tokenId.toNumber()}
+                {da.pair.mainTokenId.isZero() ||
+                availableMainTokenIds.find(
+                  (amt) =>
+                    amt.poolId === da.pair.mainTypePoolId.toNumber() &&
+                    amt.tokenId === da.pair.mainTokenId.toNumber()
+                ) ? (
+                  <select
+                    className="h-7 w-1/2 appearance-none border px-2 py-0 dark:border-zinc-500 dark:bg-zinc-800"
+                    name="mainTokenId"
+                    onChange={handleSelectInputChangeForBakc(
+                      da.tokenId.toNumber()
+                    )}
+                    defaultValue="default"
+                  >
+                    <option value="default" disabled>
+                      PAIR WITH
                     </option>
-                  ))}
-                </select>
-              ) : (
-                <span>
-                  + {da.poolId === 1 ? "BAYC" : "MAYC"}{" "}
-                  {da.mainTokenId.toNumber()}
-                </span>
-              )}
-            </td>
-            <td className="flex w-1/4 flex-wrap items-center gap-2 p-4">
-              <input className="w-2/5 border px-2 dark:border-zinc-500 dark:bg-zinc-800" />
-              <button>MAX</button>
-            </td>
-            <td className="flex w-1/4 flex-wrap items-center gap-2 p-4">
-              {Intl.NumberFormat("en-us").format(+formatUnits(da.amount))}
-              {apecoinPrice && (
-                <>
-                  {" "}
-                  (
-                  {formatToUSD(
-                    +formatUnits(da.amount) * +formatUnits(apecoinPrice, 8)
-                  )}
-                  )
-                </>
-              )}
-            </td>
-            <td className="flex w-1/4 flex-wrap items-center gap-2 p-4">
-              {Intl.NumberFormat("en-us").format(+formatUnits(da.unclaimed))}
-              {apecoinPrice && (
-                <>
-                  {" "}
-                  (
-                  {formatToUSD(
-                    +formatUnits(da.unclaimed) * +formatUnits(apecoinPrice, 8)
-                  )}
-                  )
-                </>
-              )}
-            </td>
-          </tr>
-        ))}
+                    {availableMainTokenIds.map((o) => (
+                      <option
+                        key={`${o.poolId}_${o.tokenId}`}
+                        value={`${o.poolId}_${o.tokenId}`}
+                      >
+                        {o.poolId === PoolType.BAYC ? "BAYC" : "MAYC"}{" "}
+                        {o.tokenId}
+                      </option>
+                    ))}
+                  </select>
+                ) : (
+                  <span>
+                    +{" "}
+                    {da.pair.mainTypePoolId.toNumber() === 1 ? "BAYC" : "MAYC"}{" "}
+                    {da.pair.mainTokenId.toNumber()}
+                  </span>
+                )}
+              </td>
+              <td className="flex w-1/4 flex-wrap items-center gap-2 p-4">
+                <input
+                  className="w-2/5 border px-2 dark:border-zinc-500 dark:bg-zinc-800"
+                  value={
+                    +formatUnits(
+                      depositAmounts[da.tokenId.toNumber()].amount || 0
+                    )
+                  }
+                  max={Math.min(MAX_STAKES[3] - depositedAmount)}
+                  onChange={(e) =>
+                    setDepositAmounts((prev) => ({
+                      ...prev,
+                      [da.tokenId.toNumber()]: {
+                        ...prev[da.tokenId.toNumber()],
+                        amount:
+                          e.target.value === ""
+                            ? ethers.constants.Zero
+                            : parseUnits(e.target.value.toString()),
+                      },
+                    }))
+                  }
+                  type="number"
+                />
+                <button
+                  onClick={() =>
+                    setDepositAmounts((prev) => ({
+                      ...prev,
+                      [da.tokenId.toNumber()]: {
+                        ...prev[da.tokenId.toNumber()],
+                        amount: parseUnits(
+                          (MAX_STAKES[3] - depositedAmount).toString()
+                        ),
+                      },
+                    }))
+                  }
+                >
+                  MAX
+                </button>
+              </td>
+              <td className="flex w-1/4 flex-wrap items-center gap-2 p-4">
+                {Intl.NumberFormat("en-us").format(+formatUnits(da.deposited))}
+                {apecoinPrice && (
+                  <>
+                    {" "}
+                    (
+                    {formatToUSD(
+                      +formatUnits(da.deposited) * +formatUnits(apecoinPrice, 8)
+                    )}
+                    )
+                  </>
+                )}
+              </td>
+              <td className="flex w-1/4 flex-wrap items-center gap-2 p-4">
+                {Intl.NumberFormat("en-us").format(+formatUnits(da.unclaimed))}
+                {apecoinPrice && (
+                  <>
+                    {" "}
+                    (
+                    {formatToUSD(
+                      +formatUnits(da.unclaimed) * +formatUnits(apecoinPrice, 8)
+                    )}
+                    )
+                  </>
+                )}
+              </td>
+            </tr>
+          );
+        })}
 
         {(depositedTotal.gt(0) || unclaimedTotal.gt(0) || true) && (
           <>
@@ -163,7 +237,14 @@ export const BakcTable = (props: BakcTableProps) => {
                 Totals:
               </td>
               <td className="flex w-1/4 flex-wrap items-center gap-2 p-4">
-                {Intl.NumberFormat("en-us").format(+formatUnits(0))}
+                {Intl.NumberFormat("en-us").format(
+                  +formatUnits(
+                    Object.values(depositAmounts).reduce(
+                      (acc, da) => acc.add(da.amount),
+                      ethers.constants.Zero
+                    )
+                  )
+                )}
                 {apecoinPrice && (
                   <> ({formatToUSD(1712 * +formatUnits(apecoinPrice, 8))})</>
                 )}
@@ -238,13 +319,13 @@ export const BakcTable = (props: BakcTableProps) => {
                 <textarea
                   className="border px-2 dark:border-zinc-500 dark:bg-zinc-800"
                   readOnly
-                  value={JSON.stringify(withdrawArgs(1, true))}
+                  value={JSON.stringify(depositArgs.bayc)}
                 />
                 <p className="text-sm">_maycPairs</p>
                 <textarea
                   className="border px-2 dark:border-zinc-500 dark:bg-zinc-800"
                   readOnly
-                  value={JSON.stringify(withdrawArgs(2, true))}
+                  value={JSON.stringify(depositArgs.mayc)}
                 />
               </td>
               <td className="w-1/4 p-4">
