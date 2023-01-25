@@ -8,11 +8,11 @@ export default function Head() {
 
       <meta
         name="description"
-        content="ApeCoin user interface is an open-source and free website for interacting with ApeCoin"
+        content="ApeCoinUI is an open-source interface for ApeCoin including a Staking Calculator."
       />
       <meta
         property="og:title"
-        content="ApeCoin user interface is an open-source and free website for interacting with ApeCoin"
+        content="ApeCoinUI is an open-source interface for ApeCoin including a Staking Calculator."
       />
       <meta property="og:site_name" content="ApeCoin UI" />
       <meta property="og:url" content="https://apecoinui.com" />
@@ -22,7 +22,7 @@ export default function Head() {
       <meta name="twitter:title" content="ApeCoin UI" />
       <meta
         name="twitter:description"
-        content="ApeCoin user interface is an open-source and free website for interacting with ApeCoin"
+        content="ApeCoinUI is an open-source interface for ApeCoin including a Staking Calculator."
       />
       <meta name="twitter:card" content="summary_large_image" />
       <meta

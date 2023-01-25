@@ -119,7 +119,7 @@ export const NftTable = (props: NftTableProps) => {
                         });
                       }
                     }}
-                    className="w-2/5 border px-2 dark:border-zinc-500 dark:bg-zinc-800"
+                    className="w-2/5 w-full border px-2 text-[10px] dark:border-zinc-500 dark:bg-zinc-800"
                   />
                   {!depositAmounts[stake.tokenId.toNumber()].eq(
                     parseUnits(
@@ -305,7 +305,7 @@ export const NftTable = (props: NftTableProps) => {
                       deposit{tokenSymbol}
                     </a>
                     <textarea
-                      className="border px-2 dark:border-zinc-500 dark:bg-zinc-800"
+                      className="w-full border px-2 text-[10px] dark:border-zinc-500 dark:bg-zinc-800"
                       readOnly
                       value={JSON.stringify(depositArgs())}
                     />
@@ -322,7 +322,7 @@ export const NftTable = (props: NftTableProps) => {
                       withdrawSelf{tokenSymbol}
                     </a>
                     <textarea
-                      className="border px-2 dark:border-zinc-500 dark:bg-zinc-800"
+                      className="w-full border px-2 text-[10px] dark:border-zinc-500 dark:bg-zinc-800"
                       readOnly
                       value={JSON.stringify(withdrawArgs(poolId, true))}
                     />
@@ -339,7 +339,7 @@ export const NftTable = (props: NftTableProps) => {
                       claimSelf{tokenSymbol}
                     </a>
                     <textarea
-                      className="border px-2 dark:border-zinc-500 dark:bg-zinc-800"
+                      className="w-full border px-2 text-[10px] dark:border-zinc-500 dark:bg-zinc-800"
                       readOnly
                       value={JSON.stringify(claimArgs(poolId, true))}
                     />

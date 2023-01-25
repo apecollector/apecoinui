@@ -54,10 +54,10 @@ export default async function Page() {
         </Link>
       </div>
 
-      <div className="mt-10">
+      {/* <div className="mt-10">
         <h3 className="text-3xl font-bold">Live Staking Activity:</h3>
         <Events />
-      </div>
+      </div> */}
     </>
   );
 }

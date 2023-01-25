@@ -53,7 +53,7 @@ export const ApeCoinTable = (props: ApeCoinTableProps) => {
                     setDepositApeCoinAmount(parseUnits(e.target.value));
                   }
                 }}
-                className="w-2/5 border px-2 dark:border-zinc-500 dark:bg-zinc-800"
+                className="w-2/5 w-full border px-2 text-[10px] dark:border-zinc-500 dark:bg-zinc-800"
               />
               {apeCoinBalance?.gt(0) &&
                 !depositApeCoinAmount.eq(apeCoinBalance) && (
@@ -171,7 +171,7 @@ export const ApeCoinTable = (props: ApeCoinTableProps) => {
                     </a>
                     <textarea
                       value={`["${depositApeCoinAmount?.toString()}"]`}
-                      className="border px-2 dark:border-zinc-500 dark:bg-zinc-800"
+                      className="w-full border px-2 text-[10px] dark:border-zinc-500 dark:bg-zinc-800"
                     />
                   </>
                 )}
@@ -186,7 +186,7 @@ export const ApeCoinTable = (props: ApeCoinTableProps) => {
                       withdrawSelfApeCoin
                     </a>
                     <textarea
-                      className="border px-2 dark:border-zinc-500 dark:bg-zinc-800"
+                      className="w-full border px-2 text-[10px] dark:border-zinc-500 dark:bg-zinc-800"
                       readOnly
                       value={JSON.stringify(withdrawArgs(0, true))}
                     />
@@ -203,7 +203,7 @@ export const ApeCoinTable = (props: ApeCoinTableProps) => {
                       claimSelfApeCoin
                     </a>
                     <textarea
-                      className="border px-2 dark:border-zinc-500 dark:bg-zinc-800"
+                      className="w-full border px-2 text-[10px] dark:border-zinc-500 dark:bg-zinc-800"
                       readOnly
                       value={JSON.stringify(claimArgs(0, true))}
                     />

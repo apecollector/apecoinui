@@ -39,7 +39,7 @@ function ClaimAll({
     enabled:
       apeCoinStakes &&
       apeCoinStakes.length !== 0 &&
-      !apeCoinStakes[0].unclaimed.isZero,
+      !apeCoinStakes[0].unclaimed.isZero(),
     address: stakingContractAddresses[chain?.id || 1],
     abi: ABI,
     functionName: "claimSelfApeCoin",
@@ -59,8 +59,13 @@ function ClaimAll({
       return token !== undefined;
     });
 
+  const baycUnclaimed =
+    baycStakes?.reduce((sum, stake) => {
+      return sum + +formatUnits(stake.unclaimed);
+    }, 0) || 0;
+
   const baycPrepareContractWrite = usePrepareContractWrite({
-    enabled: baycStakes && baycStakes.length > 0,
+    enabled: baycStakes && baycStakes.length > 0 && baycUnclaimed > 0,
     address: stakingContractAddresses[chain?.id || 1],
     abi: ABI,
     functionName: "claimSelfBAYC",
@@ -163,7 +168,7 @@ function WithdrawAll({
   bakcStakes: poolStakesData[] | undefined;
 }) {
   const apeCoinWithdrawPrepareContractWrite = usePrepareContractWrite({
-    enabled: !apeCoinStakes?.[0]?.deposited.isZero,
+    enabled: !apeCoinStakes?.[0]?.deposited.isZero(),
     address: stakingContractAddresses[chain?.id || 1],
     abi: ABI,
     functionName: "withdrawSelfApeCoin",
@@ -379,18 +384,19 @@ export default function UserStaking() {
                     </>
                   )}
                 </div>
-                {address === statsAddress && chain?.id === 5 && (
-                  <WithdrawAll
-                    chain={chain}
-                    apeCoinStakes={apeCoinStakes}
-                    baycStakes={baycStakes}
-                    maycStakes={maycStakes}
-                    bakcStakes={bakcStakes}
-                  />
-                )}
+                {address === statsAddress &&
+                  process.env.NEXT_PUBLIC_ENABLE_STAKE === "TRUE" && (
+                    <WithdrawAll
+                      chain={chain}
+                      apeCoinStakes={apeCoinStakes}
+                      baycStakes={baycStakes}
+                      maycStakes={maycStakes}
+                      bakcStakes={bakcStakes}
+                    />
+                  )}
               </>
             ) : (
-              <>{baycStakes && <>Address has no staked ApeCoin.</>}</>
+              <>{baycStakes && <>0</>}</>
             )}
           </div>
         </div>
@@ -420,18 +426,19 @@ export default function UserStaking() {
                     )
                   </>
                 )}
-                {address === statsAddress && chain?.id === 5 && (
-                  <ClaimAll
-                    chain={chain}
-                    apeCoinStakes={apeCoinStakes}
-                    baycStakes={baycStakes}
-                    maycStakes={maycStakes}
-                    bakcStakes={bakcStakes}
-                  />
-                )}
+                {address === statsAddress &&
+                  process.env.NEXT_PUBLIC_ENABLE_STAKE === "TRUE" && (
+                    <ClaimAll
+                      chain={chain}
+                      apeCoinStakes={apeCoinStakes}
+                      baycStakes={baycStakes}
+                      maycStakes={maycStakes}
+                      bakcStakes={bakcStakes}
+                    />
+                  )}
               </>
             ) : (
-              <>{baycStakes && <>Address has no ApeCoin Rewards.</>}</>
+              <>{baycStakes && <>0</>}</>
             )}
           </div>
         </div>

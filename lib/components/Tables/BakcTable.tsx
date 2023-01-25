@@ -326,13 +326,13 @@ export const BakcTable = (props: BakcTableProps) => {
                 </a>
                 <p className="mt-4 text-sm">_baycPairs</p>
                 <textarea
-                  className="border px-2 dark:border-zinc-500 dark:bg-zinc-800"
+                  className="w-full border px-2 text-[10px] dark:border-zinc-500 dark:bg-zinc-800"
                   readOnly
                   value={JSON.stringify(depositArgs.bayc)}
                 />
                 <p className="text-sm">_maycPairs</p>
                 <textarea
-                  className="border px-2 dark:border-zinc-500 dark:bg-zinc-800"
+                  className="w-full border px-2 text-[10px] dark:border-zinc-500 dark:bg-zinc-800"
                   readOnly
                   value={JSON.stringify(depositArgs.mayc)}
                 />
@@ -346,13 +346,13 @@ export const BakcTable = (props: BakcTableProps) => {
                 </a>
                 <p className="mt-4 text-sm">_baycPairs</p>
                 <textarea
-                  className="border px-2 dark:border-zinc-500 dark:bg-zinc-800"
+                  className="w-full border px-2 text-[10px] dark:border-zinc-500 dark:bg-zinc-800"
                   readOnly
                   value={JSON.stringify(withdrawArgs(1, true))}
                 />
                 <p className="text-sm">_maycPairs</p>
                 <textarea
-                  className="border px-2 dark:border-zinc-500 dark:bg-zinc-800"
+                  className="w-full border px-2 text-[10px] dark:border-zinc-500 dark:bg-zinc-800"
                   readOnly
                   value={JSON.stringify(withdrawArgs(2, true))}
                 />
@@ -366,13 +366,13 @@ export const BakcTable = (props: BakcTableProps) => {
                 </a>
                 <p className="mt-4 text-sm">_baycPairs</p>
                 <textarea
-                  className="border px-2 dark:border-zinc-500 dark:bg-zinc-800"
+                  className="w-full border px-2 text-[10px] dark:border-zinc-500 dark:bg-zinc-800"
                   readOnly
                   value={JSON.stringify(claimArgs(1, true))}
                 />
                 <p className="text-sm">_maycPairs</p>
                 <textarea
-                  className="border px-2 dark:border-zinc-500 dark:bg-zinc-800"
+                  className="w-full border px-2 text-[10px] dark:border-zinc-500 dark:bg-zinc-800"
                   readOnly
                   value={JSON.stringify(claimArgs(2, true))}
                 />

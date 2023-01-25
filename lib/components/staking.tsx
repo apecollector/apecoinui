@@ -66,9 +66,9 @@ export default function Staking() {
     if (poolID === 0) {
       const token = allStakes.data?.[0];
       if (token?.deposited.gt(0)) {
-        return [asString ? token.deposited.toString() : token.deposited];
+        return asString ? token.deposited.toString() : token.deposited;
       } else {
-        return [];
+        return "";
       }
     }
     return allStakes.data
@@ -125,9 +125,9 @@ export default function Staking() {
     if (poolID === 0) {
       const token = allStakes.data?.[0];
       if (token?.unclaimed.gt(0)) {
-        return [asString ? token.unclaimed.toString() : token.unclaimed];
+        return asString ? token.unclaimed.toString() : token.unclaimed;
       } else {
-        return [];
+        return "";
       }
     }
     return allStakes.data
@@ -139,14 +139,12 @@ export default function Staking() {
       .map((token) => {
         if (token.unclaimed?.gt(0)) {
           if (asString) {
-            return [token.tokenId.toNumber(), token.unclaimed.toString()];
+            return token.tokenId.toNumber();
           } else {
-            return [
-              {
-                tokenId: token.tokenId,
-                amount: token.unclaimed,
-              },
-            ];
+            return;
+            {
+              tokenId: token.tokenId;
+            }
           }
         }
       })
