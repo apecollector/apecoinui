@@ -119,7 +119,8 @@ export const NftTable = (props: NftTableProps) => {
                         });
                       }
                     }}
-                    className="w-2/5 w-full border px-2 text-[10px] dark:border-zinc-500 dark:bg-zinc-800"
+                    className="w-2/5 border px-2 dark:border-zinc-500 dark:bg-zinc-800"
+                    type="number"
                   />
                   {!depositAmounts[stake.tokenId.toNumber()].eq(
                     parseUnits(

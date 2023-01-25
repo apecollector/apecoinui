@@ -53,7 +53,8 @@ export const ApeCoinTable = (props: ApeCoinTableProps) => {
                     setDepositApeCoinAmount(parseUnits(e.target.value));
                   }
                 }}
-                className="w-2/5 w-full border px-2 text-[10px] dark:border-zinc-500 dark:bg-zinc-800"
+                className="w-2/5 border px-2 dark:border-zinc-500 dark:bg-zinc-800"
+                type="number"
               />
               {apeCoinBalance?.gt(0) &&
                 !depositApeCoinAmount.eq(apeCoinBalance) && (
