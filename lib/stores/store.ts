@@ -5,7 +5,7 @@ import { devtools } from "zustand/middleware";
 
 import { EventData } from "@/types/event";
 import { TimeFrame } from "@/types/timeframe";
-import { Amount } from "@/types/data";
+import { Amount } from "@/types/constants";
 
 interface AppState {
   autoConnecting: boolean;

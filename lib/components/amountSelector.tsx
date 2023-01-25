@@ -1,6 +1,6 @@
 import { useId } from "react";
 import useAmount from "@/hooks/useAmount";
-import { Amount } from "@/types/data";
+import { Amount } from "@/types/constants";
 
 const AmountSelector: React.FC<{ classNames?: string }> = () => {
   const { amount, setAmount } = useAmount();

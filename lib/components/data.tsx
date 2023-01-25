@@ -4,7 +4,7 @@ import { formatUnits } from "ethers/lib/utils";
 
 import usePoolData from "@/hooks/usePoolData";
 import { TimeFrame } from "@/types/timeframe";
-import { Amount, PoolType } from "@/types/data";
+import { Amount, PoolType } from "@/types/constants";
 import usePrice from "@/hooks/usePrice";
 import useTimeframe from "@/hooks/useTimeframe";
 import TimeframeSelector from "./timeframeSelector";

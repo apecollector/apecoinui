@@ -12,8 +12,8 @@ import { NftTable } from "./Tables/NFTTable";
 import useAllowance from "@/hooks/useAllowance";
 import Allowance from "./allowance";
 import { formatUnits } from "ethers/lib/utils.js";
-import UserStaking from "./userStaking";
-import { PoolType } from "../types/data";
+import { UserStaking } from "./userStaking";
+import { PoolType } from "@/types/constants";
 
 interface poolStakesData {
   poolId: BigNumber;

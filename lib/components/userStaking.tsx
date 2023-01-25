@@ -13,14 +13,8 @@ import useAllStakes, { poolStakesData } from "@/hooks/useAllStakes";
 import { formatUnits } from "ethers/lib/utils.js";
 import usePrice from "@/hooks/usePrice";
 import ABI from "@/abis/staking";
-import { Map } from "@/types/map";
 import { BigNumber } from "ethers";
-import { StakingContractAddress } from "@/types/data";
-
-const stakingContractAddresses: Map = {
-  1: "0x5954aB967Bc958940b7EB73ee84797Dc8a2AFbb9",
-  5: StakingContractAddress.Goerli,
-} as const;
+import { StakingContractAddresses } from "@/types/constants";
 
 function ClaimAll({
   chain,
@@ -40,7 +34,7 @@ function ClaimAll({
       apeCoinStakes &&
       apeCoinStakes.length !== 0 &&
       !apeCoinStakes[0].unclaimed.isZero(),
-    address: stakingContractAddresses[chain?.id || 1],
+    address: StakingContractAddresses[chain?.id || 1],
     abi: ABI,
     functionName: "claimSelfApeCoin",
   });
@@ -66,7 +60,7 @@ function ClaimAll({
 
   const baycPrepareContractWrite = usePrepareContractWrite({
     enabled: baycStakes && baycStakes.length > 0 && baycUnclaimed > 0,
-    address: stakingContractAddresses[chain?.id || 1],
+    address: StakingContractAddresses[chain?.id || 1],
     abi: ABI,
     functionName: "claimSelfBAYC",
     args: args && ([args] as any),
@@ -86,7 +80,7 @@ function ClaimAll({
 
   const maycPrepareContractWrite = usePrepareContractWrite({
     enabled: maycStakes && maycStakes.length > 0,
-    address: stakingContractAddresses[chain?.id || 1],
+    address: StakingContractAddresses[chain?.id || 1],
     abi: ABI,
     functionName: "claimSelfMAYC",
     args: [maycArgs as any],
@@ -128,7 +122,7 @@ function ClaimAll({
 
   const bakcPrepareContractWrite = usePrepareContractWrite({
     enabled: bakcBaycArgs.length > 0 || bakcMaycArgs.length > 0,
-    address: stakingContractAddresses[chain?.id || 1],
+    address: StakingContractAddresses[chain?.id || 1],
     abi: ABI,
     functionName: "claimSelfBAKC",
     args: [bakcBaycArgs, bakcMaycArgs],
@@ -169,7 +163,7 @@ function WithdrawAll({
 }) {
   const apeCoinWithdrawPrepareContractWrite = usePrepareContractWrite({
     enabled: !apeCoinStakes?.[0]?.deposited.isZero(),
-    address: stakingContractAddresses[chain?.id || 1],
+    address: StakingContractAddresses[chain?.id || 1],
     abi: ABI,
     functionName: "withdrawSelfApeCoin",
     args: apeCoinStakes?.[0]?.deposited && [apeCoinStakes[0].deposited],
@@ -200,7 +194,7 @@ function WithdrawAll({
 
   const baycWithdrawPrepareContractWrite = usePrepareContractWrite({
     enabled: baycStakes && baycStakes.length > 0,
-    address: stakingContractAddresses[chain?.id || 1],
+    address: StakingContractAddresses[chain?.id || 1],
     abi: ABI,
     functionName: "withdrawSelfBAYC",
     args: baycWithdrawArgs && ([baycWithdrawArgs] as any),
@@ -226,7 +220,7 @@ function WithdrawAll({
 
   const maycWithdrawPrepareContractWrite = usePrepareContractWrite({
     enabled: maycStakes && maycStakes.length > 0,
-    address: stakingContractAddresses[chain?.id || 1],
+    address: StakingContractAddresses[chain?.id || 1],
     abi: ABI,
     functionName: "withdrawSelfMAYC",
     args: maycWithdrawArgs && ([maycWithdrawArgs] as any),
@@ -276,7 +270,7 @@ function WithdrawAll({
 
   const bakcPrepareContractWrite = usePrepareContractWrite({
     enabled: bakcBaycArgs.length > 0 || bakcMaycArgs.length > 0,
-    address: stakingContractAddresses[chain?.id || 1],
+    address: StakingContractAddresses[chain?.id || 1],
     abi: ABI,
     functionName: "withdrawBAKC",
     args: [bakcBaycArgs, bakcMaycArgs],
@@ -302,7 +296,7 @@ function WithdrawAll({
   );
 }
 
-export default function UserStaking() {
+export const UserStaking = () => {
   const { chain } = useNetwork();
   const { address } = useAccount();
   const { apecoinPrice } = usePrice();
@@ -445,4 +439,4 @@ export default function UserStaking() {
       </div>
     </>
   );
-}
+};

@@ -1,14 +1,8 @@
 "use client";
 
 import ABI from "@/abis/staking";
-import useAllStakes, { poolStakesData } from "@/hooks/useAllStakes";
-import { Map } from "@/types/map";
-import {
-  CheckCircleIcon,
-  ClockIcon,
-  WalletIcon,
-  XCircleIcon,
-} from "@heroicons/react/24/solid";
+import useAllStakes from "@/hooks/useAllStakes";
+import { CheckCircleIcon } from "@heroicons/react/24/solid";
 import { BigNumber, ethers } from "ethers";
 import { Modal } from "flowbite-react";
 import { Dispatch, useEffect, useState } from "react";
@@ -18,12 +12,7 @@ import {
   useNetwork,
   usePrepareContractWrite,
 } from "wagmi";
-import { StakingContractAddress } from "@/types/data";
-
-const stakingContractAddresses: Map = {
-  1: "0x5954aB967Bc958940b7EB73ee84797Dc8a2AFbb9",
-  5: StakingContractAddress.Goerli,
-} as const;
+import { StakingContractAddresses } from "@/types/constants";
 
 function displayApeCoin(apecoin: BigNumber | number): string {
   return Intl.NumberFormat("en-US", {
@@ -37,7 +26,7 @@ const ClaimApeCoin = () => {
   const { apeCoinStakes } = useAllStakes(address as string);
 
   const apeCoinPrepareContractWrite = usePrepareContractWrite({
-    address: stakingContractAddresses[chain?.id || 1],
+    address: StakingContractAddresses[chain?.id || 1],
     abi: ABI,
     functionName: "claimSelfApeCoin",
   });
@@ -84,7 +73,7 @@ const ClaimBayc = () => {
     });
 
   const baycPrepareContractWrite = usePrepareContractWrite({
-    address: stakingContractAddresses[chain?.id || 1],
+    address: StakingContractAddresses[chain?.id || 1],
     abi: ABI,
     functionName: "claimSelfBAYC",
     args: [args as any],

@@ -1,7 +1,7 @@
 import Events from "@/components/events";
 import Data from "@/components/data";
 import Calculator from "@/components/calculator";
-import UserStaking from "@/components/userStaking";
+import { UserStaking } from "@/components/userStaking";
 
 export default async function Page() {
   return (

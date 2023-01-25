@@ -2,19 +2,16 @@
 
 import { formatUnits, parseUnits } from "ethers/lib/utils.js";
 import { ethers, BigNumber } from "ethers";
+import { ChangeEvent, useState } from "react";
 
 import { poolStakesData } from "@/hooks/useAllStakes";
 import { MAX_STAKES } from "@/types/constants";
+import { PairNftWithAmount } from "@/types/contract";
 import { TableHead } from "./common/TableHead";
 import { formatToUSD } from "@/utils/format";
 import { IClaimArgsBakc, IWithdrawArgsBakc } from "./common/types";
-import { ChangeEvent, useState } from "react";
-import {
-  PairNftWithAmount,
-  useBakcDeposits,
-  useNftDeposits,
-} from "@/hooks/useDeposits";
-import { PoolType } from "@/types/data";
+import { useBakcDeposits } from "@/hooks/useDeposits";
+import { PoolType } from "@/types/constants";
 
 export interface IPairOption {
   tokenId: number;

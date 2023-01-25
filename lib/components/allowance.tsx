@@ -11,18 +11,10 @@ import {
 } from "wagmi";
 
 import ABI from "@/abis/apecoin";
-import { Map } from "@/types/map";
-import { StakingContractAddress } from "@/types/data";
-
-const apecoinContractAddresses: Map = {
-  1: "0x4d224452801ACEd8B2F0aebE155379bb5D594381",
-  5: "0x328507DC29C95c170B56a1b3A758eB7a9E73455c",
-};
-
-const stakingContractAddresses: Map = {
-  1: "0x5954aB967Bc958940b7EB73ee84797Dc8a2AFbb9",
-  5: StakingContractAddress.Goerli,
-};
+import {
+  StakingContractAddresses,
+  ApecoinContractAddresses,
+} from "@/types/constants";
 
 export default function Allowance() {
   const { address, isConnected } = useAccount();
@@ -30,19 +22,19 @@ export default function Allowance() {
 
   const allowanceContractRead = useContractRead({
     enabled: address !== undefined,
-    address: apecoinContractAddresses[chain?.id || 1],
+    address: ApecoinContractAddresses[chain?.id || 1],
     abi: ABI,
     functionName: "allowance",
-    args: [address as `0x${string}`, stakingContractAddresses[chain?.id || 1]],
+    args: [address as `0x${string}`, StakingContractAddresses[chain?.id || 1]],
   });
 
   const { config } = usePrepareContractWrite({
     enabled: isConnected && allowanceContractRead.isSuccess,
-    address: apecoinContractAddresses[chain?.id || 1],
+    address: ApecoinContractAddresses[chain?.id || 1],
     abi: ABI,
     functionName: "approve",
     args: [
-      stakingContractAddresses[chain?.id || 1],
+      StakingContractAddresses[chain?.id || 1],
       ethers.constants.MaxUint256,
     ],
   });

@@ -4,10 +4,11 @@ import { useState } from "react";
 
 import { poolStakesData } from "@/hooks/useAllStakes";
 import { MAX_STAKES } from "@/types/constants";
+import { SingleNft } from "@/types/contract";
 import { TableHead } from "./common/TableHead";
 import { formatToUSD } from "../../utils/format";
 import { IClaimArgs, IWithdrawArgs } from "./common/types";
-import { SingleNft, useNftDeposits } from "@/hooks/useDeposits";
+import { useNftDeposits } from "@/hooks/useDeposits";
 
 interface NftTableProps {
   tokenSymbol: string;

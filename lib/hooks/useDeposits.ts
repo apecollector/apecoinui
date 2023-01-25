@@ -1,7 +1,8 @@
 import { usePrepareContractWrite, useNetwork, useContractWrite } from "wagmi";
 import StakingABI from "@/abis/staking";
 import { BigNumber } from "ethers";
-import { stakingContractAddresses } from "@/types/constants";
+import { StakingContractAddresses } from "@/types/constants";
+import { PairNftWithAmount, SingleNft } from "@/types/contract";
 
 interface UseDepositsProps {
   amount: BigNumber;
@@ -11,7 +12,7 @@ export const useDeposits = (props: UseDepositsProps) => {
   const { amount } = props;
   const { chain } = useNetwork();
   const { config } = usePrepareContractWrite({
-    address: stakingContractAddresses[chain?.id || 1],
+    address: StakingContractAddresses[chain?.id || 1],
     abi: StakingABI,
     functionName: "depositSelfApeCoin",
     chainId: chain?.id || 1,
@@ -25,10 +26,6 @@ export const useDeposits = (props: UseDepositsProps) => {
 
   return { depositApecoin: write };
 };
-export interface SingleNft {
-  tokenId: BigNumber;
-  amount: BigNumber;
-}
 
 interface UseNftDepositsProps {
   poolId: 1 | 2;
@@ -40,7 +37,7 @@ export const useNftDeposits = (props: UseNftDepositsProps) => {
   const { chain } = useNetwork();
 
   const { config } = usePrepareContractWrite({
-    address: stakingContractAddresses[chain?.id || 1],
+    address: StakingContractAddresses[chain?.id || 1],
     abi: StakingABI,
     functionName: poolId === 1 ? "depositBAYC" : "depositMAYC",
     chainId: chain?.id || 1,
@@ -55,12 +52,6 @@ export const useNftDeposits = (props: UseNftDepositsProps) => {
   return { depositNft: write };
 };
 
-export interface PairNftWithAmount {
-  mainTokenId: BigNumber;
-  bakcTokenId: BigNumber;
-  amount: BigNumber;
-}
-
 interface UseBakcDepositsProps {
   bayc: PairNftWithAmount[];
   mayc: PairNftWithAmount[];
@@ -70,7 +61,7 @@ export const useBakcDeposits = (props: UseBakcDepositsProps) => {
   const { bayc, mayc } = props;
   const { chain } = useNetwork();
   const { config } = usePrepareContractWrite({
-    address: stakingContractAddresses[chain?.id || 1],
+    address: StakingContractAddresses[chain?.id || 1],
     abi: StakingABI,
     functionName: "depositBAKC",
     chainId: chain?.id || 1,

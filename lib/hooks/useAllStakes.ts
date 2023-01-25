@@ -1,13 +1,7 @@
 import { useContractRead, useNetwork, useEnsAddress } from "wagmi";
 import StakingABI from "@/abis/staking";
-import { Map } from "@/types/map";
-import { StakingContractAddress } from "@/types/data";
+import { StakingContractAddresses } from "@/types/constants";
 import { BigNumber } from "ethers";
-
-const stakingContractAddresses: Map = {
-  1: "0x5954aB967Bc958940b7EB73ee84797Dc8a2AFbb9",
-  5: StakingContractAddress.Goerli,
-} as const;
 
 export interface poolStakesData {
   poolId: BigNumber;
@@ -26,7 +20,7 @@ function useAllStakes(addressOrEns: string) {
 
   const poolsContractRead = useContractRead({
     enabled: addressOrEns !== undefined && addressOrEns !== "",
-    address: stakingContractAddresses[chain?.id || 1],
+    address: StakingContractAddresses[chain?.id || 1],
     abi: StakingABI,
     functionName: "getAllStakes",
     watch: true,

@@ -4,6 +4,7 @@ import { ethers, Contract } from "ethers";
 import StakingABI from "@/abis/staking";
 import useStore from "@/stores/store";
 import { useEffect, useRef } from "react";
+import { StakingContractAddress } from "../types/constants";
 
 const useEvents = () => {
   const alreadyAdded = useRef(false);
@@ -14,7 +15,7 @@ const useEvents = () => {
 
   async function connectToMetamask() {
     const contract = new Contract(
-      "0x5954aB967Bc958940b7EB73ee84797Dc8a2AFbb9",
+      StakingContractAddress.Ethereum,
       StakingABI,
       provider
     );
@@ -46,7 +47,7 @@ const useEvents = () => {
   }, [alreadyAdded]);
 
   useContractEvent({
-    address: "0x5954aB967Bc958940b7EB73ee84797Dc8a2AFbb9",
+    address: StakingContractAddress.Ethereum,
     abi: StakingABI,
     eventName: "Deposit",
     listener(...args) {
@@ -62,7 +63,7 @@ const useEvents = () => {
   });
 
   useContractEvent({
-    address: "0x5954aB967Bc958940b7EB73ee84797Dc8a2AFbb9",
+    address: StakingContractAddress.Ethereum,
     abi: StakingABI,
     eventName: "DepositNft",
     listener(...args) {
@@ -78,7 +79,7 @@ const useEvents = () => {
   });
 
   useContractEvent({
-    address: "0x5954aB967Bc958940b7EB73ee84797Dc8a2AFbb9",
+    address: StakingContractAddress.Ethereum,
     abi: StakingABI,
     eventName: "DepositPairNft",
     listener(...args) {
@@ -94,7 +95,7 @@ const useEvents = () => {
   });
 
   useContractEvent({
-    address: "0x5954aB967Bc958940b7EB73ee84797Dc8a2AFbb9",
+    address: StakingContractAddress.Ethereum,
     abi: StakingABI,
     eventName: "Withdraw",
     listener(...args) {
@@ -110,7 +111,7 @@ const useEvents = () => {
   });
 
   useContractEvent({
-    address: "0x5954aB967Bc958940b7EB73ee84797Dc8a2AFbb9",
+    address: StakingContractAddress.Ethereum,
     abi: StakingABI,
     eventName: "WithdrawNft",
     listener(...args) {
@@ -126,7 +127,7 @@ const useEvents = () => {
   });
 
   useContractEvent({
-    address: "0x5954aB967Bc958940b7EB73ee84797Dc8a2AFbb9",
+    address: StakingContractAddress.Ethereum,
     abi: StakingABI,
     eventName: "WithdrawPairNft",
     listener(...args) {
@@ -142,7 +143,7 @@ const useEvents = () => {
   });
 
   useContractEvent({
-    address: "0x5954aB967Bc958940b7EB73ee84797Dc8a2AFbb9",
+    address: StakingContractAddress.Ethereum,
     abi: StakingABI,
     eventName: "ClaimRewards",
     listener(...args) {
@@ -158,7 +159,7 @@ const useEvents = () => {
   });
 
   useContractEvent({
-    address: "0x5954aB967Bc958940b7EB73ee84797Dc8a2AFbb9",
+    address: StakingContractAddress.Ethereum,
     abi: StakingABI,
     eventName: "ClaimRewardsNft",
     listener(...args) {
@@ -174,7 +175,7 @@ const useEvents = () => {
   });
 
   useContractEvent({
-    address: "0x5954aB967Bc958940b7EB73ee84797Dc8a2AFbb9",
+    address: StakingContractAddress.Ethereum,
     abi: StakingABI,
     eventName: "ClaimRewardsPairNft",
     listener(...args) {
