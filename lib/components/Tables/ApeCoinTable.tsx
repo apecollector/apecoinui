@@ -3,10 +3,12 @@ import { ethers, BigNumber } from "ethers";
 import { useState } from "react";
 
 import useApeCoinBalance from "@/hooks/useApeCoinBalance";
-import { useDeposits } from "@/hooks/useDeposits";
 import { poolStakesData } from "@/hooks/useAllStakes";
 import { TableHead } from "./common/TableHead";
 import { IClaimArgs, IWithdrawArgs } from "./common/types";
+import { useWithdrawSelfApecoin } from "@/hooks/useWithdraws";
+import { useDeposits } from "@/hooks/useDeposits";
+import { useClaimSelfApecoin } from "@/hooks/useClaims";
 
 interface ApeCoinTableProps {
   apeCoinStakes: poolStakesData[];
@@ -28,11 +30,15 @@ export const ApeCoinTable = (props: ApeCoinTableProps) => {
     apeCoinStakes?.reduce((total, token) => {
       return total.add(token.deposited);
     }, ethers.constants.Zero) || 0;
+  const { withdrawSelfApecoin } = useWithdrawSelfApecoin({
+    amount: depositedTotal,
+  });
+  const { claimSelfApecoin } = useClaimSelfApecoin();
 
-  const unclaimedTotal =
-    apeCoinStakes?.reduce((total, token) => {
-      return total.add(token.unclaimed);
-    }, ethers.constants.Zero) || 0;
+  const unclaimedTotal = apeCoinStakes?.reduce(
+    (total, token) => total.add(token.unclaimed),
+    ethers.constants.Zero
+  );
 
   return (
     <table className="mt-4 w-full border dark:border-zinc-700">
@@ -144,14 +150,22 @@ export const ApeCoinTable = (props: ApeCoinTableProps) => {
               </td>
               <td className="flex w-1/4 flex-wrap items-center gap-2 p-4">
                 {depositedTotal.gt(0) && (
-                  <button className="border px-2 hover:border-zinc-500 dark:border-zinc-500 dark:bg-zinc-800 dark:hover:border-zinc-300">
+                  <button
+                    disabled={!withdrawSelfApecoin}
+                    onClick={() => withdrawSelfApecoin?.()}
+                    className="border px-2 hover:border-zinc-500 dark:border-zinc-500 dark:bg-zinc-800 dark:hover:border-zinc-300"
+                  >
                     Withdraw
                   </button>
                 )}
               </td>
               <td className="flex w-1/4 flex-wrap items-center gap-2 p-4">
                 {unclaimedTotal.gt(0) && (
-                  <button className="border px-2 hover:border-zinc-500 dark:border-zinc-500 dark:bg-zinc-800 dark:hover:border-zinc-300">
+                  <button
+                    disabled={unclaimedTotal.isZero()}
+                    onClick={() => claimSelfApecoin?.()}
+                    className="border px-2 hover:border-zinc-500 dark:border-zinc-500 dark:bg-zinc-800 dark:hover:border-zinc-300"
+                  >
                     Claim
                   </button>
                 )}
