@@ -62,20 +62,20 @@ export interface PairNftWithAmount {
 }
 
 interface UseBakcDepositsProps {
-  baycPairs: PairNftWithAmount[];
-  maycPairs: PairNftWithAmount[];
+  bayc: PairNftWithAmount[];
+  mayc: PairNftWithAmount[];
 }
 
 export const useBakcDeposits = (props: UseBakcDepositsProps) => {
-  const { baycPairs, maycPairs } = props;
+  const { bayc, mayc } = props;
   const { chain } = useNetwork();
   const { config } = usePrepareContractWrite({
     address: stakingContractAddresses[chain?.id || 1],
     abi: StakingABI,
     functionName: "depositBAKC",
     chainId: chain?.id || 1,
-    args: [baycPairs, maycPairs],
-    enabled: baycPairs.length > 0 || maycPairs.length > 0,
+    args: [bayc, mayc],
+    enabled: bayc.length > 0 || mayc.length > 0,
   });
 
   const { data, isLoading, isSuccess, write, ...rest } = useContractWrite({

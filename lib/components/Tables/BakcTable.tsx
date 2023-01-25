@@ -6,11 +6,15 @@ import { ethers, BigNumber } from "ethers";
 import { poolStakesData } from "@/hooks/useAllStakes";
 import { MAX_STAKES } from "@/types/constants";
 import { TableHead } from "./common/TableHead";
-import { formatToUSD } from "../../utils/format";
+import { formatToUSD } from "@/utils/format";
 import { IClaimArgs, IWithdrawArgsBakc } from "./common/types";
 import { useState } from "react";
-import { PairNftWithAmount } from "@/hooks/useDeposits";
-import { PoolType } from "../../types/data";
+import {
+  PairNftWithAmount,
+  useBakcDeposits,
+  useNftDeposits,
+} from "@/hooks/useDeposits";
+import { PoolType } from "@/types/data";
 
 export interface IPairOption {
   tokenId: number;
@@ -61,27 +65,6 @@ export const BakcTable = (props: BakcTableProps) => {
     }, {})
   );
 
-  const handleSelectInputChangeForBakc = (bakcTokenId: number) => (e) => {
-    setDepositAmounts((prev) => ({
-      ...prev,
-      [bakcTokenId]: {
-        ...prev[bakcTokenId],
-        mainTokenId: ethers.BigNumber.from(e.target.value.split("_")[1]),
-        poolId: Number(e.target.value.split("_")[0]),
-      },
-    }));
-  };
-
-  const handleAmountChange = (bakcTokenId: number) => (e) => {
-    setDepositAmounts((prev) => ({
-      ...prev,
-      [bakcTokenId]: {
-        ...prev[bakcTokenId],
-        amount: e.target.value,
-      },
-    }));
-  };
-
   const depositArgs = (() => {
     return Object.values(depositAmounts)
       .filter((da) => da.amount.gt(0) && !da.mainTokenId.isZero())
@@ -104,10 +87,38 @@ export const BakcTable = (props: BakcTableProps) => {
       );
   })();
 
+  const { depositBakc } = useBakcDeposits(depositArgs);
+
+  const handleSelectInputChangeForBakc = (bakcTokenId: number) => (e) => {
+    setDepositAmounts((prev) => ({
+      ...prev,
+      [bakcTokenId]: {
+        ...prev[bakcTokenId],
+        mainTokenId: BigNumber.from(e.target.value.split("_")[1]),
+        poolId: Number(e.target.value.split("_")[0]),
+      },
+    }));
+  };
+
+  const handleAmountChange = (bakcTokenId: number, amount: BigNumber) => {
+    setDepositAmounts((prev) => ({
+      ...prev,
+      [bakcTokenId]: {
+        ...prev[bakcTokenId],
+        amount: BigNumber.from(amount),
+      },
+    }));
+  };
+
   const unclaimedTotal =
     poolStakes?.reduce((total, token) => {
       return total.add(token.unclaimed);
     }, ethers.constants.Zero) || 0;
+
+  const totalToDeposit = Object.values(depositAmounts).reduce(
+    (acc, da) => acc.add(da.amount),
+    ethers.constants.Zero
+  );
 
   if (poolStakes.length === 0) {
     return <p className="mt-4">This wallet does not own any of these NFTs.</p>;
@@ -171,30 +182,21 @@ export const BakcTable = (props: BakcTableProps) => {
                   }
                   max={Math.min(MAX_STAKES[3] - depositedAmount)}
                   onChange={(e) =>
-                    setDepositAmounts((prev) => ({
-                      ...prev,
-                      [da.tokenId.toNumber()]: {
-                        ...prev[da.tokenId.toNumber()],
-                        amount:
-                          e.target.value === ""
-                            ? ethers.constants.Zero
-                            : parseUnits(e.target.value.toString()),
-                      },
-                    }))
+                    handleAmountChange(
+                      da.tokenId.toNumber(),
+                      e.target.value === ""
+                        ? ethers.constants.Zero
+                        : parseUnits(e.target.value.toString())
+                    )
                   }
                   type="number"
                 />
                 <button
                   onClick={() =>
-                    setDepositAmounts((prev) => ({
-                      ...prev,
-                      [da.tokenId.toNumber()]: {
-                        ...prev[da.tokenId.toNumber()],
-                        amount: parseUnits(
-                          (MAX_STAKES[3] - depositedAmount).toString()
-                        ),
-                      },
-                    }))
+                    handleAmountChange(
+                      da.tokenId.toNumber(),
+                      parseUnits((MAX_STAKES[3] - depositedAmount).toString())
+                    )
                   }
                 >
                   MAX
@@ -238,15 +240,18 @@ export const BakcTable = (props: BakcTableProps) => {
               </td>
               <td className="flex w-1/4 flex-wrap items-center gap-2 p-4">
                 {Intl.NumberFormat("en-us").format(
-                  +formatUnits(
-                    Object.values(depositAmounts).reduce(
-                      (acc, da) => acc.add(da.amount),
-                      ethers.constants.Zero
-                    )
-                  )
+                  +formatUnits(totalToDeposit)
                 )}
                 {apecoinPrice && (
-                  <> ({formatToUSD(1712 * +formatUnits(apecoinPrice, 8))})</>
+                  <>
+                    {" "}
+                    (
+                    {formatToUSD(
+                      +formatUnits(totalToDeposit) *
+                        +formatUnits(apecoinPrice, 8)
+                    )}
+                    )
+                  </>
                 )}
               </td>
               <td className="flex w-1/4 flex-wrap items-center gap-2 p-4">
@@ -288,7 +293,11 @@ export const BakcTable = (props: BakcTableProps) => {
                 Batch Transaction:
               </td>
               <td className="flex w-1/4 flex-wrap items-center gap-2 p-4">
-                <button className="border px-2 hover:border-zinc-500 dark:border-zinc-500 dark:bg-zinc-800 dark:hover:border-zinc-300">
+                <button
+                  disabled={!depositBakc}
+                  onClick={() => depositBakc?.()}
+                  className="border px-2 hover:border-zinc-500 dark:border-zinc-500 dark:bg-zinc-800 dark:hover:border-zinc-300"
+                >
                   Deposit All
                 </button>
               </td>
