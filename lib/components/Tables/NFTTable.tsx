@@ -8,7 +8,6 @@ import { TableHead } from "./common/TableHead";
 import { formatToUSD } from "../../utils/format";
 import { IClaimArgs, IWithdrawArgs } from "./common/types";
 import { SingleNft, useNftDeposits } from "@/hooks/useDeposits";
-import { ChainDoesNotSupportMulticallError } from "wagmi";
 
 interface NftTableProps {
   tokenSymbol: string;
