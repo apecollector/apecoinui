@@ -1,15 +1,16 @@
-import { ethers } from "ethers";
+import { BigNumber, ethers } from "ethers";
 
 export type IWithdrawArgs = (
   poolID: number,
   asString: boolean
 ) =>
-  | (string | ethers.BigNumber)[]
+  | string
+  | BigNumber
   | (
       | (string | number)[]
       | {
-          tokenId: ethers.BigNumber;
-          amount: ethers.BigNumber;
+          tokenId: BigNumber;
+          amount: BigNumber;
         }[]
       | undefined
     )[]
@@ -22,22 +23,31 @@ export type IWithdrawArgsBakc = (
   | (
       | (string | number)[]
       | {
-          mainTokenId: ethers.BigNumber;
-          bakcTokenId: ethers.BigNumber;
-          amount: ethers.BigNumber;
+          mainTokenId: BigNumber;
+          bakcTokenId: BigNumber;
+          amount: BigNumber;
           isUncommit: boolean;
         }[]
       | undefined
     )[]
   | undefined;
-export type IClaimArgs = (
-  poolID: number,
+
+export type IClaimArgsBakc = (
+  mainTypePoolId: number,
   asString: boolean
 ) =>
-  | (string | ethers.BigNumber)[]
   | (
       | (string | number)[]
-      | { tokenId: ethers.BigNumber; amount: ethers.BigNumber }[]
+      | {
+          mainTokenId: BigNumber;
+          tokenId: BigNumber;
+          amount: BigNumber;
+        }[]
       | undefined
     )[]
   | undefined;
+
+export type IClaimArgs = (
+  poolID: number,
+  asString: boolean
+) => string | BigNumber | (number | undefined)[] | undefined;

@@ -3,7 +3,7 @@
 import { useAccount } from "wagmi";
 import { useState, useEffect } from "react";
 import useAllStakes from "@/hooks/useAllStakes";
-import { ethers, BigNumber } from "ethers";
+import { BigNumber } from "ethers";
 import usePrice from "@/hooks/usePrice";
 import useAutoConnecting from "@/hooks/useAutoConnecting";
 import { BakcTable, IPairOption } from "./Tables/BakcTable";

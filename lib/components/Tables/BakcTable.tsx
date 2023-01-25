@@ -7,8 +7,8 @@ import { poolStakesData } from "@/hooks/useAllStakes";
 import { MAX_STAKES } from "@/types/constants";
 import { TableHead } from "./common/TableHead";
 import { formatToUSD } from "@/utils/format";
-import { IClaimArgs, IWithdrawArgsBakc } from "./common/types";
-import { useState } from "react";
+import { IClaimArgsBakc, IWithdrawArgsBakc } from "./common/types";
+import { ChangeEvent, useState } from "react";
 import {
   PairNftWithAmount,
   useBakcDeposits,
@@ -26,7 +26,7 @@ interface BakcTableProps {
   apecoinPrice: BigNumber | undefined;
   pairOptions: IPairOption[];
   withdrawArgs: IWithdrawArgsBakc;
-  claimArgs: IClaimArgs;
+  claimArgs: IClaimArgsBakc;
 }
 
 export const BakcTable = (props: BakcTableProps) => {
@@ -89,16 +89,17 @@ export const BakcTable = (props: BakcTableProps) => {
 
   const { depositBakc } = useBakcDeposits(depositArgs);
 
-  const handleSelectInputChangeForBakc = (bakcTokenId: number) => (e) => {
-    setDepositAmounts((prev) => ({
-      ...prev,
-      [bakcTokenId]: {
-        ...prev[bakcTokenId],
-        mainTokenId: BigNumber.from(e.target.value.split("_")[1]),
-        poolId: Number(e.target.value.split("_")[0]),
-      },
-    }));
-  };
+  const handleSelectInputChangeForBakc =
+    (bakcTokenId: number) => (e: ChangeEvent<HTMLSelectElement>) => {
+      setDepositAmounts((prev) => ({
+        ...prev,
+        [bakcTokenId]: {
+          ...prev[bakcTokenId],
+          mainTokenId: BigNumber.from(e.target.value.split("_")[1]),
+          poolId: Number(e.target.value.split("_")[0]),
+        },
+      }));
+    };
 
   const handleAmountChange = (bakcTokenId: number, amount: BigNumber) => {
     setDepositAmounts((prev) => ({
