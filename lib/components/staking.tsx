@@ -36,7 +36,13 @@ export default function Staking() {
     }
   }, [address]);
 
-  const { poolsContractRead: allStakes } = useAllStakes(statsAddress);
+  const {
+    poolsContractRead: allStakes,
+    apeCoinStakes,
+    bakcStakes,
+    baycStakes,
+    maycStakes,
+  } = useAllStakes(statsAddress);
 
   if (!isConnected) {
     return <h1>You must be connected to stake.</h1>;
@@ -46,143 +52,96 @@ export default function Staking() {
     return <h1>Loading staking contract data...</h1>;
   }
 
-  const apeCoinStakes: poolStakesData[] | undefined = allStakes.data?.filter(
-    (stake) => stake.poolId.toNumber() === 0
-  );
-
-  const baycStakes: poolStakesData[] | undefined = allStakes.data.filter(
-    (stake) => stake.poolId.toNumber() === 1
-  );
-
-  const maycStakes: poolStakesData[] | undefined = allStakes.data.filter(
-    (stake) => stake.poolId.toNumber() === 2
-  );
-
-  const bakcStakes: poolStakesData[] | undefined = allStakes.data.filter(
-    (stake) => stake.poolId.toNumber() === 3
-  );
-
-  const withdrawArgs = (poolID: number, asString: boolean) => {
-    if (poolID === 0) {
-      const token = allStakes.data?.[0];
-      if (token?.deposited.gt(0)) {
-        return asString ? token.deposited.toString() : token.deposited;
-      } else {
-        return "";
-      }
+  const withdrawArgsApecoin = (asString: boolean = true) => {
+    const token = allStakes.data?.[0];
+    if (token?.deposited.gt(0)) {
+      return asString ? token.deposited.toString() : token.deposited;
+    } else {
+      return "";
     }
-    return allStakes.data
-      ?.filter((stake) => stake.poolId.toNumber() === poolID)
-      .map((token) => {
-        if (token.deposited?.gt(0)) {
-          if (asString) {
-            return [token.tokenId.toNumber(), token.deposited.toString()];
-          } else {
-            return [
+  };
+
+  const withdrawArgsNft = (
+    poolId: PoolType.BAYC | PoolType.MAYC,
+    asString = true
+  ) => {
+    return (allStakes.data ?? [])
+      .filter(
+        (stake) => stake.poolId.toNumber() === poolId && stake.deposited?.gt(0)
+      )
+      .map((token) =>
+        asString
+          ? [token.tokenId.toNumber(), token.deposited.toString()]
+          : [
               {
                 tokenId: token.tokenId,
                 amount: token.deposited,
               },
-            ];
-          }
-        }
-      })
+            ]
+      )
       .filter((token) => token !== undefined);
   };
 
-  const withdrawBakcArgs = (mainTypePoolId: number, asString: boolean) => {
-    return allStakes.data
-      ?.filter(
+  const withdrawArgsBakc = (mainTypePoolId: number, asString: boolean) => {
+    return (allStakes.data ?? [])
+      .filter(
         (stake) =>
           stake.poolId.toNumber() === 3 &&
-          stake.pair.mainTypePoolId.toNumber() === mainTypePoolId
+          stake.pair.mainTypePoolId.toNumber() === mainTypePoolId &&
+          stake.deposited?.gt(0)
       )
-      .map((token) => {
-        if (token.deposited?.gt(0)) {
-          if (asString) {
-            return [
+      .map((token) =>
+        asString
+          ? [
               token.pair.mainTokenId.toNumber(),
               token.tokenId.toNumber(),
               token.deposited.toString(),
-              "true",
-            ];
-          } else {
-            return [
+            ]
+          : [
               {
                 mainTokenId: token.pair.mainTokenId,
                 bakcTokenId: token.tokenId,
                 amount: token.deposited,
-                isUncommit: true,
               },
-            ];
-          }
-        }
-      })
-      .filter((token) => token !== undefined);
+            ]
+      );
   };
 
-  const claimArgs = (poolID: number, asString: boolean) => {
-    if (poolID === 0) {
-      const token = allStakes.data?.[0];
-      if (token?.unclaimed.gt(0)) {
-        return asString ? token.unclaimed.toString() : token.unclaimed;
-      } else {
-        return "";
-      }
+  const claimArgsApecoin = (asString: boolean) => {
+    const token = allStakes.data?.[0];
+    if (token?.unclaimed.gt(0)) {
+      return asString ? token.unclaimed.toString() : token.unclaimed;
+    } else {
+      return "";
     }
-    return allStakes.data
-      ?.filter((stake) => {
-        if (stake.poolId.toNumber() === poolID) {
-          return true;
-        }
-      })
-      .map((token) => {
-        if (token.unclaimed?.gt(0)) {
-          if (asString) {
-            return token.tokenId.toNumber();
-          } else {
-            return;
-            {
-              tokenId: token.tokenId;
-            }
-          }
-        }
-      })
-      .filter((token) => {
-        return token !== undefined;
-      });
   };
 
-  const claimBakcArgs = (mainTypePoolId: number, asString: boolean) => {
-    return allStakes.data
-      ?.filter((stake) => {
-        if (
+  const claimArgsNft = (poolId: number, asString: boolean) => {
+    return (allStakes.data ?? [])
+      .filter(
+        (stake) => stake.poolId.toNumber() === poolId && stake.unclaimed?.gt(0)
+      )
+      .map((token) => (asString ? token.tokenId.toNumber() : token.tokenId));
+  };
+
+  const claimArgsBakc = (mainTypePoolId: number, asString: boolean) => {
+    return (allStakes.data ?? [])
+      .filter(
+        (stake) =>
           stake.poolId.toNumber() === 3 &&
-          stake.pair.mainTypePoolId.toNumber() === mainTypePoolId
-        ) {
-          return true;
-        }
-      })
-      .map((token) => {
-        if (token.unclaimed?.gt(0)) {
-          if (asString) {
-            return [
-              token.pair.mainTokenId.toNumber(),
-              token.tokenId.toNumber(),
-              token.unclaimed.toString(),
-            ];
-          } else {
-            return [
+          stake.pair.mainTypePoolId.toNumber() === mainTypePoolId &&
+          stake.unclaimed?.gt(0)
+      )
+      .map((token) =>
+        asString
+          ? [token.pair.mainTokenId.toNumber(), token.tokenId.toNumber()]
+          : [
               {
                 mainTokenId: token.pair.mainTokenId,
-                tokenId: token.tokenId,
-                amount: token.unclaimed,
+                bakcTokenId: token.tokenId,
               },
-            ];
-          }
-        }
-      })
-      .filter((token) => token !== undefined);
+            ]
+      );
   };
 
   const baycOptions: IPairOption[] = baycStakes.map((data) => ({
@@ -222,8 +181,8 @@ export default function Staking() {
         <h2 className="text-4xl font-extrabold">ApeCoin Staking Pool</h2>
         <ApeCoinTable
           apeCoinStakes={apeCoinStakes}
-          withdrawArgs={withdrawArgs}
-          claimArgs={claimArgs}
+          withdrawArgs={withdrawArgsApecoin}
+          claimArgs={claimArgsApecoin}
           apecoinPrice={apecoinPrice}
         />
 
@@ -239,8 +198,8 @@ export default function Staking() {
           withdrawFunctionID="24"
           claimFunctionID="8"
           depositFunctionID="12"
-          withdrawArgs={withdrawArgs}
-          claimArgs={claimArgs}
+          withdrawArgs={withdrawArgsNft}
+          claimArgs={claimArgsNft}
         />
 
         <h2 className="mt-10 text-4xl font-extrabold">
@@ -255,8 +214,8 @@ export default function Staking() {
           withdrawFunctionID="25"
           claimFunctionID="9"
           depositFunctionID="13"
-          withdrawArgs={withdrawArgs}
-          claimArgs={claimArgs}
+          withdrawArgs={withdrawArgsNft}
+          claimArgs={claimArgsNft}
         />
 
         <h2 className="mt-10 text-4xl font-extrabold">
@@ -265,8 +224,8 @@ export default function Staking() {
 
         <BakcTable
           poolStakes={bakcStakes}
-          withdrawArgs={withdrawBakcArgs}
-          claimArgs={claimBakcArgs}
+          withdrawArgs={withdrawArgsBakc}
+          claimArgs={claimArgsBakc}
           apecoinPrice={apecoinPrice}
           pairOptions={options}
         />

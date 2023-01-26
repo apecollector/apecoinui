@@ -1,53 +1,32 @@
 import { BigNumber, ethers } from "ethers";
+import { PoolType } from "../../../types/constants";
+import { SingleNft, PairNftWithAmount, PairNft } from "../../../types/contract";
 
-export type IWithdrawArgs = (
-  poolID: number,
+export type IWithdrawArgsApecoin = (asString: boolean) => string | BigNumber;
+
+export type IWithdrawArgsNft = (
+  poolId: PoolType.MAYC | PoolType.BAYC,
   asString: boolean
-) =>
-  | string
-  | BigNumber
-  | (
-      | (string | number)[]
-      | {
-          tokenId: BigNumber;
-          amount: BigNumber;
-        }[]
-      | undefined
-    )[]
-  | undefined;
+) => ((string | number)[] | SingleNft[])[];
 
 export type IWithdrawArgsBakc = (
-  mainTypePoolId: number,
+  mainTypePoolId: PoolType.MAYC | PoolType.BAYC,
   asString: boolean
-) =>
-  | (
-      | (string | number)[]
-      | {
-          mainTokenId: BigNumber;
-          bakcTokenId: BigNumber;
-          amount: BigNumber;
-          isUncommit: boolean;
-        }[]
-      | undefined
-    )[]
-  | undefined;
+) => ((string | number)[] | PairNftWithAmount[])[];
+
+export type IClaimArgsApecoin = (asString: boolean) => string | BigNumber;
+
+export type IClaimArgsNft = (
+  poolId: PoolType.MAYC | PoolType.BAYC,
+  asString: boolean
+) => (number | BigNumber)[];
 
 export type IClaimArgsBakc = (
   mainTypePoolId: number,
   asString: boolean
-) =>
-  | (
-      | (string | number)[]
-      | {
-          mainTokenId: BigNumber;
-          tokenId: BigNumber;
-          amount: BigNumber;
-        }[]
-      | undefined
-    )[]
-  | undefined;
+) => (number[] | PairNft[])[];
 
 export type IClaimArgs = (
-  poolID: number,
+  poolId: number,
   asString: boolean
 ) => string | BigNumber | (number | undefined)[] | undefined;
