@@ -1,144 +1,68 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import {
-  useAccount,
-  useNetwork,
-  usePrepareContractWrite,
-  useContractWrite,
-  Chain,
-} from "wagmi";
+import { useAccount, useNetwork, Chain } from "wagmi";
 
 import useAllStakes, { poolStakesData } from "@/hooks/useAllStakes";
 import { formatUnits } from "ethers/lib/utils.js";
 import usePrice from "@/hooks/usePrice";
-import ABI from "@/abis/staking";
-import { BigNumber } from "ethers";
-import { StakingContractAddresses } from "@/types/constants";
 
-function ClaimAll({
-  chain,
-  apeCoinStakes,
-  baycStakes,
-  maycStakes,
-  bakcStakes,
-}: {
-  chain: (Chain & { unsupported?: boolean | undefined }) | undefined;
+import { BigNumber, ethers } from "ethers";
+import { PoolType, StakingContractAddresses } from "@/types/constants";
+import {
+  useWithdrawBakc,
+  useWithdrawSelfApecoin,
+  useWithdrawSelfNft,
+} from "../hooks/useWithdraws";
+import { PairNft, PairNftWithAmount, SingleNft } from "../types/contract";
+import {
+  IClaimArgsBakc,
+  IClaimArgsNft,
+  IWithdrawArgsBakc,
+  IWithdrawArgsNft,
+} from "./Staking/common/types";
+import { formatToUSD } from "../utils/format";
+import {
+  useClaimSelfApecoin,
+  useClaimSelfBakc,
+  useClaimSelfNft,
+} from "../hooks/useClaims";
+
+interface ClaimAllProps {
   apeCoinStakes: poolStakesData[] | undefined;
-  baycStakes: poolStakesData[] | undefined;
-  maycStakes: poolStakesData[] | undefined;
-  bakcStakes: poolStakesData[] | undefined;
-}) {
-  const apeCoinClaimPrepareContractWrite = usePrepareContractWrite({
-    enabled:
-      apeCoinStakes &&
-      apeCoinStakes.length !== 0 &&
-      !apeCoinStakes[0].unclaimed.isZero(),
-    address: StakingContractAddresses[chain?.id || 1],
-    abi: ABI,
-    functionName: "claimSelfApeCoin",
+  claimArgsNft: IClaimArgsNft;
+  claimArgsBakc: IClaimArgsBakc;
+}
+
+function ClaimAll(props: ClaimAllProps) {
+  const { apeCoinStakes, claimArgsNft, claimArgsBakc } = props;
+
+  const { claimSelfApecoin } = useClaimSelfApecoin();
+
+  const { claimSelfNft: claimSelfBayc } = useClaimSelfNft({
+    poolId: PoolType.BAYC,
+    tokenIds: claimArgsNft(PoolType.BAYC, false) as BigNumber[],
   });
 
-  const apeCoinClaimContractWrite = useContractWrite(
-    apeCoinClaimPrepareContractWrite.config
-  );
-
-  const args = baycStakes
-    ?.map((token) => {
-      if (token.unclaimed?.gt(0)) {
-        return token.tokenId.toNumber();
-      }
-    })
-    .filter((token) => {
-      return token !== undefined;
-    });
-
-  const baycUnclaimed =
-    baycStakes?.reduce((sum, stake) => {
-      return sum + +formatUnits(stake.unclaimed);
-    }, 0) || 0;
-
-  const baycPrepareContractWrite = usePrepareContractWrite({
-    enabled: baycStakes && baycStakes.length > 0 && baycUnclaimed > 0,
-    address: StakingContractAddresses[chain?.id || 1],
-    abi: ABI,
-    functionName: "claimSelfBAYC",
-    args: args && ([args] as any),
+  const { claimSelfNft: claimSelfMayc } = useClaimSelfNft({
+    poolId: PoolType.MAYC,
+    tokenIds: claimArgsNft(PoolType.MAYC, false) as BigNumber[],
   });
 
-  const baycContractWrite = useContractWrite(baycPrepareContractWrite.config);
-
-  const maycArgs = maycStakes
-    ?.map((token) => {
-      if (token.unclaimed?.gt(0)) {
-        return token.tokenId.toNumber();
-      }
-    })
-    .filter((token) => {
-      return token !== undefined;
-    });
-
-  const maycPrepareContractWrite = usePrepareContractWrite({
-    enabled: maycStakes && maycStakes.length > 0,
-    address: StakingContractAddresses[chain?.id || 1],
-    abi: ABI,
-    functionName: "claimSelfMAYC",
-    args: [maycArgs as any],
+  const { claimSelfBakc } = useClaimSelfBakc({
+    bayc: claimArgsBakc(PoolType.BAYC, false)[0] as PairNft[],
+    mayc: claimArgsBakc(PoolType.MAYC, false)[0] as PairNft[],
   });
-
-  const maycContractWrite = useContractWrite(maycPrepareContractWrite.config);
-
-  interface bakcData {
-    mainTokenId: BigNumber;
-    bakcTokenId: BigNumber;
-  }
-
-  let bakcBaycArgs: bakcData[] = [];
-  let bakcMaycArgs: bakcData[] = [];
-
-  if (bakcStakes) {
-    for (let i = 0; i < bakcStakes.length; i++) {
-      const stake = bakcStakes[i];
-      if (stake.unclaimed.gt(0) && stake.pair.mainTypePoolId.toNumber() === 1) {
-        bakcBaycArgs.push({
-          mainTokenId: stake.pair.mainTokenId,
-          bakcTokenId: stake.tokenId,
-        });
-      }
-    }
-  }
-
-  if (bakcStakes) {
-    for (let i = 0; i < bakcStakes.length; i++) {
-      const stake = bakcStakes[i];
-      if (stake.unclaimed.gt(0) && stake.pair.mainTypePoolId.toNumber() === 2) {
-        bakcMaycArgs.push({
-          mainTokenId: stake.pair.mainTokenId,
-          bakcTokenId: stake.tokenId,
-        });
-      }
-    }
-  }
-
-  const bakcPrepareContractWrite = usePrepareContractWrite({
-    enabled: bakcBaycArgs.length > 0 || bakcMaycArgs.length > 0,
-    address: StakingContractAddresses[chain?.id || 1],
-    abi: ABI,
-    functionName: "claimSelfBAKC",
-    args: [bakcBaycArgs, bakcMaycArgs],
-  });
-
-  const bakcContractWrite = useContractWrite(bakcPrepareContractWrite.config);
   return (
     <div>
       <button
         onClick={() => {
           if (apeCoinStakes?.[0]?.unclaimed.gt(0)) {
-            apeCoinClaimContractWrite.write?.();
+            claimSelfApecoin?.();
           }
-          baycContractWrite.write?.();
-          maycContractWrite.write?.();
-          bakcContractWrite.write?.();
+          claimSelfBayc?.();
+          claimSelfMayc?.();
+          claimSelfBakc?.();
         }}
         className="border px-2 hover:border-zinc-500 dark:border-zinc-500 dark:bg-zinc-800 dark:hover:border-zinc-300"
       >
@@ -148,145 +72,42 @@ function ClaimAll({
   );
 }
 
-function WithdrawAll({
-  chain,
-  apeCoinStakes,
-  baycStakes,
-  maycStakes,
-  bakcStakes,
-}: {
+interface WithdrawAllProps {
   chain: (Chain & { unsupported?: boolean | undefined }) | undefined;
   apeCoinStakes: poolStakesData[] | undefined;
-  baycStakes: poolStakesData[] | undefined;
-  maycStakes: poolStakesData[] | undefined;
-  bakcStakes: poolStakesData[] | undefined;
-}) {
-  const apeCoinWithdrawPrepareContractWrite = usePrepareContractWrite({
-    enabled: !apeCoinStakes?.[0]?.deposited.isZero(),
-    address: StakingContractAddresses[chain?.id || 1],
-    abi: ABI,
-    functionName: "withdrawSelfApeCoin",
-    args: apeCoinStakes?.[0]?.deposited && [apeCoinStakes[0].deposited],
+  withdrawArgsNft: IWithdrawArgsNft;
+  withdrawArgsBakc: IWithdrawArgsBakc;
+}
+
+function WithdrawAll(props: WithdrawAllProps) {
+  const { apeCoinStakes, withdrawArgsNft, withdrawArgsBakc } = props;
+  const { withdrawSelfApecoin } = useWithdrawSelfApecoin({
+    amount: apeCoinStakes?.[0].deposited ?? ethers.constants.Zero,
   });
 
-  const apeCoinWithdrawContractWrite = useContractWrite(
-    apeCoinWithdrawPrepareContractWrite.config
-  );
-
-  interface withdrawData {
-    tokenId: BigNumber;
-    amount: BigNumber;
-  }
-
-  let baycWithdrawArgs: withdrawData[] = [];
-
-  if (baycStakes) {
-    for (let i = 0; i < baycStakes.length; i++) {
-      const stake = baycStakes[i];
-      if (stake.deposited.gt(0)) {
-        baycWithdrawArgs.push({
-          tokenId: stake.tokenId,
-          amount: stake.deposited,
-        });
-      }
-    }
-  }
-
-  const baycWithdrawPrepareContractWrite = usePrepareContractWrite({
-    enabled: baycStakes && baycStakes.length > 0,
-    address: StakingContractAddresses[chain?.id || 1],
-    abi: ABI,
-    functionName: "withdrawSelfBAYC",
-    args: baycWithdrawArgs && ([baycWithdrawArgs] as any),
+  const { withdrawSelfNft: withdrawSelfBayc } = useWithdrawSelfNft({
+    poolId: PoolType.BAYC,
+    nfts: withdrawArgsNft(PoolType.BAYC, false)[0] as SingleNft[],
   });
 
-  const baycWithdrawContractWrite = useContractWrite(
-    baycWithdrawPrepareContractWrite.config
-  );
-
-  let maycWithdrawArgs: withdrawData[] = [];
-
-  if (maycStakes) {
-    for (let i = 0; i < maycStakes.length; i++) {
-      const stake = maycStakes[i];
-      if (stake.deposited.gt(0)) {
-        maycWithdrawArgs.push({
-          tokenId: stake.tokenId,
-          amount: stake.deposited,
-        });
-      }
-    }
-  }
-
-  const maycWithdrawPrepareContractWrite = usePrepareContractWrite({
-    enabled: maycStakes && maycStakes.length > 0,
-    address: StakingContractAddresses[chain?.id || 1],
-    abi: ABI,
-    functionName: "withdrawSelfMAYC",
-    args: maycWithdrawArgs && ([maycWithdrawArgs] as any),
+  const { withdrawSelfNft: withdrawSelfMayc } = useWithdrawSelfNft({
+    poolId: PoolType.MAYC,
+    nfts: withdrawArgsNft(PoolType.MAYC, false)[0] as SingleNft[],
   });
 
-  const maycWithdrawContractWrite = useContractWrite(
-    maycWithdrawPrepareContractWrite.config
-  );
-
-  interface bakcData {
-    mainTokenId: number;
-    bakcTokenId: number;
-    amount: BigNumber;
-    isUncommit: boolean;
-  }
-
-  let bakcBaycArgs: bakcData[] = [];
-  let bakcMaycArgs: bakcData[] = [];
-
-  if (bakcStakes) {
-    for (let i = 0; i < bakcStakes.length; i++) {
-      const stake = bakcStakes[i];
-      if (stake.unclaimed.gt(0) && stake.pair.mainTypePoolId.toNumber() === 1) {
-        bakcBaycArgs.push({
-          mainTokenId: stake.pair.mainTokenId.toNumber(),
-          bakcTokenId: stake.tokenId.toNumber(),
-          amount: stake.deposited,
-          isUncommit: true,
-        });
-      }
-    }
-  }
-
-  if (bakcStakes) {
-    for (let i = 0; i < bakcStakes.length; i++) {
-      const stake = bakcStakes[i];
-      if (stake.unclaimed.gt(0) && stake.pair.mainTypePoolId.toNumber() === 2) {
-        bakcMaycArgs.push({
-          mainTokenId: stake.pair.mainTokenId.toNumber(),
-          bakcTokenId: stake.tokenId.toNumber(),
-          amount: stake.deposited,
-          isUncommit: true,
-        });
-      }
-    }
-  }
-
-  const bakcPrepareContractWrite = usePrepareContractWrite({
-    enabled: bakcBaycArgs.length > 0 || bakcMaycArgs.length > 0,
-    address: StakingContractAddresses[chain?.id || 1],
-    abi: ABI,
-    functionName: "withdrawBAKC",
-    args: [bakcBaycArgs, bakcMaycArgs],
+  const { withdrawBakc } = useWithdrawBakc({
+    bayc: withdrawArgsBakc(1, false)[0] as PairNftWithAmount[],
+    mayc: withdrawArgsBakc(2, false)[0] as PairNftWithAmount[],
   });
 
-  const bakcContractWrite = useContractWrite(bakcPrepareContractWrite.config);
   return (
     <div>
       <button
         onClick={() => {
-          if (apeCoinStakes?.[0]?.unclaimed.gt(0)) {
-            apeCoinWithdrawContractWrite.write?.();
-          }
-          baycWithdrawContractWrite.write?.();
-          maycWithdrawContractWrite.write?.();
-          bakcContractWrite.write?.();
+          withdrawSelfApecoin?.();
+          withdrawSelfBayc?.();
+          withdrawSelfMayc?.();
+          withdrawBakc?.();
         }}
         className="border px-2 hover:border-zinc-500 dark:border-zinc-500 dark:bg-zinc-800 dark:hover:border-zinc-300"
       >
@@ -296,7 +117,16 @@ function WithdrawAll({
   );
 }
 
-export const UserStaking = () => {
+interface UserStakingProps {
+  withdrawArgsNft: IWithdrawArgsNft;
+  withdrawArgsBakc: IWithdrawArgsBakc;
+  claimArgsNft: IClaimArgsNft;
+  claimArgsBakc: IClaimArgsBakc;
+}
+
+export const UserStaking = (props: UserStakingProps) => {
+  const { withdrawArgsNft, withdrawArgsBakc, claimArgsBakc, claimArgsNft } =
+    props;
   const { chain } = useNetwork();
   const { address } = useAccount();
   const { apecoinPrice } = usePrice();
@@ -307,13 +137,9 @@ export const UserStaking = () => {
     }
   }, [address]);
 
-  const {
-    poolsContractRead: allStakes,
-    apeCoinStakes,
-    baycStakes,
-    maycStakes,
-    bakcStakes,
-  } = useAllStakes(statsAddress!);
+  const { poolsContractRead: allStakes, apeCoinStakes } = useAllStakes(
+    statsAddress!
+  );
 
   const totalStaked = allStakes.data?.reduce((sum, stake) => {
     return sum + +formatUnits(stake.deposited);
@@ -364,33 +190,21 @@ export const UserStaking = () => {
                     maximumFractionDigits: 4,
                   }).format(totalStaked)}
                   {totalStaked && apecoinPriceNumber && (
-                    <>
-                      {" "}
-                      (
-                      {Intl.NumberFormat("en-US", {
-                        maximumFractionDigits: 2,
-                        style: "currency",
-                        currency: "USD",
-                        notation: "compact",
-                        compactDisplay: "short",
-                      }).format(totalStaked * apecoinPriceNumber)}
-                      )
-                    </>
+                    <> ({formatToUSD(totalStaked * apecoinPriceNumber)})</>
                   )}
                 </div>
                 {address === statsAddress &&
                   process.env.NEXT_PUBLIC_ENABLE_STAKE === "TRUE" && (
                     <WithdrawAll
                       chain={chain}
+                      withdrawArgsNft={withdrawArgsNft}
+                      withdrawArgsBakc={withdrawArgsBakc}
                       apeCoinStakes={apeCoinStakes}
-                      baycStakes={baycStakes}
-                      maycStakes={maycStakes}
-                      bakcStakes={bakcStakes}
                     />
                   )}
               </>
             ) : (
-              <>{baycStakes && <>0</>}</>
+              <>0</>
             )}
           </div>
         </div>
@@ -423,16 +237,14 @@ export const UserStaking = () => {
                 {address === statsAddress &&
                   process.env.NEXT_PUBLIC_ENABLE_STAKE === "TRUE" && (
                     <ClaimAll
-                      chain={chain}
                       apeCoinStakes={apeCoinStakes}
-                      baycStakes={baycStakes}
-                      maycStakes={maycStakes}
-                      bakcStakes={bakcStakes}
+                      claimArgsNft={claimArgsNft}
+                      claimArgsBakc={claimArgsBakc}
                     />
                   )}
               </>
             ) : (
-              <>{baycStakes && <>0</>}</>
+              <>0</>
             )}
           </div>
         </div>
