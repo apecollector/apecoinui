@@ -28,33 +28,21 @@ function useAllStakes(addressOrEns: string) {
     args: [data as `0x${string}`],
   });
 
-  const apeCoinStakes: poolStakesData[] | undefined =
-    poolsContractRead.data?.filter((stake) => {
-      if (stake.poolId.toNumber() === 0) {
-        return true;
-      }
-    });
+  const apeCoinStakes: poolStakesData[] = (poolsContractRead.data || []).filter(
+    (stake) => stake.poolId.toNumber() === 0
+  );
 
-  const baycStakes: poolStakesData[] | undefined =
-    poolsContractRead.data?.filter((stake) => {
-      if (stake.poolId.toNumber() === 1) {
-        return true;
-      }
-    });
+  const baycStakes: poolStakesData[] = (poolsContractRead.data || []).filter(
+    (stake) => stake.poolId.toNumber() === 1
+  );
 
-  const maycStakes: poolStakesData[] | undefined =
-    poolsContractRead.data?.filter((stake) => {
-      if (stake.poolId.toNumber() === 2) {
-        return true;
-      }
-    });
+  const maycStakes: poolStakesData[] = (poolsContractRead.data || []).filter(
+    (stake) => stake.poolId.toNumber() === 2
+  );
 
-  const bakcStakes: poolStakesData[] | undefined =
-    poolsContractRead.data?.filter((stake) => {
-      if (stake.poolId.toNumber() === 3) {
-        return true;
-      }
-    });
+  const bakcStakes: poolStakesData[] = (poolsContractRead.data || []).filter(
+    (stake) => stake.poolId.toNumber() === 3
+  );
 
   return {
     poolsContractRead,
