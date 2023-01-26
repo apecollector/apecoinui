@@ -2,7 +2,7 @@ import { usePrepareContractWrite, useNetwork, useContractWrite } from "wagmi";
 import StakingABI from "@/abis/staking";
 import { BigNumber } from "ethers";
 import { StakingContractAddresses } from "@/types/constants";
-import { PairNftWithAmount, SingleNft } from "@/types/contract";
+import { PairNft } from "@/types/contract";
 
 export const useClaimSelfApecoin = () => {
   const { chain } = useNetwork();
@@ -22,10 +22,11 @@ export const useClaimSelfApecoin = () => {
 
 interface UseClaimSelfNftProps {
   poolId: 1 | 2;
+  tokenIds: BigNumber[];
 }
 
 export const useClaimSelfNft = (props: UseClaimSelfNftProps) => {
-  const { poolId } = props;
+  const { poolId, tokenIds } = props;
   const { chain } = useNetwork();
 
   const { config } = usePrepareContractWrite({
@@ -33,6 +34,7 @@ export const useClaimSelfNft = (props: UseClaimSelfNftProps) => {
     abi: StakingABI,
     functionName: poolId === 1 ? "claimSelfBAYC" : "claimSelfMAYC",
     chainId: chain?.id || 1,
+    args: [tokenIds],
   });
 
   const { data, isLoading, isSuccess, write, ...rest } = useContractWrite({
@@ -42,18 +44,26 @@ export const useClaimSelfNft = (props: UseClaimSelfNftProps) => {
   return { claimSelfNft: write };
 };
 
-export const useClaimBakc = () => {
+interface UseClaimBakcNftProps {
+  bayc: PairNft[];
+  mayc: PairNft[];
+}
+
+export const useClaimSelfBakc = (props: UseClaimBakcNftProps) => {
+  const { bayc, mayc } = props;
+
   const { chain } = useNetwork();
   const { config } = usePrepareContractWrite({
     address: StakingContractAddresses[chain?.id || 1],
     abi: StakingABI,
-    functionName: "claimBAKC",
+    functionName: "claimSelfBAKC",
     chainId: chain?.id || 1,
+    args: [bayc, mayc],
   });
 
   const { data, isLoading, isSuccess, write, ...rest } = useContractWrite({
     ...config,
   });
 
-  return { claimBakc: write };
+  return { claimSelfBakc: write };
 };
