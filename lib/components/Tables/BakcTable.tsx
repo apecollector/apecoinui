@@ -6,12 +6,14 @@ import { ChangeEvent, useState } from "react";
 
 import { poolStakesData } from "@/hooks/useAllStakes";
 import { MAX_STAKES } from "@/types/constants";
-import { PairNftWithAmount } from "@/types/contract";
+import { PairNft, PairNftWithAmount } from "@/types/contract";
 import { TableHead } from "./common/TableHead";
 import { formatToUSD } from "@/utils/format";
 import { IClaimArgsBakc, IWithdrawArgsBakc } from "./common/types";
-import { useBakcDeposits } from "@/hooks/useDeposits";
 import { PoolType } from "@/types/constants";
+import { useBakcDeposits } from "@/hooks/useDeposits";
+import { useWithdrawBakc } from "@/hooks/useWithdraws";
+import { useClaimSelfBakc } from "@/hooks/useClaims";
 
 export interface IPairOption {
   tokenId: number;
@@ -43,6 +45,15 @@ export const BakcTable = (props: BakcTableProps) => {
     poolStakes?.reduce((total, token) => {
       return total.add(token.deposited);
     }, ethers.constants.Zero) || 0;
+
+  const { withdrawBakc } = useWithdrawBakc({
+    bayc: withdrawArgs(1, false)[0] as PairNftWithAmount[],
+    mayc: withdrawArgs(2, false)[0] as PairNftWithAmount[],
+  });
+  const { claimSelfBakc } = useClaimSelfBakc({
+    bayc: claimArgs(1, false)[0] as PairNft[],
+    mayc: claimArgs(2, false)[0] as PairNft[],
+  });
 
   const [depositAmounts, setDepositAmounts] = useState<{
     [key: number]: PairNftWithAmount & {
@@ -300,12 +311,20 @@ export const BakcTable = (props: BakcTableProps) => {
                 </button>
               </td>
               <td className="flex w-1/4 flex-wrap items-center gap-2 p-4">
-                <button className="border px-2 hover:border-zinc-500 dark:border-zinc-500 dark:bg-zinc-800 dark:hover:border-zinc-300">
+                <button
+                  disabled={!withdrawBakc}
+                  onClick={() => withdrawBakc?.()}
+                  className="border px-2 hover:border-zinc-500 dark:border-zinc-500 dark:bg-zinc-800 dark:hover:border-zinc-300"
+                >
                   Withdraw All
                 </button>
               </td>
               <td className="flex w-1/4 flex-wrap items-center gap-2 p-4">
-                <button className="border px-2 hover:border-zinc-500 dark:border-zinc-500 dark:bg-zinc-800 dark:hover:border-zinc-300">
+                <button
+                  disabled={!claimSelfBakc}
+                  onClick={() => claimSelfBakc?.()}
+                  className="border px-2 hover:border-zinc-500 dark:border-zinc-500 dark:bg-zinc-800 dark:hover:border-zinc-300"
+                >
                   Claim All
                 </button>
               </td>

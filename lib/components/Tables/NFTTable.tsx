@@ -7,8 +7,10 @@ import { MAX_STAKES } from "@/types/constants";
 import { SingleNft } from "@/types/contract";
 import { TableHead } from "./common/TableHead";
 import { formatToUSD } from "../../utils/format";
-import { IClaimArgs, IWithdrawArgs } from "./common/types";
+import { IClaimArgsNft, IWithdrawArgsNft } from "./common/types";
 import { useNftDeposits } from "@/hooks/useDeposits";
+import { useWithdrawSelfNft } from "@/hooks/useWithdraws";
+import { useClaimSelfNft } from "@/hooks/useClaims";
 
 interface NftTableProps {
   tokenSymbol: string;
@@ -18,8 +20,8 @@ interface NftTableProps {
   poolStakes: poolStakesData[];
   apecoinPrice: BigNumber | undefined;
   poolId: 1 | 2;
-  withdrawArgs: IWithdrawArgs;
-  claimArgs: IClaimArgs;
+  withdrawArgs: IWithdrawArgsNft;
+  claimArgs: IClaimArgsNft;
 }
 export const NftTable = (props: NftTableProps) => {
   const {
@@ -54,16 +56,20 @@ export const NftTable = (props: NftTableProps) => {
     ),
   });
 
+  const { withdrawSelfNft } = useWithdrawSelfNft({
+    poolId,
+    nfts: withdrawArgs(poolId, false)[0] as SingleNft[],
+  });
+  const { claimSelfNft } = useClaimSelfNft({
+    poolId,
+    tokenIds: claimArgs(poolId, false) as BigNumber[],
+  });
+
   const depositArgs = () => {
     const args = Object.entries(depositAmounts)
-      .map((token) => {
-        if (token[1].gt(0)) {
-          return [token[0], token[1].toString()];
-        }
-      })
-      .filter((token) => {
-        return token !== undefined;
-      });
+      .filter((token) => token[1].gt(0))
+      .map((token) => [token[0], token[1].toString()]);
+
     return args.length === 0 ? [] : args;
   };
 
@@ -279,14 +285,22 @@ export const NftTable = (props: NftTableProps) => {
               </td>
               <td className="flex w-1/4 flex-wrap items-center gap-2 p-4">
                 {depositedTotal.gt(0) && (
-                  <button className="border px-2 hover:border-zinc-500 dark:border-zinc-500 dark:bg-zinc-800 dark:hover:border-zinc-300">
+                  <button
+                    disabled={!withdrawSelfNft}
+                    onClick={() => withdrawSelfNft?.()}
+                    className="border px-2 hover:border-zinc-500 dark:border-zinc-500 dark:bg-zinc-800 dark:hover:border-zinc-300"
+                  >
                     Withdraw All
                   </button>
                 )}
               </td>
               <td className="flex w-1/4 flex-wrap items-center gap-2 p-4">
                 {unclaimedTotal.gt(0) && (
-                  <button className="border px-2 hover:border-zinc-500 dark:border-zinc-500 dark:bg-zinc-800 dark:hover:border-zinc-300">
+                  <button
+                    disabled={!claimSelfNft}
+                    onClick={() => claimSelfNft?.()}
+                    className="border px-2 hover:border-zinc-500 dark:border-zinc-500 dark:bg-zinc-800 dark:hover:border-zinc-300"
+                  >
                     Claim All
                   </button>
                 )}

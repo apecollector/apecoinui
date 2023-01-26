@@ -5,7 +5,7 @@ import { useState } from "react";
 import useApeCoinBalance from "@/hooks/useApeCoinBalance";
 import { poolStakesData } from "@/hooks/useAllStakes";
 import { TableHead } from "./common/TableHead";
-import { IClaimArgs, IWithdrawArgs } from "./common/types";
+import { IClaimArgsApecoin, IWithdrawArgsApecoin } from "./common/types";
 import { useWithdrawSelfApecoin } from "@/hooks/useWithdraws";
 import { useDeposits } from "@/hooks/useDeposits";
 import { useClaimSelfApecoin } from "@/hooks/useClaims";
@@ -13,8 +13,8 @@ import { useClaimSelfApecoin } from "@/hooks/useClaims";
 interface ApeCoinTableProps {
   apeCoinStakes: poolStakesData[];
   apecoinPrice: BigNumber | undefined;
-  withdrawArgs: IWithdrawArgs;
-  claimArgs: IClaimArgs;
+  withdrawArgs: IWithdrawArgsApecoin;
+  claimArgs: IClaimArgsApecoin;
 }
 
 export const ApeCoinTable = (props: ApeCoinTableProps) => {
@@ -203,7 +203,7 @@ export const ApeCoinTable = (props: ApeCoinTableProps) => {
                     <textarea
                       className="w-full border px-2 text-[10px] dark:border-zinc-500 dark:bg-zinc-800"
                       readOnly
-                      value={JSON.stringify(withdrawArgs(0, true))}
+                      value={JSON.stringify(withdrawArgs(true))}
                     />
                   </>
                 )}
@@ -220,7 +220,7 @@ export const ApeCoinTable = (props: ApeCoinTableProps) => {
                     <textarea
                       className="w-full border px-2 text-[10px] dark:border-zinc-500 dark:bg-zinc-800"
                       readOnly
-                      value={JSON.stringify(claimArgs(0, true))}
+                      value={JSON.stringify(claimArgs(true))}
                     />
                   </>
                 )}
