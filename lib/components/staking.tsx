@@ -159,7 +159,12 @@ export default function Staking() {
   return (
     <div>
       <div>
-        <UserStaking />
+        <UserStaking
+          withdrawArgsBakc={withdrawArgsBakc}
+          withdrawArgsNft={withdrawArgsNft}
+          claimArgsBakc={claimArgsBakc}
+          claimArgsNft={claimArgsNft}
+        />
       </div>
 
       <div className="mt-10 overflow-scroll">
