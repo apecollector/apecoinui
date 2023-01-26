@@ -1,15 +1,19 @@
 import { BigNumber } from "ethers";
+import { PoolType } from "./constants";
 
 export interface SingleNft {
   tokenId: BigNumber;
   amount: BigNumber;
 }
 
-export interface PairNftWithAmount {
+export interface PairNft {
   mainTokenId: BigNumber;
   bakcTokenId: BigNumber;
-  amount: BigNumber;
 }
+
+export type PairNftWithAmount = PairNft & {
+  amount: BigNumber;
+};
 
 export type PoolData = {
   [key in PoolType]: {
