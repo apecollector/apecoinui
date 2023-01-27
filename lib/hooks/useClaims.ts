@@ -3,6 +3,7 @@ import StakingABI from "@/abis/staking";
 import { BigNumber } from "ethers";
 import { StakingContractAddresses } from "@/types/constants";
 import { PairNft } from "@/types/contract";
+import { poolStakesData } from "./useAllStakes";
 
 export const useClaimSelfApecoin = () => {
   const { chain } = useNetwork();
@@ -67,3 +68,46 @@ export const useClaimSelfBakc = (props: UseClaimBakcNftProps) => {
 
   return { claimSelfBakc: write };
 };
+
+export const getFnClaimArgsApecoin =
+  (allStakes: readonly poolStakesData[] = []) =>
+  (asString: boolean) => {
+    const token = allStakes?.[0];
+    if (token?.unclaimed.gt(0)) {
+      return asString ? token.unclaimed.toString() : token.unclaimed;
+    } else {
+      return "";
+    }
+  };
+
+export const getFnClaimArgsNft =
+  (allStakes: readonly poolStakesData[] = []) =>
+  (poolId: number, asString: boolean) => {
+    return (allStakes ?? [])
+      .filter(
+        (stake) => stake.poolId.toNumber() === poolId && stake.unclaimed?.gt(0)
+      )
+      .map((token) => (asString ? token.tokenId.toNumber() : token.tokenId));
+  };
+
+export const getFnClaimArgsBakc =
+  (allStakes: readonly poolStakesData[] = []) =>
+  (mainTypePoolId: number, asString: boolean) => {
+    return (allStakes ?? [])
+      .filter(
+        (stake) =>
+          stake.poolId.toNumber() === 3 &&
+          stake.pair.mainTypePoolId.toNumber() === mainTypePoolId &&
+          stake.unclaimed?.gt(0)
+      )
+      .map((token) =>
+        asString
+          ? [token.pair.mainTokenId.toNumber(), token.tokenId.toNumber()]
+          : [
+              {
+                mainTokenId: token.pair.mainTokenId,
+                bakcTokenId: token.tokenId,
+              },
+            ]
+      );
+  };

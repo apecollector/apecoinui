@@ -14,6 +14,16 @@ import Allowance from "./allowance";
 import { formatUnits } from "ethers/lib/utils.js";
 import { UserStaking } from "./userStaking";
 import { PoolType } from "@/types/constants";
+import {
+  getFnWithdrawArgsApecoin,
+  getFnWithdrawArgsBakc,
+  getFnWithdrawArgsNft,
+} from "../hooks/useWithdraws";
+import {
+  getFnClaimArgsApecoin,
+  getFnClaimArgsNft,
+  getFnClaimArgsBakc,
+} from "../hooks/useClaims";
 
 interface poolStakesData {
   poolId: BigNumber;
@@ -52,98 +62,6 @@ export default function Staking() {
     return <h1>Loading staking contract data...</h1>;
   }
 
-  const withdrawArgsApecoin = (asString: boolean = true) => {
-    const token = allStakes.data?.[0];
-    if (token?.deposited.gt(0)) {
-      return asString ? token.deposited.toString() : token.deposited;
-    } else {
-      return "";
-    }
-  };
-
-  const withdrawArgsNft = (
-    poolId: PoolType.BAYC | PoolType.MAYC,
-    asString = true
-  ) => {
-    return (allStakes.data ?? [])
-      .filter(
-        (stake) => stake.poolId.toNumber() === poolId && stake.deposited?.gt(0)
-      )
-      .map((token) =>
-        asString
-          ? [token.tokenId.toNumber(), token.deposited.toString()]
-          : [
-              {
-                tokenId: token.tokenId,
-                amount: token.deposited,
-              },
-            ]
-      )
-      .filter((token) => token !== undefined);
-  };
-
-  const withdrawArgsBakc = (mainTypePoolId: number, asString: boolean) => {
-    return (allStakes.data ?? [])
-      .filter(
-        (stake) =>
-          stake.poolId.toNumber() === 3 &&
-          stake.pair.mainTypePoolId.toNumber() === mainTypePoolId &&
-          stake.deposited?.gt(0)
-      )
-      .map((token) =>
-        asString
-          ? [
-              token.pair.mainTokenId.toNumber(),
-              token.tokenId.toNumber(),
-              token.deposited.toString(),
-            ]
-          : [
-              {
-                mainTokenId: token.pair.mainTokenId,
-                bakcTokenId: token.tokenId,
-                amount: token.deposited,
-              },
-            ]
-      );
-  };
-
-  const claimArgsApecoin = (asString: boolean) => {
-    const token = allStakes.data?.[0];
-    if (token?.unclaimed.gt(0)) {
-      return asString ? token.unclaimed.toString() : token.unclaimed;
-    } else {
-      return "";
-    }
-  };
-
-  const claimArgsNft = (poolId: number, asString: boolean) => {
-    return (allStakes.data ?? [])
-      .filter(
-        (stake) => stake.poolId.toNumber() === poolId && stake.unclaimed?.gt(0)
-      )
-      .map((token) => (asString ? token.tokenId.toNumber() : token.tokenId));
-  };
-
-  const claimArgsBakc = (mainTypePoolId: number, asString: boolean) => {
-    return (allStakes.data ?? [])
-      .filter(
-        (stake) =>
-          stake.poolId.toNumber() === 3 &&
-          stake.pair.mainTypePoolId.toNumber() === mainTypePoolId &&
-          stake.unclaimed?.gt(0)
-      )
-      .map((token) =>
-        asString
-          ? [token.pair.mainTokenId.toNumber(), token.tokenId.toNumber()]
-          : [
-              {
-                mainTokenId: token.pair.mainTokenId,
-                bakcTokenId: token.tokenId,
-              },
-            ]
-      );
-  };
-
   const baycOptions: IPairOption[] = baycStakes.map((data) => ({
     tokenId: data.tokenId.toNumber(),
     poolId: PoolType.BAYC,
@@ -159,12 +77,7 @@ export default function Staking() {
   return (
     <div>
       <div>
-        <UserStaking
-          withdrawArgsBakc={withdrawArgsBakc}
-          withdrawArgsNft={withdrawArgsNft}
-          claimArgsBakc={claimArgsBakc}
-          claimArgsNft={claimArgsNft}
-        />
+        <UserStaking />
       </div>
 
       <div className="mt-10 overflow-scroll">
@@ -186,8 +99,8 @@ export default function Staking() {
         <h2 className="text-4xl font-extrabold">ApeCoin Staking Pool</h2>
         <ApeCoinTable
           apeCoinStakes={apeCoinStakes}
-          withdrawArgs={withdrawArgsApecoin}
-          claimArgs={claimArgsApecoin}
+          withdrawArgs={getFnWithdrawArgsApecoin(allStakes.data)}
+          claimArgs={getFnClaimArgsApecoin(allStakes.data)}
           apecoinPrice={apecoinPrice}
         />
 
@@ -203,8 +116,8 @@ export default function Staking() {
           withdrawFunctionID="24"
           claimFunctionID="8"
           depositFunctionID="12"
-          withdrawArgs={withdrawArgsNft}
-          claimArgs={claimArgsNft}
+          withdrawArgs={getFnWithdrawArgsNft(allStakes.data)}
+          claimArgs={getFnClaimArgsNft(allStakes.data)}
         />
 
         <h2 className="mt-10 text-4xl font-extrabold">
@@ -219,8 +132,8 @@ export default function Staking() {
           withdrawFunctionID="25"
           claimFunctionID="9"
           depositFunctionID="13"
-          withdrawArgs={withdrawArgsNft}
-          claimArgs={claimArgsNft}
+          withdrawArgs={getFnWithdrawArgsNft(allStakes.data)}
+          claimArgs={getFnClaimArgsNft(allStakes.data)}
         />
 
         <h2 className="mt-10 text-4xl font-extrabold">
@@ -229,8 +142,8 @@ export default function Staking() {
 
         <BakcTable
           poolStakes={bakcStakes}
-          withdrawArgs={withdrawArgsBakc}
-          claimArgs={claimArgsBakc}
+          withdrawArgs={getFnWithdrawArgsBakc(allStakes.data)}
+          claimArgs={getFnClaimArgsBakc(allStakes.data)}
           apecoinPrice={apecoinPrice}
           pairOptions={options}
         />

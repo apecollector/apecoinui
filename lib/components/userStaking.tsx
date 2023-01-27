@@ -10,6 +10,9 @@ import usePrice from "@/hooks/usePrice";
 import { BigNumber, ethers } from "ethers";
 import { PoolType, StakingContractAddresses } from "@/types/constants";
 import {
+  getFnWithdrawArgsApecoin,
+  getFnWithdrawArgsBakc,
+  getFnWithdrawArgsNft,
   useWithdrawBakc,
   useWithdrawSelfApecoin,
   useWithdrawSelfNft,
@@ -20,9 +23,11 @@ import {
   IClaimArgsNft,
   IWithdrawArgsBakc,
   IWithdrawArgsNft,
-} from "./Staking/common/types";
+} from "./Tables/common/types";
 import { formatToUSD } from "../utils/format";
 import {
+  getFnClaimArgsBakc,
+  getFnClaimArgsNft,
   useClaimSelfApecoin,
   useClaimSelfBakc,
   useClaimSelfNft,
@@ -117,16 +122,9 @@ function WithdrawAll(props: WithdrawAllProps) {
   );
 }
 
-interface UserStakingProps {
-  withdrawArgsNft: IWithdrawArgsNft;
-  withdrawArgsBakc: IWithdrawArgsBakc;
-  claimArgsNft: IClaimArgsNft;
-  claimArgsBakc: IClaimArgsBakc;
-}
+interface UserStakingProps {}
 
 export const UserStaking = (props: UserStakingProps) => {
-  const { withdrawArgsNft, withdrawArgsBakc, claimArgsBakc, claimArgsNft } =
-    props;
   const { chain } = useNetwork();
   const { address } = useAccount();
   const { apecoinPrice } = usePrice();
@@ -148,6 +146,11 @@ export const UserStaking = (props: UserStakingProps) => {
   const totalUnclaimed = allStakes.data?.reduce((sum, stake) => {
     return sum + +formatUnits(stake.unclaimed);
   }, 0);
+
+  const withdrawArgsNft = getFnWithdrawArgsNft(allStakes?.data ?? []);
+  const withdrawArgsBakc = getFnWithdrawArgsBakc(allStakes?.data ?? []);
+  const claimArgsNft = getFnClaimArgsNft(allStakes?.data ?? []);
+  const claimArgsBakc = getFnClaimArgsBakc(allStakes?.data ?? []);
 
   const apecoinPriceNumber = apecoinPrice && +formatUnits(apecoinPrice, 8);
 
