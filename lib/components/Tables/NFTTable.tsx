@@ -48,10 +48,10 @@ export const NftTable = (props: NftTableProps) => {
   const { depositNft } = useNftDeposits({
     poolId,
     nfts: Object.entries(depositAmounts).reduce(
-      (acc: SingleNft[], [key, value]) => [
-        ...acc,
-        { tokenId: BigNumber.from(key), amount: value },
-      ],
+      (acc: SingleNft[], [key, value]) =>
+        value.gt(0)
+          ? [...acc, { tokenId: BigNumber.from(key), amount: value }]
+          : acc,
       []
     ),
   });
