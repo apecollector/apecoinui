@@ -137,26 +137,26 @@ export const BakcTable = (props: BakcTableProps) => {
     <table className="mt-4 w-full border dark:border-zinc-700">
       <TableHead />
       <tbody className="divide-y divide-zinc-200 dark:divide-zinc-700">
-        {poolStakes.map((da) => {
+        {poolStakes.map((ps) => {
           const depositedAmount = Number(
-            da.deposited.isZero() ? 0 : formatUnits(da.deposited)
+            ps.deposited.isZero() ? 0 : formatUnits(ps.deposited)
           );
 
           return (
-            <tr className="flex" key={da.tokenId.toNumber()}>
+            <tr className="flex" key={ps.tokenId.toNumber()}>
               <td className="flex w-1/4 flex-wrap items-center gap-2 p-4">
-                BAKC {da.tokenId.toNumber()}
-                {da.pair.mainTokenId.isZero() ||
+                BAKC {ps.tokenId.toNumber()}
+                {ps.pair.mainTokenId.isZero() ||
                 availableMainTokenIds.find(
                   (amt) =>
-                    amt.poolId === da.pair.mainTypePoolId.toNumber() &&
-                    amt.tokenId === da.pair.mainTokenId.toNumber()
+                    amt.poolId === ps.pair.mainTypePoolId.toNumber() &&
+                    amt.tokenId === ps.pair.mainTokenId.toNumber()
                 ) ? (
                   <select
                     className="h-7 w-1/2 appearance-none border px-2 py-0 dark:border-zinc-500 dark:bg-zinc-800"
                     name="mainTokenId"
                     onChange={handleSelectInputChangeForBakc(
-                      da.tokenId.toNumber()
+                      ps.tokenId.toNumber()
                     )}
                     defaultValue="default"
                   >
@@ -176,62 +176,71 @@ export const BakcTable = (props: BakcTableProps) => {
                 ) : (
                   <span>
                     +{" "}
-                    {da.pair.mainTypePoolId.toNumber() === 1 ? "BAYC" : "MAYC"}{" "}
-                    {da.pair.mainTokenId.toNumber()}
+                    {ps.pair.mainTypePoolId.toNumber() === 1 ? "BAYC" : "MAYC"}{" "}
+                    {ps.pair.mainTokenId.toNumber()}
                   </span>
                 )}
               </td>
               <td className="flex w-1/4 flex-wrap items-center gap-2 p-4">
-                <input
-                  className="w-2/5 border px-2 dark:border-zinc-500 dark:bg-zinc-800"
-                  value={
-                    +formatUnits(
-                      depositAmounts[da.tokenId.toNumber()].amount || 0
-                    )
-                  }
-                  max={Math.min(MAX_STAKES[3] - depositedAmount)}
-                  onChange={(e) =>
-                    handleAmountChange(
-                      da.tokenId.toNumber(),
-                      e.target.value === ""
-                        ? ethers.constants.Zero
-                        : parseUnits(e.target.value.toString())
-                    )
-                  }
-                  type="number"
-                />
-                <button
-                  onClick={() =>
-                    handleAmountChange(
-                      da.tokenId.toNumber(),
-                      parseUnits((MAX_STAKES[3] - depositedAmount).toString())
-                    )
-                  }
-                >
-                  MAX
-                </button>
+                {+formatUnits(ps.deposited) === MAX_STAKES[3] ? (
+                  <span>MAXED OUT</span>
+                ) : (
+                  <>
+                    {" "}
+                    <input
+                      className="w-2/5 border px-2 dark:border-zinc-500 dark:bg-zinc-800"
+                      value={
+                        +formatUnits(
+                          depositAmounts[ps.tokenId.toNumber()].amount || 0
+                        )
+                      }
+                      max={Math.min(MAX_STAKES[3] - depositedAmount)}
+                      onChange={(e) =>
+                        handleAmountChange(
+                          ps.tokenId.toNumber(),
+                          e.target.value === ""
+                            ? ethers.constants.Zero
+                            : parseUnits(e.target.value.toString())
+                        )
+                      }
+                      type="number"
+                    />
+                    <button
+                      onClick={() =>
+                        handleAmountChange(
+                          ps.tokenId.toNumber(),
+                          parseUnits(
+                            (MAX_STAKES[3] - depositedAmount).toString()
+                          )
+                        )
+                      }
+                    >
+                      MAX
+                    </button>
+                  </>
+                )}
               </td>
               <td className="flex w-1/4 flex-wrap items-center gap-2 p-4">
-                {Intl.NumberFormat("en-us").format(+formatUnits(da.deposited))}
+                {Intl.NumberFormat("en-us").format(+formatUnits(ps.deposited))}
                 {apecoinPrice && (
                   <>
                     {" "}
                     (
                     {formatToUSD(
-                      +formatUnits(da.deposited) * +formatUnits(apecoinPrice, 8)
+                      +formatUnits(ps.deposited) * +formatUnits(apecoinPrice, 8)
                     )}
                     )
                   </>
                 )}
               </td>
               <td className="flex w-1/4 flex-wrap items-center gap-2 p-4">
-                {Intl.NumberFormat("en-us").format(+formatUnits(da.unclaimed))}
+                {Intl.NumberFormat("en-us").format(+formatUnits(ps.unclaimed))}
                 {apecoinPrice && (
                   <>
                     {" "}
                     (
                     {formatToUSD(
-                      +formatUnits(da.unclaimed) * +formatUnits(apecoinPrice, 8)
+                      +formatUnits(ps.unclaimed) * +formatUnits(apecoinPrice, 8)
                     )}
                     )
                   </>
