@@ -45,15 +45,21 @@ export const NftTable = (props: NftTableProps) => {
     )
   );
 
+  const depositArgs = (asString: boolean = true) => {
+    const args = Object.entries(depositAmounts)
+      .filter((token) => token[1].gt(0))
+      .map(([key, value]) =>
+        asString
+          ? [key.toString(), value.toString()]
+          : { tokenId: ethers.BigNumber.from(key), amount: value }
+      );
+
+    return args.length === 0 ? [] : args;
+  };
+
   const { depositNft } = useNftDeposits({
     poolId,
-    nfts: Object.entries(depositAmounts).reduce(
-      (acc: SingleNft[], [key, value]) =>
-        value.gt(0)
-          ? [...acc, { tokenId: BigNumber.from(key), amount: value }]
-          : acc,
-      []
-    ),
+    nfts: depositArgs(false) as SingleNft[],
   });
 
   const { withdrawSelfNft } = useWithdrawSelfNft({
@@ -64,14 +70,6 @@ export const NftTable = (props: NftTableProps) => {
     poolId,
     tokenIds: claimArgs(poolId, false) as BigNumber[],
   });
-
-  const depositArgs = () => {
-    const args = Object.entries(depositAmounts)
-      .filter((token) => token[1].gt(0))
-      .map((token) => [token[0], token[1].toString()]);
-
-    return args.length === 0 ? [] : args;
-  };
 
   const depositedTotal = poolStakes.reduce((total, token) => {
     return total.add(token.deposited);
