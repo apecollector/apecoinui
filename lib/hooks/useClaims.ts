@@ -27,7 +27,7 @@ interface UseClaimSelfNftProps {
 }
 
 export const useClaimSelfNft = (props: UseClaimSelfNftProps) => {
-  const { poolId, tokenIds } = props;
+  const { poolId, tokenIds = [] } = props;
   const { chain } = useNetwork();
 
   const { config } = usePrepareContractWrite({
@@ -51,7 +51,7 @@ interface UseClaimBakcNftProps {
 }
 
 export const useClaimSelfBakc = (props: UseClaimBakcNftProps) => {
-  const { bayc, mayc } = props;
+  const { bayc = [], mayc = [] } = props;
 
   const { chain } = useNetwork();
   const { config } = usePrepareContractWrite({

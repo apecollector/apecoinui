@@ -33,7 +33,7 @@ interface UseNftDepositsProps {
 }
 
 export const useNftDeposits = (props: UseNftDepositsProps) => {
-  const { poolId, nfts } = props;
+  const { poolId, nfts = [] } = props;
   const { chain } = useNetwork();
 
   const { config } = usePrepareContractWrite({
@@ -58,7 +58,7 @@ interface UseBakcDepositsProps {
 }
 
 export const useBakcDeposits = (props: UseBakcDepositsProps) => {
-  const { bayc, mayc } = props;
+  const { bayc = [], mayc = [] } = props;
   const { chain } = useNetwork();
   const { config } = usePrepareContractWrite({
     address: StakingContractAddresses[chain?.id || 1],

@@ -34,7 +34,7 @@ interface UseWithdrawSelfNftProps {
 }
 
 export const useWithdrawSelfNft = (props: UseWithdrawSelfNftProps) => {
-  const { poolId, nfts } = props;
+  const { poolId, nfts = [] } = props;
   const { chain } = useNetwork();
 
   const { config } = usePrepareContractWrite({
@@ -59,7 +59,7 @@ interface UseWithdrawBakcProps {
 }
 
 export const useWithdrawBakc = (props: UseWithdrawBakcProps) => {
-  const { bayc, mayc } = props;
+  const { bayc = [], mayc = [] } = props;
   const { chain } = useNetwork();
   const { config } = usePrepareContractWrite({
     address: StakingContractAddresses[chain?.id || 1],
