@@ -9,6 +9,7 @@ import { IClaimArgsApecoin, IWithdrawArgsApecoin } from "./common/types";
 import { useWithdrawSelfApecoin } from "@/hooks/useWithdraws";
 import { useDeposits } from "@/hooks/useDeposits";
 import { useClaimSelfApecoin } from "@/hooks/useClaims";
+import { formatToUSD } from "../../utils/format";
 
 interface ApeCoinTableProps {
   apeCoinStakes: poolStakesData[];
@@ -51,7 +52,7 @@ export const ApeCoinTable = (props: ApeCoinTableProps) => {
             </td>
             <td className="flex w-1/4 flex-wrap items-center gap-2 p-4">
               <input
-                value={Math.round(+formatUnits(depositApeCoinAmount || 0))}
+                value={+formatUnits(depositApeCoinAmount || 0)}
                 onChange={(e) => {
                   if (e.target.value === "") {
                     setDepositApeCoinAmount(ethers.constants.Zero);
@@ -65,9 +66,7 @@ export const ApeCoinTable = (props: ApeCoinTableProps) => {
               {apeCoinBalance?.gt(0) &&
                 !depositApeCoinAmount.eq(apeCoinBalance) && (
                   <button
-                    onClick={() => {
-                      setDepositApeCoinAmount(apeCoinBalance!);
-                    }}
+                    onClick={() => setDepositApeCoinAmount(apeCoinBalance!)}
                   >
                     MAX
                   </button>
@@ -89,13 +88,7 @@ export const ApeCoinTable = (props: ApeCoinTableProps) => {
                 <>
                   {" "}
                   (
-                  {Intl.NumberFormat(undefined, {
-                    maximumFractionDigits: 2,
-                    style: "currency",
-                    currency: "USD",
-                    notation: "compact",
-                    compactDisplay: "short",
-                  }).format(
+                  {formatToUSD(
                     +formatUnits(stake.deposited) *
                       +formatUnits(apecoinPrice, 8)
                   )}
@@ -112,13 +105,7 @@ export const ApeCoinTable = (props: ApeCoinTableProps) => {
                 <>
                   {" "}
                   (
-                  {Intl.NumberFormat(undefined, {
-                    maximumFractionDigits: 2,
-                    style: "currency",
-                    currency: "USD",
-                    notation: "compact",
-                    compactDisplay: "short",
-                  }).format(
+                  {formatToUSD(
                     +formatUnits(stake.unclaimed) *
                       +formatUnits(apecoinPrice, 8)
                   )}

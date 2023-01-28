@@ -104,11 +104,11 @@ export const NftTable = (props: NftTableProps) => {
               ) : (
                 <>
                   <input
-                    value={Math.round(
+                    value={
                       +formatUnits(
                         depositAmounts[stake.tokenId.toNumber()] || 0
                       )
-                    )}
+                    }
                     onChange={(e) => {
                       if (e.target.value === "") {
                         setDepositAmounts({
@@ -139,9 +139,9 @@ export const NftTable = (props: NftTableProps) => {
                         setDepositAmounts({
                           ...depositAmounts,
                           [stake.tokenId.toNumber()]: parseUnits(
-                            MAX_STAKES[
-                              stake.poolId.toNumber() as keyof typeof MAX_STAKES
-                            ].toString()
+                            (
+                              MAX_STAKES[poolId] - +formatUnits(stake.deposited)
+                            ).toString()
                           ),
                         });
                       }}
@@ -171,13 +171,7 @@ export const NftTable = (props: NftTableProps) => {
                 <>
                   {" "}
                   (
-                  {Intl.NumberFormat(undefined, {
-                    maximumFractionDigits: 2,
-                    style: "currency",
-                    currency: "USD",
-                    notation: "compact",
-                    compactDisplay: "short",
-                  }).format(
+                  {formatToUSD(
                     +formatUnits(stake.deposited) *
                       +formatUnits(apecoinPrice, 8)
                   )}
@@ -191,13 +185,7 @@ export const NftTable = (props: NftTableProps) => {
                 <>
                   {" "}
                   (
-                  {Intl.NumberFormat(undefined, {
-                    maximumFractionDigits: 2,
-                    style: "currency",
-                    currency: "USD",
-                    notation: "compact",
-                    compactDisplay: "short",
-                  }).format(
+                  {formatToUSD(
                     +formatUnits(stake.unclaimed) *
                       +formatUnits(apecoinPrice, 8)
                   )}
