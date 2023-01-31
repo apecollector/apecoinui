@@ -7,12 +7,12 @@ export type IWithdrawArgsApecoin = (asString: boolean) => string | BigNumber;
 export type IWithdrawArgsNft = (
   poolId: PoolType.MAYC | PoolType.BAYC,
   asString: boolean
-) => ((string | number)[] | SingleNft[])[];
+) => (SingleNft | (string | number)[])[];
 
 export type IWithdrawArgsBakc = (
   mainTypePoolId: PoolType.MAYC | PoolType.BAYC,
   asString: boolean
-) => ((string | number)[] | PairNftWithAmount[])[];
+) => ((string | number)[] | PairNftWithAmount)[];
 
 export type IClaimArgsApecoin = (asString: boolean) => string | BigNumber;
 
@@ -24,7 +24,7 @@ export type IClaimArgsNft = (
 export type IClaimArgsBakc = (
   mainTypePoolId: number,
   asString: boolean
-) => (number[] | PairNft[])[];
+) => (PairNft | number[])[];
 
 export type IClaimArgs = (
   poolId: number,

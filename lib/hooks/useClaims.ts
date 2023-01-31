@@ -1,7 +1,7 @@
 import { usePrepareContractWrite, useNetwork, useContractWrite } from "wagmi";
 import StakingABI from "@/abis/staking";
 import { BigNumber } from "ethers";
-import { StakingContractAddresses } from "@/types/constants";
+import { PoolType, StakingContractAddresses } from "@/types/constants";
 import { PairNft } from "@/types/contract";
 import { poolStakesData } from "./useAllStakes";
 
@@ -22,7 +22,7 @@ export const useClaimSelfApecoin = () => {
 };
 
 interface UseClaimSelfNftProps {
-  poolId: 1 | 2;
+  poolId: PoolType.BAYC | PoolType.MAYC;
   tokenIds: BigNumber[];
 }
 
@@ -33,7 +33,7 @@ export const useClaimSelfNft = (props: UseClaimSelfNftProps) => {
   const { config } = usePrepareContractWrite({
     address: StakingContractAddresses[chain?.id || 1],
     abi: StakingABI,
-    functionName: poolId === 1 ? "claimSelfBAYC" : "claimSelfMAYC",
+    functionName: poolId === PoolType.BAYC ? "claimSelfBAYC" : "claimSelfMAYC",
     chainId: chain?.id || 1,
     args: [tokenIds],
   });
@@ -103,11 +103,9 @@ export const getFnClaimArgsBakc =
       .map((token) =>
         asString
           ? [token.pair.mainTokenId.toNumber(), token.tokenId.toNumber()]
-          : [
-              {
-                mainTokenId: token.pair.mainTokenId,
-                bakcTokenId: token.tokenId,
-              },
-            ]
+          : ({
+              mainTokenId: token.pair.mainTokenId,
+              bakcTokenId: token.tokenId,
+            } as PairNft)
       );
   };

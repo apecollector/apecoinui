@@ -8,9 +8,8 @@ import { formatUnits } from "ethers/lib/utils.js";
 import usePrice from "@/hooks/usePrice";
 
 import { BigNumber, ethers } from "ethers";
-import { PoolType, StakingContractAddresses } from "@/types/constants";
+import { PoolType } from "@/types/constants";
 import {
-  getFnWithdrawArgsApecoin,
   getFnWithdrawArgsBakc,
   getFnWithdrawArgsNft,
   useWithdrawBakc,
@@ -55,8 +54,8 @@ function ClaimAll(props: ClaimAllProps) {
   });
 
   const { claimSelfBakc } = useClaimSelfBakc({
-    bayc: claimArgsBakc(PoolType.BAYC, false)[0] as PairNft[],
-    mayc: claimArgsBakc(PoolType.MAYC, false)[0] as PairNft[],
+    bayc: claimArgsBakc(PoolType.BAYC, false) as PairNft[],
+    mayc: claimArgsBakc(PoolType.MAYC, false) as PairNft[],
   });
   return (
     <div>
@@ -92,17 +91,17 @@ function WithdrawAll(props: WithdrawAllProps) {
 
   const { withdrawSelfNft: withdrawSelfBayc } = useWithdrawSelfNft({
     poolId: PoolType.BAYC,
-    nfts: withdrawArgsNft(PoolType.BAYC, false)[0] as SingleNft[],
+    nfts: withdrawArgsNft(PoolType.BAYC, false) as SingleNft[],
   });
 
   const { withdrawSelfNft: withdrawSelfMayc } = useWithdrawSelfNft({
     poolId: PoolType.MAYC,
-    nfts: withdrawArgsNft(PoolType.MAYC, false)[0] as SingleNft[],
+    nfts: withdrawArgsNft(PoolType.MAYC, false) as SingleNft[],
   });
 
   const { withdrawBakc } = useWithdrawBakc({
-    bayc: withdrawArgsBakc(1, false)[0] as PairNftWithAmount[],
-    mayc: withdrawArgsBakc(2, false)[0] as PairNftWithAmount[],
+    bayc: withdrawArgsBakc(1, false) as PairNftWithAmount[],
+    mayc: withdrawArgsBakc(2, false) as PairNftWithAmount[],
   });
 
   return (

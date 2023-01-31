@@ -64,7 +64,7 @@ export const NftTable = (props: NftTableProps) => {
 
   const { withdrawSelfNft } = useWithdrawSelfNft({
     poolId,
-    nfts: withdrawArgs(poolId, false)[0] as SingleNft[],
+    nfts: withdrawArgs(poolId, false) as SingleNft[],
   });
   const { claimSelfNft } = useClaimSelfNft({
     poolId,

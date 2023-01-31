@@ -29,7 +29,7 @@ export const useWithdrawSelfApecoin = (props: UseWithdrawSelfApecoinProps) => {
 };
 
 interface UseWithdrawSelfNftProps {
-  poolId: 1 | 2;
+  poolId: PoolType.BAYC | PoolType.MAYC;
   nfts: SingleNft[];
 }
 
@@ -40,7 +40,8 @@ export const useWithdrawSelfNft = (props: UseWithdrawSelfNftProps) => {
   const { config } = usePrepareContractWrite({
     address: StakingContractAddresses[chain?.id || 1],
     abi: StakingABI,
-    functionName: poolId === 1 ? "withdrawSelfBAYC" : "withdrawSelfMAYC",
+    functionName:
+      poolId === PoolType.BAYC ? "withdrawSelfBAYC" : "withdrawSelfMAYC",
     chainId: chain?.id || 1,
     args: [nfts],
     enabled: Boolean(nfts.find((n) => n.amount.gt(0))),
@@ -98,14 +99,11 @@ export const getFnWithdrawArgsNft =
       .map((token) =>
         asString
           ? [token.tokenId.toNumber(), token.deposited.toString()]
-          : [
-              {
-                tokenId: token.tokenId,
-                amount: token.deposited,
-              },
-            ]
-      )
-      .filter((token) => token !== undefined);
+          : ({
+              tokenId: token.tokenId,
+              amount: token.deposited,
+            } as SingleNft)
+      );
   };
 
 export const getFnWithdrawArgsBakc =
@@ -125,12 +123,10 @@ export const getFnWithdrawArgsBakc =
               token.tokenId.toNumber(),
               token.deposited.toString(),
             ]
-          : [
-              {
-                mainTokenId: token.pair.mainTokenId,
-                bakcTokenId: token.tokenId,
-                amount: token.deposited,
-              },
-            ]
+          : ({
+              mainTokenId: token.pair.mainTokenId,
+              bakcTokenId: token.tokenId,
+              amount: token.deposited,
+            } as PairNftWithAmount)
       );
   };

@@ -47,12 +47,12 @@ export const BakcTable = (props: BakcTableProps) => {
     }, ethers.constants.Zero) || 0;
 
   const { withdrawBakc } = useWithdrawBakc({
-    bayc: withdrawArgs(1, false)[0] as PairNftWithAmount[],
-    mayc: withdrawArgs(2, false)[0] as PairNftWithAmount[],
+    bayc: withdrawArgs(1, false) as PairNftWithAmount[],
+    mayc: withdrawArgs(2, false) as PairNftWithAmount[],
   });
   const { claimSelfBakc } = useClaimSelfBakc({
-    bayc: claimArgs(1, false)[0] as PairNft[],
-    mayc: claimArgs(2, false)[0] as PairNft[],
+    bayc: claimArgs(1, false) as PairNft[],
+    mayc: claimArgs(2, false) as PairNft[],
   });
 
   const [depositAmounts, setDepositAmounts] = useState<{
