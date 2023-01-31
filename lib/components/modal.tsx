@@ -1,6 +1,5 @@
 "use client";
 
-import ABI from "@/abis/staking";
 import useAllStakes from "@/hooks/useAllStakes";
 import { CheckCircleIcon } from "@heroicons/react/24/solid";
 import { BigNumber, ethers } from "ethers";
@@ -13,6 +12,7 @@ import {
   usePrepareContractWrite,
 } from "wagmi";
 import { StakingContractAddresses } from "@/types/constants";
+import { getStakingAbi } from "@/utils/abi";
 
 function displayApeCoin(apecoin: BigNumber | number): string {
   return Intl.NumberFormat("en-US", {
@@ -25,9 +25,12 @@ const ClaimApeCoin = () => {
   const { address } = useAccount();
   const { apeCoinStakes } = useAllStakes(address as string);
 
+  const chainId = chain?.id ?? 1;
+  const abi = getStakingAbi(chainId);
+
   const apeCoinPrepareContractWrite = usePrepareContractWrite({
-    address: StakingContractAddresses[chain?.id || 1],
-    abi: ABI,
+    address: StakingContractAddresses[chainId],
+    abi,
     functionName: "claimSelfApeCoin",
   });
 
@@ -72,9 +75,12 @@ const ClaimBayc = () => {
       return token !== undefined;
     });
 
+  const chainId = chain?.id ?? 1;
+  const abi = getStakingAbi(chainId);
+
   const baycPrepareContractWrite = usePrepareContractWrite({
-    address: StakingContractAddresses[chain?.id || 1],
-    abi: ABI,
+    address: StakingContractAddresses[chainId],
+    abi,
     functionName: "claimSelfBAYC",
     args: [args as any],
   });

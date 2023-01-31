@@ -1,9 +1,9 @@
 import { usePrepareContractWrite, useNetwork, useContractWrite } from "wagmi";
-import StakingABI from "@/abis/staking";
 import { BigNumber, ethers } from "ethers";
 import { PoolType, StakingContractAddresses } from "@/types/constants";
 import { PairNftWithAmount, SingleNft } from "@/types/contract";
 import { poolStakesData } from "./useAllStakes";
+import { getStakingAbi } from "@/utils/abi";
 
 interface UseWithdrawSelfApecoinProps {
   amount: BigNumber;
@@ -12,9 +12,11 @@ interface UseWithdrawSelfApecoinProps {
 export const useWithdrawSelfApecoin = (props: UseWithdrawSelfApecoinProps) => {
   const { amount } = props;
   const { chain } = useNetwork();
+  const chainId = chain?.id ?? 1;
+  const abi = getStakingAbi(chainId);
   const { config } = usePrepareContractWrite({
     address: StakingContractAddresses[chain?.id || 1],
-    abi: StakingABI,
+    abi,
     functionName: "withdrawSelfApeCoin",
     chainId: chain?.id || 1,
     args: [amount],
@@ -37,9 +39,10 @@ export const useWithdrawSelfNft = (props: UseWithdrawSelfNftProps) => {
   const { poolId, nfts = [] } = props;
   const { chain } = useNetwork();
   const chainId = chain?.id ?? 1;
+  const abi = getStakingAbi(chainId);
   const { config } = usePrepareContractWrite({
     address: StakingContractAddresses[chainId],
-    abi: StakingABI,
+    abi,
     functionName:
       poolId === PoolType.BAYC ? "withdrawSelfBAYC" : "withdrawSelfMAYC",
     chainId: chainId,
@@ -62,9 +65,12 @@ interface UseWithdrawBakcProps {
 export const useWithdrawBakc = (props: UseWithdrawBakcProps) => {
   const { bayc = [], mayc = [] } = props;
   const { chain } = useNetwork();
+  const chainId = chain?.id ?? 1;
+  const abi = getStakingAbi(chainId);
+
   const { config } = usePrepareContractWrite({
-    address: StakingContractAddresses[chain?.id || 1],
-    abi: StakingABI,
+    address: StakingContractAddresses[chainId],
+    abi,
     functionName: "withdrawBAKC",
     chainId: chain?.id || 1,
     args: [bayc, mayc],

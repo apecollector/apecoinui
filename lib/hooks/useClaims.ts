@@ -1,15 +1,19 @@
 import { usePrepareContractWrite, useNetwork, useContractWrite } from "wagmi";
-import StakingABI from "@/abis/staking";
 import { BigNumber } from "ethers";
 import { PoolType, StakingContractAddresses } from "@/types/constants";
 import { PairNft } from "@/types/contract";
 import { poolStakesData } from "./useAllStakes";
+import { getStakingAbi } from "@/utils/abi";
 
 export const useClaimSelfApecoin = () => {
   const { chain } = useNetwork();
+
+  const chainId = chain?.id ?? 1;
+  const abi = getStakingAbi(chainId);
+
   const { config } = usePrepareContractWrite({
     address: StakingContractAddresses[chain?.id || 1],
-    abi: StakingABI,
+    abi,
     functionName: "claimSelfApeCoin",
     chainId: chain?.id || 1,
   });
@@ -30,9 +34,12 @@ export const useClaimSelfNft = (props: UseClaimSelfNftProps) => {
   const { poolId, tokenIds = [] } = props;
   const { chain } = useNetwork();
 
+  const chainId = chain?.id ?? 1;
+  const abi = getStakingAbi(chainId);
+
   const { config } = usePrepareContractWrite({
     address: StakingContractAddresses[chain?.id || 1],
-    abi: StakingABI,
+    abi,
     functionName: poolId === PoolType.BAYC ? "claimSelfBAYC" : "claimSelfMAYC",
     chainId: chain?.id || 1,
     args: [tokenIds],
@@ -55,9 +62,10 @@ export const useClaimSelfBakc = (props: UseClaimBakcNftProps) => {
 
   const { chain } = useNetwork();
   const chainId = chain?.id || 1;
+  const abi = getStakingAbi(chainId);
   const { config } = usePrepareContractWrite({
     address: StakingContractAddresses[chainId],
-    abi: StakingABI,
+    abi,
     functionName: "claimSelfBAKC",
     chainId: chainId,
     args: [bayc, mayc],

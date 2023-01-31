@@ -1,6 +1,6 @@
 import { Map } from "@/types/map";
 
-enum Network {
+export enum Network {
   Ethereum = 1,
   Goerli = 5,
 }
