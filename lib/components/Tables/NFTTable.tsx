@@ -4,7 +4,7 @@ import { useState } from "react";
 
 import { poolStakesData } from "@/hooks/useAllStakes";
 import { MAX_STAKES } from "@/types/constants";
-import { SingleNft } from "@/types/contract";
+import { SingleNft, SingleNftDeposit } from "@/types/contract";
 import { TableHead } from "./common/TableHead";
 import { formatToUSD } from "../../utils/format";
 import { IClaimArgsNft, IWithdrawArgsNft } from "./common/types";
@@ -51,7 +51,7 @@ export const NftTable = (props: NftTableProps) => {
       .map(([key, value]) =>
         asString
           ? [key.toString(), value.toString()]
-          : { tokenId: ethers.BigNumber.from(key), amount: value }
+          : { tokenId: Number(key), amount: value }
       );
 
     return args.length === 0 ? [] : args;

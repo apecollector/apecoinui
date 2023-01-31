@@ -1,7 +1,7 @@
 import { usePrepareContractWrite, useNetwork, useContractWrite } from "wagmi";
 import { BigNumber } from "ethers";
 import { PoolType, StakingContractAddresses } from "@/types/constants";
-import { PairNft } from "@/types/contract";
+import { PairNft, PairNftClaim } from "@/types/contract";
 import { poolStakesData } from "./useAllStakes";
 import { getStakingAbi } from "@/utils/abi";
 
@@ -53,8 +53,8 @@ export const useClaimSelfNft = (props: UseClaimSelfNftProps) => {
 };
 
 interface UseClaimBakcNftProps {
-  bayc: PairNft[];
-  mayc: PairNft[];
+  bayc: PairNftClaim[];
+  mayc: PairNftClaim[];
 }
 
 export const useClaimSelfBakc = (props: UseClaimBakcNftProps) => {
@@ -115,6 +115,6 @@ export const getFnClaimArgsBakc =
           : ({
               mainTokenId: token.pair.mainTokenId,
               bakcTokenId: token.tokenId,
-            } as PairNft)
+            } as PairNftClaim)
       );
   };

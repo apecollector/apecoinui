@@ -1,6 +1,11 @@
 import { BigNumber, ethers } from "ethers";
 import { PoolType } from "../../../types/constants";
-import { SingleNft, PairNftWithAmount, PairNft } from "../../../types/contract";
+import {
+  SingleNft,
+  PairNftWithAmount,
+  PairNft,
+  PairNftClaim,
+} from "../../../types/contract";
 
 export type IWithdrawArgsApecoin = (asString: boolean) => string | BigNumber;
 
@@ -24,7 +29,7 @@ export type IClaimArgsNft = (
 export type IClaimArgsBakc = (
   mainTypePoolId: number,
   asString: boolean
-) => (PairNft | number[])[];
+) => (PairNftClaim | number[])[];
 
 export type IClaimArgs = (
   poolId: number,

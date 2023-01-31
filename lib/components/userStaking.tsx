@@ -16,7 +16,7 @@ import {
   useWithdrawSelfApecoin,
   useWithdrawSelfNft,
 } from "../hooks/useWithdraws";
-import { PairNft, PairNftWithAmount, SingleNft } from "../types/contract";
+import { PairNftClaim, PairNftWithAmount, SingleNft } from "../types/contract";
 import {
   IClaimArgsBakc,
   IClaimArgsNft,
@@ -54,8 +54,8 @@ function ClaimAll(props: ClaimAllProps) {
   });
 
   const { claimSelfBakc } = useClaimSelfBakc({
-    bayc: claimArgsBakc(PoolType.BAYC, false) as PairNft[],
-    mayc: claimArgsBakc(PoolType.MAYC, false) as PairNft[],
+    bayc: claimArgsBakc(PoolType.BAYC, false) as PairNftClaim[],
+    mayc: claimArgsBakc(PoolType.MAYC, false) as PairNftClaim[],
   });
   return (
     <div>
@@ -100,8 +100,8 @@ function WithdrawAll(props: WithdrawAllProps) {
   });
 
   const { withdrawBakc } = useWithdrawBakc({
-    bayc: withdrawArgsBakc(1, false) as PairNftWithAmount[],
-    mayc: withdrawArgsBakc(2, false) as PairNftWithAmount[],
+    bayc: withdrawArgsBakc(PoolType.BAYC, false) as PairNftWithAmount[],
+    mayc: withdrawArgsBakc(PoolType.MAYC, false) as PairNftWithAmount[],
   });
 
   return (

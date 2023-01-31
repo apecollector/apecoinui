@@ -1,7 +1,7 @@
 import { useContractEvent, useProvider } from "wagmi";
 import { ethers, Contract } from "ethers";
 
-import StakingABI from "@/abis/staking";
+import StakingABI from "@/abis/staking_mainnet";
 import useStore from "@/stores/store";
 import { useEffect, useRef } from "react";
 import { StakingContractAddress } from "../types/constants";

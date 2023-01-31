@@ -6,7 +6,7 @@ import { ChangeEvent, useState } from "react";
 
 import { poolStakesData } from "@/hooks/useAllStakes";
 import { MAX_STAKES } from "@/types/constants";
-import { PairNft, PairNftWithAmount } from "@/types/contract";
+import { PairNft, PairNftClaim, PairNftWithAmount } from "@/types/contract";
 import { TableHead } from "./common/TableHead";
 import { formatToUSD } from "@/utils/format";
 import { IClaimArgsBakc, IWithdrawArgsBakc } from "./common/types";
@@ -51,8 +51,8 @@ export const BakcTable = (props: BakcTableProps) => {
     mayc: withdrawArgs(PoolType.MAYC, false) as PairNftWithAmount[],
   });
   const { claimSelfBakc } = useClaimSelfBakc({
-    bayc: claimArgs(PoolType.BAYC, false) as PairNft[],
-    mayc: claimArgs(PoolType.MAYC, false) as PairNft[],
+    bayc: claimArgs(PoolType.BAYC, false) as PairNftClaim[],
+    mayc: claimArgs(PoolType.MAYC, false) as PairNftClaim[],
   });
 
   const [depositAmounts, setDepositAmounts] = useState<{
@@ -75,7 +75,7 @@ export const BakcTable = (props: BakcTableProps) => {
 
   const depositArgs = (() => {
     return Object.values(depositAmounts)
-      .filter((da) => da.amount.gt(0) && !da.mainTokenId.isZero())
+      .filter((da) => da.amount.gt(0) && da.mainTokenId !== 0)
       .reduce(
         (acc, da) => {
           const key = da.poolId === PoolType.BAYC ? "bayc" : "mayc";
@@ -83,11 +83,7 @@ export const BakcTable = (props: BakcTableProps) => {
             ...acc,
             [key]: [
               ...acc[key],
-              [
-                da.mainTokenId.toNumber(),
-                da.bakcTokenId.toNumber(),
-                da.amount.toString(),
-              ],
+              [da.mainTokenId, da.bakcTokenId, da.amount.toString()],
             ],
           };
         },
@@ -103,8 +99,9 @@ export const BakcTable = (props: BakcTableProps) => {
         ...prev,
         [bakcTokenId]: {
           ...prev[bakcTokenId],
-          mainTokenId: BigNumber.from(e.target.value.split("_")[1]),
+          mainTokenId: Number(e.target.value.split("_")[1]),
           poolId: Number(e.target.value.split("_")[0]),
+          isUncommit: true,
         },
       }));
     };

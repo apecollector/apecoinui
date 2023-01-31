@@ -106,7 +106,7 @@ export const getFnWithdrawArgsNft =
         asString
           ? [token.tokenId.toNumber(), token.deposited.toString()]
           : ({
-              tokenId: token.tokenId,
+              tokenId: token.tokenId.toNumber(),
               amount: token.deposited,
             } as SingleNft)
       );
@@ -130,9 +130,10 @@ export const getFnWithdrawArgsBakc =
               token.deposited.toString(),
             ]
           : ({
-              mainTokenId: token.pair.mainTokenId,
-              bakcTokenId: token.tokenId,
+              mainTokenId: token.pair.mainTokenId.toNumber(),
+              bakcTokenId: token.tokenId.toNumber(),
               amount: token.deposited,
+              isUncommit: true,
             } as PairNftWithAmount)
       );
   };
