@@ -76,7 +76,9 @@ export default function Staking() {
 
   return (
     <div>
-      <div>{/* <UserStaking /> */}</div>
+      <div>
+        <UserStaking />
+      </div>
 
       <div className="mt-10 overflow-scroll">
         {allowance?.data?.eq(0) ? (
