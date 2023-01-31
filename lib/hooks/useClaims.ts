@@ -54,11 +54,12 @@ export const useClaimSelfBakc = (props: UseClaimBakcNftProps) => {
   const { bayc = [], mayc = [] } = props;
 
   const { chain } = useNetwork();
+  const chainId = chain?.id || 1;
   const { config } = usePrepareContractWrite({
-    address: StakingContractAddresses[chain?.id || 1],
+    address: StakingContractAddresses[chainId],
     abi: StakingABI,
     functionName: "claimSelfBAKC",
-    chainId: chain?.id || 1,
+    chainId: chainId,
     args: [bayc, mayc],
   });
 
@@ -82,7 +83,7 @@ export const getFnClaimArgsApecoin =
 
 export const getFnClaimArgsNft =
   (allStakes: readonly poolStakesData[] = []) =>
-  (poolId: number, asString: boolean) => {
+  (poolId: PoolType.BAYC | PoolType.MAYC, asString: boolean) => {
     return (allStakes ?? [])
       .filter(
         (stake) => stake.poolId.toNumber() === poolId && stake.unclaimed?.gt(0)
@@ -92,11 +93,11 @@ export const getFnClaimArgsNft =
 
 export const getFnClaimArgsBakc =
   (allStakes: readonly poolStakesData[] = []) =>
-  (mainTypePoolId: number, asString: boolean) => {
+  (mainTypePoolId: PoolType.BAYC | PoolType.MAYC, asString: boolean) => {
     return (allStakes ?? [])
       .filter(
         (stake) =>
-          stake.poolId.toNumber() === 3 &&
+          stake.poolId.toNumber() === PoolType.BAKC &&
           stake.pair.mainTypePoolId.toNumber() === mainTypePoolId &&
           stake.unclaimed?.gt(0)
       )

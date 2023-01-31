@@ -1,6 +1,6 @@
 import { usePrepareContractWrite, useNetwork, useContractWrite } from "wagmi";
 import StakingABI from "@/abis/staking";
-import { BigNumber } from "ethers";
+import { BigNumber, ethers } from "ethers";
 import { PoolType, StakingContractAddresses } from "@/types/constants";
 import { PairNftWithAmount, SingleNft } from "@/types/contract";
 import { poolStakesData } from "./useAllStakes";
@@ -36,13 +36,13 @@ interface UseWithdrawSelfNftProps {
 export const useWithdrawSelfNft = (props: UseWithdrawSelfNftProps) => {
   const { poolId, nfts = [] } = props;
   const { chain } = useNetwork();
-
+  const chainId = chain?.id ?? 1;
   const { config } = usePrepareContractWrite({
-    address: StakingContractAddresses[chain?.id || 1],
+    address: StakingContractAddresses[chainId],
     abi: StakingABI,
     functionName:
       poolId === PoolType.BAYC ? "withdrawSelfBAYC" : "withdrawSelfMAYC",
-    chainId: chain?.id || 1,
+    chainId: chainId,
     args: [nfts],
     enabled: Boolean(nfts.find((n) => n.amount.gt(0))),
   });
