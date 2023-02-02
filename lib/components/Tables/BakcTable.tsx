@@ -308,31 +308,37 @@ export const BakcTable = (props: BakcTableProps) => {
                 Batch Transaction:
               </td>
               <td className="flex w-1/4 flex-wrap items-center gap-2 p-4">
-                <button
-                  disabled={!depositBakc}
-                  onClick={() => depositBakc?.()}
-                  className="border px-2 hover:border-zinc-500 dark:border-zinc-500 dark:bg-zinc-800 dark:hover:border-zinc-300"
-                >
-                  Deposit All
-                </button>
+                {totalToDeposit.gt(0) ? (
+                  <button
+                    disabled={!depositBakc}
+                    onClick={() => depositBakc?.()}
+                    className="border px-2 hover:border-zinc-500 dark:border-zinc-500 dark:bg-zinc-800 dark:hover:border-zinc-300"
+                  >
+                    Deposit All
+                  </button>
+                ) : null}
               </td>
               <td className="flex w-1/4 flex-wrap items-center gap-2 p-4">
-                <button
-                  disabled={!withdrawBakc}
-                  onClick={() => withdrawBakc?.()}
-                  className="border px-2 hover:border-zinc-500 dark:border-zinc-500 dark:bg-zinc-800 dark:hover:border-zinc-300"
-                >
-                  Withdraw All
-                </button>
+                {depositedTotal.gt(0) ? (
+                  <button
+                    disabled={!withdrawBakc}
+                    onClick={() => withdrawBakc?.()}
+                    className="border px-2 hover:border-zinc-500 dark:border-zinc-500 dark:bg-zinc-800 dark:hover:border-zinc-300"
+                  >
+                    Withdraw All
+                  </button>
+                ) : null}
               </td>
               <td className="flex w-1/4 flex-wrap items-center gap-2 p-4">
-                <button
-                  disabled={!claimSelfBakc}
-                  onClick={() => claimSelfBakc?.()}
-                  className="border px-2 hover:border-zinc-500 dark:border-zinc-500 dark:bg-zinc-800 dark:hover:border-zinc-300"
-                >
-                  Claim All
-                </button>
+                {unclaimedTotal.gt(0) ? (
+                  <button
+                    disabled={!claimSelfBakc}
+                    onClick={() => claimSelfBakc?.()}
+                    className="border px-2 hover:border-zinc-500 dark:border-zinc-500 dark:bg-zinc-800 dark:hover:border-zinc-300"
+                  >
+                    Claim All
+                  </button>
+                ) : null}
               </td>
             </tr>
 
@@ -341,64 +347,77 @@ export const BakcTable = (props: BakcTableProps) => {
                 Etherscan Contract:
               </td>
               <td className="w-1/4 p-4">
-                <a
-                  className="text-sm text-[#1da1f2] sm:text-base"
-                  href={`https://etherscan.io/address/0x5954aB967Bc958940b7EB73ee84797Dc8a2AFbb9#writeContract#F12`}
-                >
-                  depositBAKC
-                </a>
-                <p className="mt-4 text-sm">_baycPairs</p>
-                <textarea
-                  className="w-full border px-2 text-[10px] dark:border-zinc-500 dark:bg-zinc-800"
-                  readOnly
-                  value={JSON.stringify(depositArgs.bayc)}
-                />
-                <p className="text-sm">_maycPairs</p>
-                <textarea
-                  className="w-full border px-2 text-[10px] dark:border-zinc-500 dark:bg-zinc-800"
-                  readOnly
-                  value={JSON.stringify(depositArgs.mayc)}
-                />
+                {totalToDeposit.gt(0) ? (
+                  <>
+                    {" "}
+                    <a
+                      className="text-sm text-[#1da1f2] sm:text-base"
+                      href={`https://etherscan.io/address/0x5954aB967Bc958940b7EB73ee84797Dc8a2AFbb9#writeContract#F12`}
+                    >
+                      depositBAKC
+                    </a>
+                    <p className="mt-4 text-sm">_baycPairs</p>
+                    <textarea
+                      className="w-full border px-2 text-[10px] dark:border-zinc-500 dark:bg-zinc-800"
+                      readOnly
+                      value={JSON.stringify(depositArgs.bayc)}
+                    />
+                    <p className="text-sm">_maycPairs</p>
+                    <textarea
+                      className="w-full border px-2 text-[10px] dark:border-zinc-500 dark:bg-zinc-800"
+                      readOnly
+                      value={JSON.stringify(depositArgs.mayc)}
+                    />
+                  </>
+                ) : null}
               </td>
               <td className="w-1/4 p-4">
-                <a
-                  className="text-sm text-[#1da1f2] sm:text-base"
-                  href={`https://etherscan.io/address/0x5954aB967Bc958940b7EB73ee84797Dc8a2AFbb9#writeContract#F20`}
-                >
-                  withdrawBAKC
-                </a>
-                <p className="mt-4 text-sm">_baycPairs</p>
-                <textarea
-                  className="w-full border px-2 text-[10px] dark:border-zinc-500 dark:bg-zinc-800"
-                  readOnly
-                  value={JSON.stringify(withdrawArgs(1, true))}
-                />
-                <p className="text-sm">_maycPairs</p>
-                <textarea
-                  className="w-full border px-2 text-[10px] dark:border-zinc-500 dark:bg-zinc-800"
-                  readOnly
-                  value={JSON.stringify(withdrawArgs(2, true))}
-                />
+                {depositedTotal.gt(0) ? (
+                  <>
+                    <a
+                      className="text-sm text-[#1da1f2] sm:text-base"
+                      href={`https://etherscan.io/address/0x5954aB967Bc958940b7EB73ee84797Dc8a2AFbb9#writeContract#F20`}
+                    >
+                      withdrawBAKC
+                    </a>
+                    <p className="mt-4 text-sm">_baycPairs</p>
+                    <textarea
+                      className="w-full border px-2 text-[10px] dark:border-zinc-500 dark:bg-zinc-800"
+                      readOnly
+                      value={JSON.stringify(withdrawArgs(1, true))}
+                    />
+                    <p className="text-sm">_maycPairs</p>
+                    <textarea
+                      className="w-full border px-2 text-[10px] dark:border-zinc-500 dark:bg-zinc-800"
+                      readOnly
+                      value={JSON.stringify(withdrawArgs(2, true))}
+                    />
+                  </>
+                ) : null}
               </td>
               <td className="w-1/4 p-4">
-                <a
-                  className="text-sm text-[#1da1f2] sm:text-base"
-                  href={`https://etherscan.io/address/0x5954aB967Bc958940b7EB73ee84797Dc8a2AFbb9#writeContract#F7`}
-                >
-                  claimBAKC
-                </a>
-                <p className="mt-4 text-sm">_baycPairs</p>
-                <textarea
-                  className="w-full border px-2 text-[10px] dark:border-zinc-500 dark:bg-zinc-800"
-                  readOnly
-                  value={JSON.stringify(claimArgs(1, true))}
-                />
-                <p className="text-sm">_maycPairs</p>
-                <textarea
-                  className="w-full border px-2 text-[10px] dark:border-zinc-500 dark:bg-zinc-800"
-                  readOnly
-                  value={JSON.stringify(claimArgs(2, true))}
-                />
+                {unclaimedTotal.gt(0) ? (
+                  <>
+                    <a
+                      className="text-sm text-[#1da1f2] sm:text-base"
+                      href={`https://etherscan.io/address/0x5954aB967Bc958940b7EB73ee84797Dc8a2AFbb9#writeContract#F7`}
+                    >
+                      claimBAKC
+                    </a>
+                    <p className="mt-4 text-sm">_baycPairs</p>
+                    <textarea
+                      className="w-full border px-2 text-[10px] dark:border-zinc-500 dark:bg-zinc-800"
+                      readOnly
+                      value={JSON.stringify(claimArgs(1, true))}
+                    />
+                    <p className="text-sm">_maycPairs</p>
+                    <textarea
+                      className="w-full border px-2 text-[10px] dark:border-zinc-500 dark:bg-zinc-800"
+                      readOnly
+                      value={JSON.stringify(claimArgs(2, true))}
+                    />
+                  </>
+                ) : null}
               </td>
             </tr>
           </>
