@@ -276,7 +276,7 @@ export const NftTable = (props: NftTableProps) => {
                     onClick={() => withdrawSelfNft?.()}
                     className="border px-2 hover:border-zinc-500 dark:border-zinc-500 dark:bg-zinc-800 dark:hover:border-zinc-300"
                   >
-                    Withdraw All
+                    Withdraw
                   </button>
                 )}
               </td>
@@ -287,7 +287,7 @@ export const NftTable = (props: NftTableProps) => {
                     onClick={() => claimSelfNft?.()}
                     className="border px-2 hover:border-zinc-500 dark:border-zinc-500 dark:bg-zinc-800 dark:hover:border-zinc-300"
                   >
-                    Claim All
+                    Claim
                   </button>
                 )}
               </td>
