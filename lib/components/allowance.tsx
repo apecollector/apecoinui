@@ -44,7 +44,7 @@ export default function Allowance() {
   });
 
   const isSetAllowanceButtonEnabled =
-    inputValue.toLowerCase() === "max" ||
+    inputValue.toLowerCase() === "unlimited" ||
     (inputValue !== "" &&
       !isNaN(Number(inputValue)) &&
       BigNumber.from(Number(inputValue))._isBigNumber);
@@ -59,7 +59,7 @@ export default function Allowance() {
     functionName: "approve",
     args: [
       StakingContractAddresses[chain?.id || 1],
-      inputValue.toLowerCase() === "max" || !isSetAllowanceButtonEnabled
+      inputValue.toLowerCase() === "unlimited" || !isSetAllowanceButtonEnabled
         ? ethers.constants.MaxUint256
         : parseUnits(inputValue),
     ],
@@ -96,7 +96,7 @@ export default function Allowance() {
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
         />
-        <button className="w-1/5" onClick={() => setInputValue("MAX")}>
+        <button className="w-1/5" onClick={() => setInputValue("Unlimited")}>
           MAX
         </button>
       </div>
