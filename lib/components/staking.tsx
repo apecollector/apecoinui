@@ -3,15 +3,11 @@
 import { useAccount } from "wagmi";
 import { useState, useEffect } from "react";
 import useAllStakes from "@/hooks/useAllStakes";
-import { BigNumber } from "ethers";
 import usePrice from "@/hooks/usePrice";
 import useAutoConnecting from "@/hooks/useAutoConnecting";
 import { BakcTable, IPairOption } from "./Tables/BakcTable";
 import { ApeCoinTable } from "./Tables/ApeCoinTable";
 import { NftTable } from "./Tables/NFTTable";
-import useAllowance from "@/hooks/useAllowance";
-import Allowance from "./allowance";
-import { formatUnits } from "ethers/lib/utils.js";
 import { UserStaking } from "./userStaking";
 import { PoolType } from "@/types/constants";
 import {
@@ -25,20 +21,10 @@ import {
   getFnClaimArgsBakc,
 } from "../hooks/useClaims";
 
-interface poolStakesData {
-  poolId: BigNumber;
-  tokenId: BigNumber;
-  deposited: BigNumber;
-  unclaimed: BigNumber;
-  rewards24hr: BigNumber;
-  pair: { mainTokenId: BigNumber; mainTypePoolId: BigNumber };
-}
-
 export default function Staking() {
   const { address, isConnected } = useAccount();
   const { apecoinPrice } = usePrice();
   const autoConnecitng = useAutoConnecting();
-  const allowance = useAllowance();
   const [statsAddress, setStatsAddress] = useState<string>("");
   useEffect(() => {
     if (address) {
@@ -81,21 +67,6 @@ export default function Staking() {
       </div>
 
       <div className="mt-10 overflow-scroll">
-        {allowance?.data?.eq(0) ? (
-          <>
-            <div>ApeCoin Staking Contract Allowance Approval not set:</div>
-            <Allowance />
-          </>
-        ) : (
-          <div>
-            ApeCoin Staking Contract Allowance set to{" "}
-            {+formatUnits(allowance.data?.toString()!) >= 1e9
-              ? "Unlimited"
-              : formatUnits(allowance.data?.toString()!)}
-            <Allowance />
-          </div>
-        )}
-
         <h2 className="text-4xl font-extrabold">ApeCoin Staking Pool</h2>
         <ApeCoinTable
           apeCoinStakes={apeCoinStakes}

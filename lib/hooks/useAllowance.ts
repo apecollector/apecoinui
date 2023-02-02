@@ -9,7 +9,7 @@ function useAllowance() {
   const { chain } = useNetwork();
   const { address } = useAccount();
 
-  const allowanceContractRead = useContractRead({
+  const { data } = useContractRead({
     enabled: address !== undefined,
     address: ApecoinContractAddresses[chain?.id || 1],
     abi: ApeCoinABI,
@@ -20,7 +20,7 @@ function useAllowance() {
     ],
   });
 
-  return allowanceContractRead;
+  return { allowance: data };
 }
 
 export default useAllowance;
