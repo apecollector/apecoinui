@@ -91,7 +91,7 @@ export default function Allowance() {
       </div>
       <div className="my-3 flex justify-between">
         <input
-          placeholder="Enter new allowance"
+          placeholder="Allowance amount"
           className="w-4/5 border px-2 dark:border-zinc-500 dark:bg-zinc-800"
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
