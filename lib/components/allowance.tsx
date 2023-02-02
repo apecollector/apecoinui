@@ -101,7 +101,7 @@ export default function Allowance() {
         </button>
       </div>
       <button
-        className="w-full border px-2 hover:border-gray-500 disabled:text-gray-400 disabled:hover:cursor-not-allowed dark:border-slate-500 dark:bg-slate-800  dark:hover:border-slate-300"
+        className="w-full border px-2 hover:border-zinc-500 disabled:text-gray-400 disabled:hover:cursor-not-allowed dark:border-zinc-500 dark:bg-zinc-800 dark:hover:border-zinc-300"
         disabled={
           !isSetAllowanceButtonEnabled ||
           contractWrite.isLoading ||
