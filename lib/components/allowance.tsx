@@ -18,12 +18,16 @@ import {
 } from "@/types/constants";
 import useAllowance from "@/hooks/useAllowance";
 import { formatUnits, parseUnits } from "ethers/lib/utils.js";
-import { getStakingAbi } from "../utils/abi";
 
-const getAllowanceToDisplay = (allowance: BigNumber | undefined) =>
-  +formatUnits(allowance?.toString()!) >= 1e9
+const getAllowanceToDisplay = (allowance: BigNumber | undefined) => {
+  if (!allowance) {
+    return "";
+  }
+
+  return +formatUnits(allowance?.toString()!) >= 1e9
     ? "Unlimited"
     : formatUnits(allowance?.toString()!);
+};
 
 export default function Allowance() {
   const { address, isConnected } = useAccount();
