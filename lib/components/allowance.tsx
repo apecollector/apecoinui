@@ -99,6 +99,9 @@ export default function Allowance() {
         <button className="w-1/5" onClick={() => setInputValue("Unlimited")}>
           MAX
         </button>
+        <button className="w-1/5" onClick={() => setInputValue("")}>
+          CLEAR
+        </button>
       </div>
       <button
         className="w-full border px-2 hover:border-zinc-500 disabled:text-gray-400 disabled:hover:cursor-not-allowed dark:border-zinc-500 dark:bg-zinc-800 dark:hover:border-zinc-300"
