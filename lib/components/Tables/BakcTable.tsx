@@ -14,6 +14,7 @@ import { PoolType } from "@/types/constants";
 import { useBakcDeposits } from "@/hooks/useDeposits";
 import { useWithdrawBakc } from "@/hooks/useWithdraws";
 import { useClaimSelfBakc } from "@/hooks/useClaims";
+import useAllowance from "../../hooks/useAllowance";
 
 export interface IPairOption {
   tokenId: number;
@@ -40,6 +41,8 @@ export const BakcTable = (props: BakcTableProps) => {
           ps.pair.mainTypePoolId.toNumber() === po.poolId
       )
   );
+
+  const { allowance } = useAllowance();
 
   const depositedTotal =
     poolStakes?.reduce((total, token) => {
@@ -125,6 +128,8 @@ export const BakcTable = (props: BakcTableProps) => {
     (acc, da) => acc.add(da.amount),
     ethers.constants.Zero
   );
+
+  const hasEnoughAllowance = allowance?.gte(totalToDeposit);
 
   if (poolStakes.length === 0) {
     return <p className="mt-4">This wallet does not own any of these NFTs.</p>;
@@ -309,13 +314,20 @@ export const BakcTable = (props: BakcTableProps) => {
               </td>
               <td className="flex w-1/4 flex-wrap items-center gap-2 p-4">
                 {totalToDeposit.gt(0) ? (
-                  <button
-                    disabled={!depositBakc}
-                    onClick={() => depositBakc?.()}
-                    className="border px-2 hover:border-zinc-500 dark:border-zinc-500 dark:bg-zinc-800 dark:hover:border-zinc-300"
-                  >
-                    Deposit All
-                  </button>
+                  <>
+                    <button
+                      disabled={!depositBakc || !hasEnoughAllowance}
+                      onClick={() => depositBakc?.()}
+                      className="border px-2 hover:border-zinc-500 disabled:cursor-not-allowed disabled:opacity-50 dark:border-zinc-500 dark:bg-zinc-800 dark:hover:border-zinc-300"
+                    >
+                      Deposit All
+                    </button>
+                    {!hasEnoughAllowance ? (
+                      <span className="text-xs text-red-700">
+                        Increase your allowance first
+                      </span>
+                    ) : null}
+                  </>
                 ) : null}
               </td>
               <td className="flex w-1/4 flex-wrap items-center gap-2 p-4">

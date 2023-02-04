@@ -11,6 +11,7 @@ import { IClaimArgsNft, IWithdrawArgsNft } from "./common/types";
 import { useNftDeposits } from "@/hooks/useDeposits";
 import { useWithdrawSelfNft } from "@/hooks/useWithdraws";
 import { useClaimSelfNft } from "@/hooks/useClaims";
+import useAllowance from "../../hooks/useAllowance";
 
 interface NftTableProps {
   tokenSymbol: string;
@@ -44,6 +45,8 @@ export const NftTable = (props: NftTableProps) => {
       {}
     )
   );
+
+  const { allowance } = useAllowance();
 
   const depositArgs = (asString: boolean = true) => {
     const args = Object.entries(depositAmounts)
@@ -83,6 +86,8 @@ export const NftTable = (props: NftTableProps) => {
     (total, amount) => total.add(amount),
     ethers.constants.Zero
   );
+
+  const hasEnoughAllowance = allowance?.gte(totalToDeposit);
 
   if (poolStakes.length === 0) {
     return <p className="mt-4">This wallet does not own any of these NFTs.</p>;
@@ -260,13 +265,20 @@ export const NftTable = (props: NftTableProps) => {
               </td>
               <td className="flex w-1/4 flex-wrap items-center gap-2 p-4">
                 {totalToDeposit.gt(0) && (
-                  <button
-                    disabled={!depositNft}
-                    className="border px-2 hover:border-zinc-500 dark:border-zinc-500 dark:bg-zinc-800 dark:hover:border-zinc-300"
-                    onClick={() => depositNft?.()}
-                  >
-                    Deposit All
-                  </button>
+                  <>
+                    <button
+                      disabled={!depositNft || !hasEnoughAllowance}
+                      onClick={() => depositNft?.()}
+                      className="border px-2 hover:border-zinc-500 disabled:cursor-not-allowed disabled:opacity-50 dark:border-zinc-500 dark:bg-zinc-800 dark:hover:border-zinc-300"
+                    >
+                      Deposit All
+                    </button>
+                    {!hasEnoughAllowance ? (
+                      <span className="text-xs text-red-700">
+                        Increase your allowance first
+                      </span>
+                    ) : null}
+                  </>
                 )}
               </td>
               <td className="flex w-1/4 flex-wrap items-center gap-2 p-4">

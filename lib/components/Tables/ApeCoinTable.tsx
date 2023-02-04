@@ -10,6 +10,7 @@ import { useWithdrawSelfApecoin } from "@/hooks/useWithdraws";
 import { useDeposits } from "@/hooks/useDeposits";
 import { useClaimSelfApecoin } from "@/hooks/useClaims";
 import { formatToUSD } from "../../utils/format";
+import useAllowance from "../../hooks/useAllowance";
 
 interface ApeCoinTableProps {
   apeCoinStakes: poolStakesData[];
@@ -26,6 +27,7 @@ export const ApeCoinTable = (props: ApeCoinTableProps) => {
     ethers.constants.Zero
   );
   const { depositApecoin } = useDeposits({ amount: depositApeCoinAmount });
+  const { allowance } = useAllowance();
 
   const depositedTotal =
     apeCoinStakes?.reduce((total, token) => {
@@ -40,6 +42,8 @@ export const ApeCoinTable = (props: ApeCoinTableProps) => {
     (total, token) => total.add(token.unclaimed),
     ethers.constants.Zero
   );
+
+  const hasEnoughAllowance = allowance?.gte(depositApeCoinAmount);
 
   return (
     <table className="mt-4 w-full border dark:border-zinc-700">
@@ -126,13 +130,20 @@ export const ApeCoinTable = (props: ApeCoinTableProps) => {
               </td>
               <td className="flex w-1/4 flex-wrap items-center gap-2 p-4">
                 {depositApeCoinAmount.gt(0) && (
-                  <button
-                    disabled={!depositApecoin}
-                    className="border px-2 hover:border-zinc-500 dark:border-zinc-500 dark:bg-zinc-800 dark:hover:border-zinc-300"
-                    onClick={() => depositApecoin?.()}
-                  >
-                    Deposit
-                  </button>
+                  <>
+                    <button
+                      disabled={!depositApecoin || !hasEnoughAllowance}
+                      onClick={() => depositApecoin?.()}
+                      className="border px-2 hover:border-zinc-500 disabled:cursor-not-allowed disabled:opacity-50 dark:border-zinc-500 dark:bg-zinc-800 dark:hover:border-zinc-300"
+                    >
+                      Deposit
+                    </button>
+                    {!hasEnoughAllowance ? (
+                      <span className="text-xs text-red-700">
+                        Increase your allowance first
+                      </span>
+                    ) : null}
+                  </>
                 )}
               </td>
               <td className="flex w-1/4 flex-wrap items-center gap-2 p-4">
