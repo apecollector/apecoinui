@@ -1,11 +1,11 @@
 import { BigNumber, ethers } from "ethers";
-import { PoolType } from "../../../types/constants";
+import { PoolType } from "./constants";
 import {
   SingleNft,
   PairNftWithAmount,
   PairNft,
   PairNftClaim,
-} from "../../../types/contract";
+} from "./contract";
 
 export type IWithdrawArgsApecoin = (asString: boolean) => string | BigNumber;
 

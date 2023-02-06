@@ -8,7 +8,7 @@ import useAutoConnecting from "@/hooks/useAutoConnecting";
 import { BakcTable, IPairOption } from "./Tables/BakcTable";
 import { ApeCoinTable } from "./Tables/ApeCoinTable";
 import { NftTable } from "./Tables/NFTTable";
-import { UserStaking } from "./userStaking";
+import { StakingInfo } from "./StakingInfo/StakingInfo";
 import { PoolType } from "@/types/constants";
 import {
   getFnWithdrawArgsApecoin,
@@ -62,9 +62,7 @@ export default function Staking() {
 
   return (
     <div>
-      <div>
-        <UserStaking />
-      </div>
+      <StakingInfo />
 
       <div className="mt-10 overflow-scroll">
         <h2 className="text-4xl font-extrabold">ApeCoin Staking Pool</h2>

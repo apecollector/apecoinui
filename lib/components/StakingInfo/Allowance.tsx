@@ -29,7 +29,7 @@ const getAllowanceToDisplay = (allowance: BigNumber | undefined) => {
     : formatUnits(allowance?.toString()!);
 };
 
-export default function Allowance() {
+export const Allowance = () => {
   const { address, isConnected } = useAccount();
   const { chain } = useNetwork();
   const { allowance } = useAllowance();
@@ -119,4 +119,4 @@ export default function Allowance() {
       </button>
     </div>
   );
-}
+};
