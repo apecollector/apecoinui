@@ -1,14 +1,12 @@
 import Events from "@/components/events";
 import Data from "@/components/data";
 import Calculator from "@/components/calculator";
-import UserStaking from "@/components/userStaking";
+import { StakingInfo } from "@/components/StakingInfo/StakingInfo";
 
 export default async function Page() {
   return (
     <>
-      <div>
-        <UserStaking />
-      </div>
+      <StakingInfo />
 
       <div className="mt-10">
         <h3 className="text-3xl font-bold">Live staking data:</h3>

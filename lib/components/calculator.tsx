@@ -7,7 +7,7 @@ import usePrice from "@/hooks/usePrice";
 import useTimeframe from "@/hooks/useTimeframe";
 
 import { TimeFrame } from "@/types/timeframe";
-import { PoolType } from "@/types/data";
+import { PoolType } from "@/types/constants";
 
 import TimeframeSelector from "@/components/timeframeSelector";
 import { Dispatch, useEffect, useState } from "react";

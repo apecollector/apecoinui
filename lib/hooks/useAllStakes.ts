@@ -1,12 +1,7 @@
 import { useContractRead, useNetwork, useEnsAddress } from "wagmi";
-import StakingABI from "@/abis/staking";
-import { Map } from "@/types/map";
+import { StakingContractAddresses } from "@/types/constants";
 import { BigNumber } from "ethers";
-
-const stakingContractAddresses: Map = {
-  1: "0x5954aB967Bc958940b7EB73ee84797Dc8a2AFbb9",
-  5: "0xeF37717B1807a253c6D140Aca0141404D23c26D4",
-} as const;
+import { getStakingAbi } from "@/utils/abi";
 
 export interface poolStakesData {
   poolId: BigNumber;
@@ -23,43 +18,34 @@ function useAllStakes(addressOrEns: string) {
     name: addressOrEns,
   });
 
+  const chainId = chain?.id ?? 1;
+  const abi = getStakingAbi(chainId);
+
   const poolsContractRead = useContractRead({
     enabled: addressOrEns !== undefined && addressOrEns !== "",
-    address: stakingContractAddresses[chain?.id || 1],
-    abi: StakingABI,
+    address: StakingContractAddresses[chainId],
+    abi,
     functionName: "getAllStakes",
     watch: true,
     chainId: chain?.id || 1,
     args: [data as `0x${string}`],
   });
 
-  const apeCoinStakes: poolStakesData[] | undefined =
-    poolsContractRead.data?.filter((stake) => {
-      if (stake.poolId.toNumber() === 0) {
-        return true;
-      }
-    });
+  const apeCoinStakes: poolStakesData[] = (poolsContractRead.data || []).filter(
+    (stake) => stake.poolId.toNumber() === 0
+  );
 
-  const baycStakes: poolStakesData[] | undefined =
-    poolsContractRead.data?.filter((stake) => {
-      if (stake.poolId.toNumber() === 1) {
-        return true;
-      }
-    });
+  const baycStakes: poolStakesData[] = (poolsContractRead.data || []).filter(
+    (stake) => stake.poolId.toNumber() === 1
+  );
 
-  const maycStakes: poolStakesData[] | undefined =
-    poolsContractRead.data?.filter((stake) => {
-      if (stake.poolId.toNumber() === 2) {
-        return true;
-      }
-    });
+  const maycStakes: poolStakesData[] = (poolsContractRead.data || []).filter(
+    (stake) => stake.poolId.toNumber() === 2
+  );
 
-  const bakcStakes: poolStakesData[] | undefined =
-    poolsContractRead.data?.filter((stake) => {
-      if (stake.poolId.toNumber() === 3) {
-        return true;
-      }
-    });
+  const bakcStakes: poolStakesData[] = (poolsContractRead.data || []).filter(
+    (stake) => stake.poolId.toNumber() === 3
+  );
 
   return {
     poolsContractRead,

@@ -1,0 +1,37 @@
+import { BigNumber, ethers } from "ethers";
+import { PoolType } from "./constants";
+import {
+  SingleNft,
+  PairNftWithAmount,
+  PairNft,
+  PairNftClaim,
+} from "./contract";
+
+export type IWithdrawArgsApecoin = (asString: boolean) => string | BigNumber;
+
+export type IWithdrawArgsNft = (
+  poolId: PoolType.MAYC | PoolType.BAYC,
+  asString: boolean
+) => (SingleNft | (string | number)[])[];
+
+export type IWithdrawArgsBakc = (
+  mainTypePoolId: PoolType.MAYC | PoolType.BAYC,
+  asString: boolean
+) => ((string | number)[] | PairNftWithAmount)[];
+
+export type IClaimArgsApecoin = (asString: boolean) => string | BigNumber;
+
+export type IClaimArgsNft = (
+  poolId: PoolType.MAYC | PoolType.BAYC,
+  asString: boolean
+) => (number | BigNumber)[];
+
+export type IClaimArgsBakc = (
+  mainTypePoolId: number,
+  asString: boolean
+) => (PairNftClaim | number[])[];
+
+export type IClaimArgs = (
+  poolId: number,
+  asString: boolean
+) => string | BigNumber | (number | undefined)[] | undefined;
